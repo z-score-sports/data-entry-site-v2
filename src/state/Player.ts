@@ -44,8 +44,6 @@ class Player {
         if(!this.inGame) {
             console.log("warning: player already not in game.");
         }
-
-
         this.inGame = false;
     }
 
@@ -63,7 +61,7 @@ class Player {
     public removeFoul() {Math.max(this.fouls-1, 0);}
     public addSteal() {this.steals++;}
     public removeSteal() {Math.max(this.steals-1, 0);}
-    
+
 }
 
 
