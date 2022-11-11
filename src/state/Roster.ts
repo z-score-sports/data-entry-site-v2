@@ -29,7 +29,7 @@ class Roster {
             playerGIn.subIn();
             playerGOut.subOut();
         } else {
-            console.log("warning: invalid substitution.")
+            console.log("warning: invalid substitution. No lineup changes made.")
         }
     }
 
@@ -54,6 +54,7 @@ class Roster {
         lineupArr.sort();
         return lineupArr.toString();
     }
+
 
     
 
