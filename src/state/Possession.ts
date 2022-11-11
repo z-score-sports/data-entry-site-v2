@@ -1,5 +1,5 @@
 import { randomUUID } from "crypto";
-import { Player, Team } from "./Player";
+import { Team } from "./Player";
 
 class Possession {
     possessionId : string;
@@ -11,7 +11,7 @@ class Possession {
         this.possessionId = randomUUID();
         this.quarter = quarter;
         this.offenseTeam = offenseTeam;
-        
+        //TODO: need list of actions which can be of type Shot, Foul, Turnover        
     }
 }
 
