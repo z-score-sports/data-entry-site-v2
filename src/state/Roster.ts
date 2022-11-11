@@ -43,6 +43,18 @@ class Roster {
         playerGIn.subOut();
     }
 
+    public getLineupString() {
+        let lineupArr : Array<string> = new Array<string>();
+        this.players.forEach((player, playerNumber) => {
+            if(player.inGame) {
+                let numString : string = playerNumber.toString();
+                lineupArr.push(numString)
+            }
+        })
+        lineupArr.sort();
+        return lineupArr.toString();
+    }
+
     
 
 }
