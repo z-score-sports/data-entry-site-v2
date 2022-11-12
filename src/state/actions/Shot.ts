@@ -3,25 +3,7 @@ import { Action } from "./Action";
 import { Assist } from "./Assist";
 import { Rebound, ReboundType } from "./Rebound";
 import { Block } from "./Block";
-
-type NumNumMap = {
-    [key: number]: number;
-};
-
-
-const pointsMap : NumNumMap = {
-    1: 2,
-    2: 2,
-    3: 2,
-    4: 2,
-    5: 3,
-    6: 3,
-    7: 3,
-    8: 3,
-    9: 3,
-} 
-
-
+ 
 class Shot extends Action {
 
     shooter : Player;
@@ -42,9 +24,9 @@ class Shot extends Action {
         this.shooter.addFGAttempt();
         if(this.made) {
             this.shooter.addFGMade();
-            let points : number = pointsMap[this.region];
-            this.shooter.addFGPoints(points);
         }
+        let points : number = this.getPoints();
+        this.shooter.addFGPoints(points);
 
     }
 
@@ -193,3 +175,5 @@ class Shot extends Action {
     }
     
 }
+
+export {Shot}
