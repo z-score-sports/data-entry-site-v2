@@ -73,7 +73,22 @@ class Shot extends Action {
     }
 
 
-    public editShooter() {
+    public editShooter(newShooter : Player) {
+        let points : number = this.getPoints();
+        
+        this.shooter.removeFGAttempt();
+        if(this.made) {
+            this.shooter.removeFGMade();
+        }
+        this.shooter.removeFGPoints(points)
+
+        this.shooter = newShooter;
+
+        this.shooter.addFGAttempt();
+        if(this.made) {
+            this.shooter.addFGMade();
+        }
+        this.shooter.addFGPoints(points);
 
     }
 
@@ -86,11 +101,24 @@ class Shot extends Action {
         let pointsAfter : number = this.getPoints();
         this.shooter.addFGPoints(pointsAfter - pointsBefore);
         
-        
-
     }
 
-    public editMake() {
+    public editMade(newMade: boolean) {
+
+        if (newMade && !this.made) {
+            this.made = newMade // setting made to true
+            let points : number = this.getPoints();
+            this.shooter.addFGMade();
+            this.shooter.addFGPoints(points);
+        } else if(!newMade && this.made) { 
+            // case when we need to decrement stats from the shooter
+            let points : number = this.getPoints();
+            this.made = newMade;
+            this.shooter.removeFGMade();
+            this.shooter.removeFGPoints(points)
+
+        }
+
         
     }
 
