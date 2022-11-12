@@ -1,7 +1,7 @@
 import { Action } from "./Action";
 
 
-class Shot extends Action {
+class Rebound extends Action {
 
     
 
@@ -15,3 +15,5 @@ class Shot extends Action {
     }
     
 }
+
+export {Rebound}

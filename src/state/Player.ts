@@ -10,13 +10,15 @@ class Player {
     public lastName : string;
     public team : Team;
     public inGame : boolean = false;
-    public points : number = 0;
+    public fgPoints : number = 0;
     public shots : number = 0;
     public rebounds : number = 0;
     public assists : number = 0;
     public blocks : number = 0;
     public fouls : number = 0;
     public steals : number = 0;
+    public freeThrowsAttempted : number = 0;
+    public freeThrowsMade : number = 0;
 
     public constructor(playerId:string, num:number, firstName:string, lastName:string, team:Team){
         this.playerId = playerId;
@@ -26,7 +28,7 @@ class Player {
         this.team = team;
     }
 
-    public getTeamStr() {
+    public getTeamStr() : "home" | "away"  {
         if(this.team == 0) {
             return "home"
         } else {
@@ -47,8 +49,12 @@ class Player {
         this.inGame = false;
     }
 
-    public addPoints(points:number) {this.points += points;} 
-    public removePoints(points:number) {this.points = Math.max(this.points - points, 0);}
+    public getTotalPoints() : number {
+        return this.fgPoints + this.freeThrowsMade;
+    }
+
+    public addFGPoints(fgPoints:number) {this.fgPoints += fgPoints;} 
+    public removeFGPoints(fgPoints:number) {this.fgPoints = Math.max(this.fgPoints - fgPoints, 0);}
     public addShot() {this.shots++;}
     public removeShot() {Math.max(this.shots-1, 0);}
     public addRebound() {this.rebounds++;}
@@ -61,6 +67,10 @@ class Player {
     public removeFoul() {Math.max(this.fouls-1, 0);}
     public addSteal() {this.steals++;}
     public removeSteal() {Math.max(this.steals-1, 0);}
+    public addFreeThrowMade() {this.freeThrowsMade++;}
+    public removeFreeThrowMade() {Math.max(this.freeThrowsMade-1, 0);}
+    public addFreeThrowAttempt() {this.freeThrowsAttempted++;}
+    public removeFreeThrowAttempt() {Math.max(this.freeThrowsAttempted-1, 0);}
 
 }
 
