@@ -1,17 +1,29 @@
+import { Player } from "../Player";
 import { Action } from "./Action";
 
 
 class Assist extends Action {
-
+    public assistingPlayer : Player;
     
 
-    constructor() {
+    public constructor(assistingPlayer : Player) {
         super();
+        this.assistingPlayer = assistingPlayer;
+        this.assistingPlayer.addAssist();
+    }
 
+    public editAssistingPlayer(newAssistingPlayer : Player) {
+        this.assistingPlayer.removeAssist();
+        this.assistingPlayer = newAssistingPlayer;
+        this.assistingPlayer.addAssist();
     }
 
     actionJSON (): Object {
-        return {}
+        return {
+            "action": "assist",
+            "actionId": this.actionId,
+            "assistingPlayerId": this.assistingPlayer.playerId,
+        }
     }
     
 }
