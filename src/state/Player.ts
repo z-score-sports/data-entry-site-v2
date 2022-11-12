@@ -65,4 +65,4 @@ class Player {
 }
 
 
-export type {Player, Team};
+export {Player, Team};

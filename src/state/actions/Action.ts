@@ -1,13 +1,13 @@
 import { randomUUID } from "crypto";
 
-class Action {
-    actionId : string;
+export abstract class Action {
+    id : string;
 
     constructor() {
-        this.actionId = randomUUID();
+        this.id = randomUUID();
     }
 
+    abstract actionJSON() : Object;
 }
 
-export type {Action};
 

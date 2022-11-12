@@ -61,4 +61,4 @@ class Roster {
 }
 
 
-export type {Roster};
+export {Roster};

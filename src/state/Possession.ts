@@ -15,4 +15,4 @@ class Possession {
     }
 }
 
-export type {Possession};
+export {Possession};
