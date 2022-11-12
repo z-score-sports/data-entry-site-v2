@@ -12,10 +12,18 @@ class Turnover extends Action {
 
     }
 
+    public editOffensivePlayer(newOffensivePlayer : Player) {
+        this.offensivePlayer = newOffensivePlayer
+    }
+
     public removeStats (): void {return}
 
     actionJSON (): Object {
-        return {};
+        return {
+            "action": "turnover",
+            "actionId": this.actionId,
+            "offensivePlayer": this.offensivePlayer.playerId
+        }
     }
     
 }
@@ -29,6 +37,12 @@ class Steal extends Turnover {
         this.stealingPlayer.addSteal();
     }
 
+    public editStealingPlayer(newStealingPlayer : Player) {
+        this.stealingPlayer.removeSteal();
+        this.stealingPlayer = newStealingPlayer;
+        this.stealingPlayer.addSteal();
+    }
+
     public removeStats (): void {
         this.stealingPlayer.removeSteal();
     }
@@ -37,8 +51,8 @@ class Steal extends Turnover {
         return {
             "action": "steal",
             "actionId": this.actionId,
-            "stealee": this.offensivePlayer.playerId,
-            "stealer": this.stealingPlayer.playerId
+            "offensivePlayerId": this.offensivePlayer.playerId,
+            "stealingPlayerId": this.stealingPlayer.playerId
         };
     }
 }

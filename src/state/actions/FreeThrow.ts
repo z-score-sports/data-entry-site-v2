@@ -13,21 +13,23 @@ class FreeThrow extends Action {
         super();
         this.shootingPlayer = shootingPlayer;
         this.made = made;
+        //always add a free throw attempt
         this.shootingPlayer.addFreeThrowAttempt();
-
+        //if made free throw, add free throw made to the shooting player
         if(this.made){
             this.shootingPlayer.addFreeThrowMade();
         }
-
-
     }
 
     public removeStats (): void {
+        // always remove free throw attempt when deleted
         this.shootingPlayer.removeFreeThrowAttempt();
+        //if made, we need to remove their free throw made
         if(this.made) {
             this.shootingPlayer.removeFreeThrowMade();
         }
-        if(this.rebound) {
+        // if rebound exists, remove the rebound stats
+        if(this.rebound !== null) {
             this.rebound.removeStats();
         }
         
@@ -36,8 +38,6 @@ class FreeThrow extends Action {
     public editMade(newMade:boolean) {
         //case when the made boolean isn't changed
         if(this.made == newMade){return};
-        //change the made
-        this.made = newMade;
         //miss to made -> add free throw made
         //made to miss -> remove free throw made
         if(newMade == true && this.made == false) {
@@ -45,12 +45,13 @@ class FreeThrow extends Action {
         } else {
             this.shootingPlayer.removeFreeThrowMade();
         }
+        
+        //change the made
+        this.made = newMade;
 
     }
 
     public editShootingPlayer(newPlayer:Player) {
-        //case when players are the same
-        if(this.shootingPlayer == newPlayer){return;}
         //first remove the stats from the current player
         this.shootingPlayer.removeFreeThrowAttempt();
         if(this.made){
@@ -69,7 +70,7 @@ class FreeThrow extends Action {
         if(this.made) {
             console.log("warning: trying to add a rebound to a made free throw")
             return
-        } else if(this.rebound != null) {
+        } else if(this.rebound !== null) {
             console.log("warning: trying to add a second rebound to free throw.")
             return 
         }
@@ -84,7 +85,6 @@ class FreeThrow extends Action {
         if(!this.rebound) {return;}
         this.rebound.removeStats();
         delete this.rebound
-        // ensure right here that the rebound is deleted        
     }
 
     private getReboundId() : string {

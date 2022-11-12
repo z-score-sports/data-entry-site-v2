@@ -7,6 +7,10 @@ export abstract class Action {
         this.actionId = randomUUID();
     }
 
+    public toString() {
+        return this.actionId;
+    }
+
     abstract removeStats() : void;
 
     abstract actionJSON() : Object;

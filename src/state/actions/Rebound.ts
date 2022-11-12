@@ -21,6 +21,10 @@ class Rebound extends Action {
 
     }
 
+    public removeStats (): void {
+        this.reboundingPlayer.removeRebound();
+    }
+    
     public editReboundType(newReboundType : ReboundType) {
         this.reboundType = newReboundType;
     }
@@ -39,9 +43,6 @@ class Rebound extends Action {
         }
     }
 
-    public removeStats (): void {
-        this.reboundingPlayer.removeRebound();
-    }
 
     public actionJSON (): Object {
         return {
