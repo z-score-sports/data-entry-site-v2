@@ -41,7 +41,12 @@ class Foul extends Action {
         this.foulingPlayer.addFoul();
     }
 
-
+    public getLastFreeThrow() : FreeThrow {
+        if(this.freeThrows.length === 0) {
+            return null;
+        }
+        return this.freeThrows[this.freeThrows.length-1]
+    }
 
     actionJSON (): Object {
         return {

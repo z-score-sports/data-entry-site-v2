@@ -11,7 +11,8 @@ class Player {
     public team : Team;
     public inGame : boolean = false;
     public fgPoints : number = 0;
-    public shots : number = 0;
+    public fgMade : number = 0;
+    public fgAttempted : number = 0;
     public rebounds : number = 0;
     public assists : number = 0;
     public blocks : number = 0;
@@ -55,22 +56,26 @@ class Player {
 
     public addFGPoints(fgPoints:number) {this.fgPoints += fgPoints;} 
     public removeFGPoints(fgPoints:number) {this.fgPoints = Math.max(this.fgPoints - fgPoints, 0);}
-    public addShot() {this.shots++;}
-    public removeShot() {Math.max(this.shots-1, 0);}
+    public addFGMade() {this.fgMade += 1;}
+    public removeFGMade() {this.fgMade = Math.max(this.fgMade-1, 0);}
+    public addFGAttempt() {this.fgAttempted += 1;}
+    public removeFGAttempt() {this.fgAttempted = Math.max(this.fgAttempted-1, 0);}
+
+
     public addRebound() {this.rebounds++;}
-    public removeRebound() {Math.max(this.rebounds-1, 0);}
+    public removeRebound() {this.rebounds = Math.max(this.rebounds-1, 0);}
     public addAssist() {this.assists++;}
-    public removeAssist() {Math.max(this.assists-1, 0);}
+    public removeAssist() {this.assists = Math.max(this.assists-1, 0);}
     public addBlock() {this.blocks++;}
-    public removeBlock() {Math.max(this.blocks-1, 0);}
+    public removeBlock() {this.blocks = Math.max(this.blocks-1, 0);}
     public addFoul() {this.fouls++;}
-    public removeFoul() {Math.max(this.fouls-1, 0);}
+    public removeFoul() {this.fouls = Math.max(this.fouls-1, 0);}
     public addSteal() {this.steals++;}
-    public removeSteal() {Math.max(this.steals-1, 0);}
+    public removeSteal() {this.steals = Math.max(this.steals-1, 0);}
     public addFreeThrowMade() {this.freeThrowsMade++;}
-    public removeFreeThrowMade() {Math.max(this.freeThrowsMade-1, 0);}
+    public removeFreeThrowMade() {this.freeThrowsMade = Math.max(this.freeThrowsMade-1, 0);}
     public addFreeThrowAttempt() {this.freeThrowsAttempted++;}
-    public removeFreeThrowAttempt() {Math.max(this.freeThrowsAttempted-1, 0);}
+    public removeFreeThrowAttempt() {this.freeThrowsAttempted = Math.max(this.freeThrowsAttempted-1, 0);}
 
 }
 

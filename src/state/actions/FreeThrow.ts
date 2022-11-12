@@ -84,7 +84,7 @@ class FreeThrow extends Action {
         //we need to remove the stats from the rebounding player
         if(!this.rebound) {return;}
         this.rebound.removeStats();
-        delete this.rebound
+        this.rebound = null;
     }
 
     private getReboundId() : string {
