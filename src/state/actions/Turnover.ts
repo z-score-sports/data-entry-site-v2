@@ -3,7 +3,7 @@ import { Action } from "./Action";
 
 
 class Turnover extends Action {
-    offensivePlayer : Player;
+    offensivePlayer : Player = null;
     
 
     constructor(offensivePlayer : Player) {
@@ -12,6 +12,8 @@ class Turnover extends Action {
 
     }
 
+    public removeStats (): void {return}
+
     actionJSON (): Object {
         return {};
     }
@@ -19,15 +21,25 @@ class Turnover extends Action {
 }
 
 class Steal extends Turnover {
-    stealingPlayer : Player = null;
+    stealingPlayer : Player;
 
     constructor(offensivePlayer:Player, stealingPlayer:Player) {
         super(offensivePlayer);
         this.stealingPlayer = stealingPlayer;
+        this.stealingPlayer.addSteal();
+    }
+
+    public removeStats (): void {
+        this.stealingPlayer.removeSteal();
     }
 
     actionJSON (): Object {
-        return {};
+        return {
+            "action": "steal",
+            "actionId": this.actionId,
+            "stealee": this.offensivePlayer.playerId,
+            "stealer": this.stealingPlayer.playerId
+        };
     }
 }
 

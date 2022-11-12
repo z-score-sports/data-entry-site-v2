@@ -39,6 +39,10 @@ class Rebound extends Action {
         }
     }
 
+    public removeStats (): void {
+        this.reboundingPlayer.removeRebound();
+    }
+
     public actionJSON (): Object {
         return {
             "action": "rebound",

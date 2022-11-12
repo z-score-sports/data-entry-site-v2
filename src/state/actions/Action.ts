@@ -7,6 +7,8 @@ export abstract class Action {
         this.actionId = randomUUID();
     }
 
+    abstract removeStats() : void;
+
     abstract actionJSON() : Object;
 }
 

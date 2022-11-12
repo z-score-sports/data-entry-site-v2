@@ -12,6 +12,10 @@ class Block extends Action {
         this.blockingPlayer.addBlock();
     }
 
+    public removeStats (): void {
+        this.blockingPlayer.removeBlock();
+    }
+
     public editBlockingPlayer(newBlockingPlayer : Player) {
         this.blockingPlayer.removeBlock();
         this.blockingPlayer = newBlockingPlayer;

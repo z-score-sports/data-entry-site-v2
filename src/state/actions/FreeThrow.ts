@@ -1,12 +1,12 @@
 import { Player } from "../Player";
 import { Action } from "./Action";
-import { Rebound } from "./Rebound";
+import { Rebound, ReboundType } from "./Rebound";
 
 
 class FreeThrow extends Action {
 
     public shootingPlayer:Player;
-    public made : boolean = false;
+    public made : boolean;
     public rebound : Rebound = null;
 
     public constructor(shootingPlayer:Player, made:boolean) {
@@ -20,6 +20,17 @@ class FreeThrow extends Action {
         }
 
 
+    }
+
+    public removeStats (): void {
+        this.shootingPlayer.removeFreeThrowAttempt();
+        if(this.made) {
+            this.shootingPlayer.removeFreeThrowMade();
+        }
+        if(this.rebound) {
+            this.rebound.removeStats();
+        }
+        
     }
 
     public editMade(newMade:boolean) {
@@ -37,7 +48,7 @@ class FreeThrow extends Action {
 
     }
 
-    public editPlayer(newPlayer:Player) {
+    public editShootingPlayer(newPlayer:Player) {
         //case when players are the same
         if(this.shootingPlayer == newPlayer){return;}
         //first remove the stats from the current player
@@ -54,21 +65,24 @@ class FreeThrow extends Action {
         }
     }
 
-    public setRebound(rebound:Rebound) {
-        if(!this.made){
-            this.rebound = rebound;
-        } else {
-            console.log("warning: cannot add rebound to a made free throw.")
+    public addRebound(reboundingPlayer: Player, reboundType : ReboundType) {
+        if(this.made) {
+            console.log("warning: trying to add a rebound to a made free throw")
+            return
+        } else if(this.rebound != null) {
+            console.log("warning: trying to add a second rebound to free throw.")
+            return 
         }
+        let rebound : Rebound = new Rebound(reboundingPlayer, reboundType);
+        this.rebound = rebound;
+
     }
 
     public removeRebound() {
         //since we're removing the action from the outside...
         //we need to remove the stats from the rebounding player
         if(!this.rebound) {return;}
-        
-        let reboundingPlayer : Player = this.rebound.reboundingPlayer;
-        reboundingPlayer.removeRebound();
+        this.rebound.removeStats();
         delete this.rebound
         // ensure right here that the rebound is deleted        
     }

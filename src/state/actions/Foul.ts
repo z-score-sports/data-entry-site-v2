@@ -12,6 +12,10 @@ class Foul extends Action {
 
     }
 
+    public removeStats (): void {
+        
+    }
+
     actionJSON (): Object {
         return {}
     }

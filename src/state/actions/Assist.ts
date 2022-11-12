@@ -12,11 +12,16 @@ class Assist extends Action {
         this.assistingPlayer.addAssist();
     }
 
+    public removeStats (): void {
+        this.assistingPlayer.removeAssist();
+    }
+
     public editAssistingPlayer(newAssistingPlayer : Player) {
         this.assistingPlayer.removeAssist();
         this.assistingPlayer = newAssistingPlayer;
         this.assistingPlayer.addAssist();
     }
+
 
     actionJSON (): Object {
         return {
