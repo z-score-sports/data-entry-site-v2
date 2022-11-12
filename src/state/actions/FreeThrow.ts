@@ -1,11 +1,13 @@
 import { Player } from "../Player";
 import { Action } from "./Action";
+import { Rebound } from "./Rebound";
 
 
 class FreeThrow extends Action {
 
     public shootingPlayer:Player;
     public made : boolean = false;
+    public rebound : Rebound = null;
 
     public constructor(shootingPlayer:Player, made:boolean) {
         super();
@@ -52,12 +54,29 @@ class FreeThrow extends Action {
         }
     }
 
+    public setRebound(rebound:Rebound) {
+        if(!this.made){
+            this.rebound = rebound;
+        } else {
+            console.log("warning: cannot add rebound to a made free throw.")
+        }
+    }
+
+    private getReboundId() : string {
+        if(this.rebound){
+            return this.rebound.actionId;
+        } else {
+            return "";
+        }
+    }
+
     public actionJSON (): Object {
         return {
             "action": "freethrow",
             "actionId": this.actionId,
             "shootingPlayerId": this.shootingPlayer.playerId,
             "made": this.made,
+            "reboundId": this.getReboundId(),
         }
     }
     
