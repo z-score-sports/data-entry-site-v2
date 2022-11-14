@@ -1,13 +1,13 @@
-import { randomUUID } from "crypto";
+import { observable, action, computed, reaction } from "mobx"
 
 export abstract class Action {
     actionId : string;
 
     constructor() {
-        this.actionId = randomUUID();
+        this.actionId = crypto.randomUUID();
     }
 
-    public toString() {
+    @computed public toString() {
         return this.actionId;
     }
 

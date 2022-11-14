@@ -37,10 +37,10 @@ class FreeThrow extends Action {
 
     public editMade(newMade:boolean) {
         //case when the made boolean isn't changed
-        if(this.made == newMade){return};
+        if(this.made === newMade){return};
         //miss to made -> add free throw made
         //made to miss -> remove free throw made
-        if(newMade == true && this.made == false) {
+        if(newMade === true && this.made === false) {
             this.shootingPlayer.addFreeThrowMade();
         } else {
             this.shootingPlayer.removeFreeThrowMade();

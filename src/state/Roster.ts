@@ -1,8 +1,11 @@
+import { observable, action, computed, reaction } from "mobx"
+
+
 import { Player } from "./Player";
 
 class Roster {
 
-    public players : Map<number, Player> = new Map<number,Player>();
+    @observable players : Map<number, Player> = new Map<number,Player>();
 
     public constructor(players : Array<Player>) {
         players.forEach((player) => {
@@ -11,7 +14,7 @@ class Roster {
         })
     }
 
-    public getPlayer(num : number) {
+    @computed public getPlayer(num : number) {
         let playerGet : Player | undefined = this.players.get(num);
         if(typeof playerGet == undefined) {
             return null
@@ -21,7 +24,7 @@ class Roster {
         
     }
 
-    public substitute(playerGoingIn : number, playerGoingOut: number) {
+    @action public substitute(playerGoingIn : number, playerGoingOut: number) {
         let playerGIn : Player = this.getPlayer(playerGoingIn);
         let playerGOut : Player = this.getPlayer(playerGoingOut);
         
@@ -33,17 +36,17 @@ class Roster {
         }
     }
 
-    public putInGame(playerGoingIn : number) {
+    @action public putInGame(playerGoingIn : number) {
         let playerGIn : Player = this.getPlayer(playerGoingIn);
         playerGIn.subIn();
     }
 
-    public takeOutOfGame(playerGoingIn : number) {
+    @action public takeOutOfGame(playerGoingIn : number) {
         let playerGIn : Player = this.getPlayer(playerGoingIn);
         playerGIn.subOut();
     }
 
-    public getLineupString() {
+    @computed public getLineupString() {
         let lineupArr : Array<string> = new Array<string>();
         this.players.forEach((player, playerNumber) => {
             if(player.inGame) {

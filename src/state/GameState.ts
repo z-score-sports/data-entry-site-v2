@@ -1,4 +1,5 @@
 import { observable, action, computed, reaction } from "mobx"
+import { createContext } from "react";
 
 import { Team, Player } from "./Player";
 import { Possession } from "./Possession";
@@ -21,6 +22,20 @@ const p6_a = new Player("000015", 15, "L", "Lopez", Team.away);
 const homePlayers = new Array<Player>(p1_h, p2_h, p3_h, p4_h, p5_h, p6_h);
 const awayPlayers = new Array<Player>(p1_a, p2_a, p3_a, p4_a, p5_a, p6_a);
 
+const tempHomeRoster = new Roster(homePlayers);
+tempHomeRoster.putInGame(0);
+tempHomeRoster.putInGame(1);
+tempHomeRoster.putInGame(2);
+tempHomeRoster.putInGame(3);
+tempHomeRoster.putInGame(4);
+const tempAwayRoster = new Roster(awayPlayers);
+tempAwayRoster.putInGame(10);
+tempAwayRoster.putInGame(11);
+tempAwayRoster.putInGame(12);
+tempAwayRoster.putInGame(13);
+tempAwayRoster.putInGame(14);
+
+
 
 
 class GameState {
@@ -39,7 +54,7 @@ class GameState {
     }
 
     @action callTimeout(team : Team) {
-        if(team == Team.home) {
+        if(team === Team.home) {
             this.homeTimeouts--;
         } else {
             this.awayTimeouts--;
@@ -78,4 +93,4 @@ class GameState {
 
 }
 
-export {GameState}
+export default createContext(new GameState(Team.home))

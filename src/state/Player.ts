@@ -33,7 +33,7 @@ class Player {
     }
 
     @computed getTeamStr() : "home" | "away"  {
-        if(this.team == 0) {
+        if(this.team === Team.home) {
             return "home"
         } else {
             return "away"

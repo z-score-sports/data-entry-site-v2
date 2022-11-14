@@ -36,7 +36,7 @@ class Rebound extends Action {
     }
 
     public getReboundTypeString() {
-        if(this.reboundType == 0) {
+        if(this.reboundType === ReboundType.offensive) {
             return "offensive";
         } else {
             return "defensive";
