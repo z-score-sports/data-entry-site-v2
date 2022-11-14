@@ -1,3 +1,5 @@
+import { observable, action, computed, reaction } from "mobx"
+
 import { Team, Player } from "./Player";
 import { Possession } from "./Possession";
 import { Roster } from "./Roster";
@@ -22,21 +24,21 @@ const awayPlayers = new Array<Player>(p1_a, p2_a, p3_a, p4_a, p5_a, p6_a);
 
 
 class GameState {
-    quarter : number = 1;
-    possessionArrow : Team;
-    homeTimeouts : number = 4;
-    awayTimeouts : number = 4;
-    homeRoster : Roster = new Roster(homePlayers);
-    awayRoster : Roster = new Roster(awayPlayers);
+    @observable quarter : number = 1;
+    @observable possessionArrow : Team;
+    @observable homeTimeouts : number = 4;
+    @observable awayTimeouts : number = 4;
+    @observable homeRoster : Roster = new Roster(homePlayers);
+    @observable awayRoster : Roster = new Roster(awayPlayers);
     possessionStack : Array<Possession> = new Array<Possession>();
-    currentPossession : Possession = null;
+    @observable currentPossession : Possession = null;
 
     constructor(startTeam : Team) {
         this.currentPossession = new Possession(this.quarter, startTeam)
 
     }
 
-    callTimeout(team : Team) {
+    @action callTimeout(team : Team) {
         if(team == Team.home) {
             this.homeTimeouts--;
         } else {
@@ -44,15 +46,15 @@ class GameState {
         }
     }
 
-    increaseQuarter() {
+    @action increaseQuarter() {
         this.quarter++;
     }
 
-    decreaseQuarter() {
+    @action decreaseQuarter() {
         this.quarter = Math.max(this.quarter-1, 1);
     }
 
-    changePossessionArray() {
+    @action changePossessionArrow() {
         this.possessionArrow = this.possessionArrow === Team.away ? Team.home : Team.away;
     }
 
@@ -65,7 +67,7 @@ class GameState {
     }
 
 
-    endPossession() {
+    @action endPossession() {
         let team : Team = this.currentPossession.offenseTeam;
         this.currentPossession.homeLineupString = this.homeRoster.getLineupString();
         this.currentPossession.awayLineupString = this.awayRoster.getLineupString();
