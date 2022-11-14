@@ -1,9 +1,11 @@
+import { observable, action, computed, reaction } from "mobx"
+
 import { Player } from "../Player";
 import { Action } from "./Action";
 
 
 class Turnover extends Action {
-    offensivePlayer : Player = null;
+    @observable offensivePlayer : Player = null;
     
 
     constructor(offensivePlayer : Player) {
@@ -12,13 +14,13 @@ class Turnover extends Action {
 
     }
 
-    public editOffensivePlayer(newOffensivePlayer : Player) {
+    @action editOffensivePlayer(newOffensivePlayer : Player) {
         this.offensivePlayer = newOffensivePlayer
     }
 
-    public removeStats (): void {return}
+    @action removeStats (): void {return}
 
-    actionJSON (): Object {
+    @computed actionJSON (): Object {
         return {
             "action": "turnover",
             "actionId": this.actionId,
@@ -29,7 +31,7 @@ class Turnover extends Action {
 }
 
 class Steal extends Turnover {
-    stealingPlayer : Player;
+    @observable stealingPlayer : Player;
 
     constructor(offensivePlayer:Player, stealingPlayer:Player) {
         super(offensivePlayer);
@@ -37,17 +39,17 @@ class Steal extends Turnover {
         this.stealingPlayer.addSteal();
     }
 
-    public editStealingPlayer(newStealingPlayer : Player) {
+    @action editStealingPlayer(newStealingPlayer : Player) {
         this.stealingPlayer.removeSteal();
         this.stealingPlayer = newStealingPlayer;
         this.stealingPlayer.addSteal();
     }
 
-    public removeStats (): void {
+    @action removeStats (): void {
         this.stealingPlayer.removeSteal();
     }
 
-    actionJSON (): Object {
+    @computed actionJSON (): Object {
         return {
             "action": "steal",
             "actionId": this.actionId,

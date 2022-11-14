@@ -1,11 +1,13 @@
+import { observable, action, computed, reaction } from "mobx"
+
 import { Player } from "../Player";
 import { Action } from "./Action";
 import { FreeThrow } from "./FreeThrow";
 
 
 class Foul extends Action {
-    foulingPlayer : Player;
-    freeThrows : Array<FreeThrow> = Array<FreeThrow>();
+    @observable foulingPlayer : Player;
+    @observable freeThrows : Array<FreeThrow> = Array<FreeThrow>();
     
 
     constructor(foulingPlayer:Player) {
@@ -15,19 +17,19 @@ class Foul extends Action {
 
     }
 
-    public removeStats (): void {
+    @action removeStats (): void {
         this.freeThrows.forEach((freeThrow : FreeThrow) => {
             freeThrow.removeStats();
         })
         this.foulingPlayer.removeFoul();
     }
 
-    public addFreeThrow(shootingPlayer:Player, made:boolean) {
+    @action addFreeThrow(shootingPlayer:Player, made:boolean) {
         let freeThrow : FreeThrow = new FreeThrow(shootingPlayer, made);
         this.freeThrows.push(freeThrow)
     }
 
-    public removeFreeThrow() {
+    @action removeFreeThrow() {
         // NOTE: this only removes the last free throw that was attempted
         // in the future, we should be able to remove by id
         let lastFreeThrow : FreeThrow = this.freeThrows.pop()
@@ -35,20 +37,20 @@ class Foul extends Action {
         
     }
 
-    public editFoulingPlayer(newFoulingPlayer : Player) {
+    @action editFoulingPlayer(newFoulingPlayer : Player) {
         this.foulingPlayer.removeFoul();
         this.foulingPlayer = newFoulingPlayer;
         this.foulingPlayer.addFoul();
     }
 
-    public getLastFreeThrow() : FreeThrow {
+    @action getLastFreeThrow() : FreeThrow {
         if(this.freeThrows.length === 0) {
             return null;
         }
         return this.freeThrows[this.freeThrows.length-1]
     }
 
-    actionJSON (): Object {
+    @computed actionJSON (): Object {
         return {
             "action": "foul",
             "actionId": this.actionId,

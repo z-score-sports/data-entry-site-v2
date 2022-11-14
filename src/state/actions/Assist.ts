@@ -1,9 +1,11 @@
+import { observable, action, computed, reaction } from "mobx"
+
 import { Player } from "../Player";
 import { Action } from "./Action";
 
 
 class Assist extends Action {
-    public assistingPlayer : Player;
+    @observable assistingPlayer : Player;
     
 
     public constructor(assistingPlayer : Player) {
@@ -12,18 +14,18 @@ class Assist extends Action {
         this.assistingPlayer.addAssist();
     }
 
-    public removeStats (): void {
+    @action public removeStats (): void {
         this.assistingPlayer.removeAssist();
     }
 
-    public editAssistingPlayer(newAssistingPlayer : Player) {
+    @action public editAssistingPlayer(newAssistingPlayer : Player) {
         this.assistingPlayer.removeAssist();
         this.assistingPlayer = newAssistingPlayer;
         this.assistingPlayer.addAssist();
     }
 
 
-    actionJSON (): Object {
+    @computed actionJSON (): Object {
         return {
             "action": "assist",
             "actionId": this.actionId,

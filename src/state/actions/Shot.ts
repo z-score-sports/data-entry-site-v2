@@ -1,3 +1,5 @@
+import { observable, action, computed, reaction } from "mobx"
+
 import { Player } from "../Player";
 import { Action } from "./Action";
 import { Assist } from "./Assist";
@@ -6,12 +8,12 @@ import { Block } from "./Block";
  
 class Shot extends Action {
 
-    shooter : Player;
-    region : number;
-    made : boolean;
-    assist : Assist = null;
-    rebound : Rebound = null;
-    block : Block = null;
+    @observable shooter : Player;
+    @observable region : number;
+    @observable made : boolean;
+    @observable assist : Assist = null;
+    @observable rebound : Rebound = null;
+    @observable block : Block = null;
     
     
 
@@ -30,7 +32,7 @@ class Shot extends Action {
 
     }
 
-    public getPoints() : number {
+    @computed public getPoints() : number {
         if(!this.made){
             return 0;
         } else if (this.region <= 4){
@@ -40,7 +42,7 @@ class Shot extends Action {
         }
     }
 
-    public removeStats (): void {
+    @action removeStats (): void {
         // first the properties unique to the shot 
         this.shooter.removeFGAttempt();
         if(this.made) {
@@ -55,7 +57,7 @@ class Shot extends Action {
     }
 
 
-    public editShooter(newShooter : Player) {
+    @action editShooter(newShooter : Player) {
         let points : number = this.getPoints();
         
         this.shooter.removeFGAttempt();
@@ -74,7 +76,7 @@ class Shot extends Action {
 
     }
 
-    public editRegion(newRegion : 1|2|3|4|5|6|7|8|9) {
+    @action editRegion(newRegion : 1|2|3|4|5|6|7|8|9) {
         //we edit the region explicitly
         //track points before and after adjusting the region...
         //add the difference
@@ -85,7 +87,7 @@ class Shot extends Action {
         
     }
 
-    public editMade(newMade: boolean) {
+    @action editMade(newMade: boolean) {
 
         if (newMade && !this.made) {
             this.made = newMade // setting made to true
@@ -104,7 +106,7 @@ class Shot extends Action {
         
     }
 
-    public addAssist(assistingPlayer : Player) {
+    @action addAssist(assistingPlayer : Player) {
         if (!this.made) {
             console.log("warning: cannot add an assist to a missed shot.")
             return
@@ -115,7 +117,7 @@ class Shot extends Action {
 
     }
 
-    public removeAssist() {
+    @action removeAssist() {
         if(!this.assist) {return ;}
         this.assist.removeStats();
         this.assist = null;
@@ -123,7 +125,7 @@ class Shot extends Action {
 
     }
 
-    public addRebound(reboundingPlayer : Player, reboundType : ReboundType) {
+    @action addRebound(reboundingPlayer : Player, reboundType : ReboundType) {
         if(this.made) {
             console.log("warning: cannot add a rebound to a made shot.")
             return
@@ -132,7 +134,7 @@ class Shot extends Action {
         this.rebound = newRebound;
     }
 
-    public removeRebound() {
+    @action removeRebound() {
         if (!this.rebound){return;}
 
         this.rebound.removeStats();
@@ -140,7 +142,7 @@ class Shot extends Action {
 
     }
 
-    public addBlock(blockingPlayer : Player) {
+    @action addBlock(blockingPlayer : Player) {
         //validate
         if(this.made) {
             console.log("warning: cannot add a block to a made shot.")
@@ -150,7 +152,7 @@ class Shot extends Action {
         this.block = newBlock;
     }
 
-    public removeBlock() {
+    @action removeBlock() {
         if(!this.block){return;}
         this.block.removeStats();
         this.block = null;
@@ -160,7 +162,7 @@ class Shot extends Action {
 
 
 
-    actionJSON (): Object {
+    @computed actionJSON (): Object {
         return {
             "action": "shot",
             "actionId": this.actionId,
