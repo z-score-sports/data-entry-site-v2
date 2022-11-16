@@ -1,4 +1,4 @@
-import { observable, action, computed, reaction } from "mobx"
+import { observable, action, computed, reaction, makeObservable } from "mobx"
 
 import { Action } from "./Action";
 import { Player } from "../Player";
@@ -6,26 +6,32 @@ import { Player } from "../Player";
 
 
 class Block extends Action {
-    @observable blockingPlayer : Player;
+    blockingPlayer : Player;
 
     public constructor(blockingPlayer : Player) {
         super();
+        makeObservable(this, {
+            blockingPlayer: observable,
+            removeStats: action,
+            editBlockingPlayer: action,
+            actionJSON: computed,
+        })
         this.blockingPlayer = blockingPlayer;
         this.blockingPlayer.addBlock();
     }
 
-    @action public removeStats (): void {
+    public removeStats (): void {
         this.blockingPlayer.removeBlock();
     }
 
-    @action public editBlockingPlayer(newBlockingPlayer : Player) {
+    public editBlockingPlayer(newBlockingPlayer : Player) {
         this.blockingPlayer.removeBlock();
         this.blockingPlayer = newBlockingPlayer;
         this.blockingPlayer.addBlock();
     }
 
 
-    @computed public actionJSON (): Object {
+    get actionJSON (): Object {
         return {
             "action" : "block",
             "actionId": this.actionId,
