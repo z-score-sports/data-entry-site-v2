@@ -1,4 +1,4 @@
-import { observable, action, computed, reaction } from "mobx"
+import { observable, action, computed, reaction, makeObservable } from "mobx"
 
 import { Player } from "../Player";
 import { Action } from "./Action";
@@ -6,12 +6,23 @@ import { FreeThrow } from "./FreeThrow";
 
 
 class Foul extends Action {
-    @observable foulingPlayer : Player;
-    @observable freeThrows : Array<FreeThrow> = Array<FreeThrow>();
+    foulingPlayer : Player;
+    freeThrows : Array<FreeThrow> = Array<FreeThrow>();
     
 
     constructor(foulingPlayer:Player) {
         super();
+        makeObservable(this, {
+            foulingPlayer: observable,
+            freeThrows: observable,
+            removeStats: action,
+            addFreeThrow: action,
+            removeFreeThrow: action,
+            editFoulingPlayer: action,
+            lastFreeThrow: computed,
+            actionJSON: computed,
+            
+        })
         this.foulingPlayer = foulingPlayer;
         this.foulingPlayer.addFoul();
 
@@ -43,14 +54,14 @@ class Foul extends Action {
         this.foulingPlayer.addFoul();
     }
 
-    @action getLastFreeThrow() : FreeThrow {
+    get lastFreeThrow() : FreeThrow {
         if(this.freeThrows.length === 0) {
             return null;
         }
         return this.freeThrows[this.freeThrows.length-1]
     }
 
-    @computed actionJSON (): Object {
+    get actionJSON (): Object {
         return {
             "action": "foul",
             "actionId": this.actionId,

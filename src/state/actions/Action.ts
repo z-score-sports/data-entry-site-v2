@@ -18,7 +18,7 @@ export abstract class Action {
 
     abstract removeStats() : void;
 
-    abstract actionJSON() : Object;
+    abstract get actionJSON() : Object;
 }
 
 
