@@ -1,4 +1,4 @@
-import { observable, action, computed, reaction, makeObservable } from "mobx"
+import { observable, action, computed, reaction, makeObservable, makeAutoObservable } from "mobx"
 import { createContext } from "react";
 
 import { Team, Player } from "./Player";
@@ -49,22 +49,7 @@ class GameState {
     currentPossession : Possession = null;
 
     constructor(startTeam : Team) {
-        makeObservable(this, {
-            quarter: observable,
-            possessionArrow: observable,
-            homeTimeouts: observable,
-            awayTimeouts: observable,
-            homeRoster: observable,
-            awayRoster: observable,
-            possessionStack: observable,
-            currentPossession: observable,
-            callTimeout: action,
-            increaseQuarter: action,
-            decreaseQuarter: action,
-            changePossessionArrow: action,
-            substitute: action,
-            endPossession: action
-        })
+        makeAutoObservable(this)
         this.currentPossession = new Possession(this.quarter, startTeam)
 
     }
