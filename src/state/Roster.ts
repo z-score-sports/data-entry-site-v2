@@ -1,20 +1,21 @@
-import { observable, action, computed, reaction } from "mobx"
+import { observable, action, computed, reaction, makeAutoObservable } from "mobx"
 
 
 import { Player } from "./Player";
 
 class Roster {
 
-    @observable players : Map<number, Player> = new Map<number,Player>();
+    players : Map<number, Player> = new Map<number,Player>();
 
     public constructor(players : Array<Player>) {
+        makeAutoObservable(this, {})
         players.forEach((player) => {
             let playerNum : number = player.num;
             this.players.set(playerNum, player);
         })
     }
 
-    @computed public getPlayer(num : number) {
+    getPlayer(num : number) {
         let playerGet : Player | undefined = this.players.get(num);
         if(typeof playerGet == undefined) {
             return null
@@ -24,7 +25,7 @@ class Roster {
         
     }
 
-    @action public substitute(playerGoingIn : number, playerGoingOut: number) {
+    substitute(playerGoingIn : number, playerGoingOut: number) {
         let playerGIn : Player = this.getPlayer(playerGoingIn);
         let playerGOut : Player = this.getPlayer(playerGoingOut);
         
@@ -36,17 +37,17 @@ class Roster {
         }
     }
 
-    @action public putInGame(playerGoingIn : number) {
+    putInGame(playerGoingIn : number) {
         let playerGIn : Player = this.getPlayer(playerGoingIn);
         playerGIn.subIn();
     }
 
-    @action public takeOutOfGame(playerGoingIn : number) {
+    takeOutOfGame(playerGoingIn : number) {
         let playerGIn : Player = this.getPlayer(playerGoingIn);
         playerGIn.subOut();
     }
 
-    @computed public getLineupString() {
+    get lineupString() {
         let lineupArr : Array<string> = new Array<string>();
         this.players.forEach((player, playerNumber) => {
             if(player.inGame) {

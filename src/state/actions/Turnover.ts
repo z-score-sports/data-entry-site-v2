@@ -1,26 +1,33 @@
-import { observable, action, computed, reaction } from "mobx"
+import { observable, action, computed, reaction, makeObservable, override } from "mobx"
 
 import { Player } from "../Player";
 import { Action } from "./Action";
 
 
 class Turnover extends Action {
-    @observable offensivePlayer : Player = null;
+    offensivePlayer : Player = null;
     
 
     constructor(offensivePlayer : Player) {
         super();
+        makeObservable(this, {
+            offensivePlayer: observable,
+            editOffensivePlayer: action,
+            removeStats: action,
+            actionJSON: computed,
+
+        })
         this.offensivePlayer = offensivePlayer;
 
     }
 
-    @action editOffensivePlayer(newOffensivePlayer : Player) {
+    editOffensivePlayer(newOffensivePlayer : Player) {
         this.offensivePlayer = newOffensivePlayer
     }
 
-    @action removeStats (): void {return}
+    removeStats (): void {return}
 
-    @computed actionJSON (): Object {
+    get actionJSON (): Object {
         return {
             "action": "turnover",
             "actionId": this.actionId,
@@ -31,25 +38,31 @@ class Turnover extends Action {
 }
 
 class Steal extends Turnover {
-    @observable stealingPlayer : Player;
+    stealingPlayer : Player;
 
     constructor(offensivePlayer:Player, stealingPlayer:Player) {
         super(offensivePlayer);
+        makeObservable(this, {
+            stealingPlayer: observable,
+            editStealingPlayer: observable,
+            removeStats: override,
+            actionJSON: override,
+        })
         this.stealingPlayer = stealingPlayer;
         this.stealingPlayer.addSteal();
     }
 
-    @action editStealingPlayer(newStealingPlayer : Player) {
+    editStealingPlayer(newStealingPlayer : Player) {
         this.stealingPlayer.removeSteal();
         this.stealingPlayer = newStealingPlayer;
         this.stealingPlayer.addSteal();
     }
 
-    @action removeStats (): void {
+    removeStats (): void {
         this.stealingPlayer.removeSteal();
     }
 
-    @computed actionJSON (): Object {
+    get actionJSON (): Object {
         return {
             "action": "steal",
             "actionId": this.actionId,

@@ -1,19 +1,24 @@
-import { observable, action, computed, reaction } from "mobx"
+import { makeObservable, computed } from "mobx"
 
 export abstract class Action {
     actionId : string;
 
     constructor() {
+        makeObservable(this, {
+            actionId: false,
+            actionString: computed,
+
+        })
         this.actionId = crypto.randomUUID();
     }
 
-    @computed public toString() {
+    get actionString() {
         return this.actionId;
     }
 
     abstract removeStats() : void;
 
-    abstract actionJSON() : Object;
+    abstract get actionJSON() : Object;
 }
 
 
