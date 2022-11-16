@@ -66,7 +66,7 @@ class Possession {
             if (tempAction instanceof Shot) {
                 return tempAction
             } else if(tempAction instanceof Foul) {
-                return tempAction.getLastFreeThrow();
+                return tempAction.lastFreeThrow;
             }
         }
 

@@ -49,7 +49,7 @@ class GameState {
     currentPossession : Possession = null;
 
     constructor(startTeam : Team) {
-        makeAutoObservable(this)
+        makeAutoObservable(this, {})
         this.currentPossession = new Possession(this.quarter, startTeam)
 
     }

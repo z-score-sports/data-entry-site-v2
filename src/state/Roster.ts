@@ -8,9 +8,7 @@ class Roster {
     players : Map<number, Player> = new Map<number,Player>();
 
     public constructor(players : Array<Player>) {
-        makeAutoObservable(this, {
-            getPlayer: computed,
-        })
+        makeAutoObservable(this, {})
         players.forEach((player) => {
             let playerNum : number = player.num;
             this.players.set(playerNum, player);

@@ -7,10 +7,13 @@ function App() {
 
   const gameState = useContext(GameState)
 
+
+
   return (
     <div className="App">
       This is our app.
       <br/>
+      <button onClick={() => {gameState.increaseQuarter()}}>Click to increase quarter.</button>
       {gameState.quarter}
       <br/>
       {gameState.awayTimeouts}
