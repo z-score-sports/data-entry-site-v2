@@ -1,4 +1,4 @@
-import { observable, action, computed, reaction } from "mobx"
+import { observable, action, computed, reaction, makeObservable } from "mobx"
 
 import { Player } from "../Player";
 import { Action } from "./Action";
@@ -10,34 +10,44 @@ enum ReboundType {
 } 
 
 class Rebound extends Action {
-    @observable reboundingPlayer : Player;
-    @observable reboundType : ReboundType;
+    reboundingPlayer : Player;
+    reboundType : ReboundType;
 
     
 
     public constructor(reboundingPlayer : Player, reboundType : ReboundType) {
         super();
+        makeObservable(this, {
+            reboundingPlayer: observable,
+            reboundType: observable,
+            removeStats: action,
+            editReboundType: action,
+            editPlayer: action,
+            reboundTypeString: computed,
+            actionJSON: computed
+
+        })
         this.reboundingPlayer = reboundingPlayer;
         this.reboundType = reboundType; 
         this.reboundingPlayer.addRebound();
 
     }
 
-    @action removeStats (): void {
+    removeStats (): void {
         this.reboundingPlayer.removeRebound();
     }
     
-    @action editReboundType(newReboundType : ReboundType) {
+    editReboundType(newReboundType : ReboundType) {
         this.reboundType = newReboundType;
     }
 
-    @action editPlayer(newPlayer : Player) {
+    editPlayer(newPlayer : Player) {
         this.reboundingPlayer.removeRebound();
         this.reboundingPlayer = newPlayer;
         this.reboundingPlayer.addRebound();
     }
 
-    @computed getReboundTypeString() {
+    get reboundTypeString() {
         if(this.reboundType === ReboundType.offensive) {
             return "offensive";
         } else {
@@ -46,7 +56,7 @@ class Rebound extends Action {
     }
 
 
-    @computed actionJSON (): Object {
+    get actionJSON (): Object {
         return {
             "action": "rebound",
             "actionId": this.actionId,

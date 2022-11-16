@@ -1,4 +1,4 @@
-import { observable, action, computed, reaction } from "mobx"
+import { observable, action, computed, reaction, makeObservable, makeAutoObservable } from "mobx"
 import { createContext } from "react";
 
 import { Team, Player } from "./Player";
@@ -39,21 +39,22 @@ tempAwayRoster.putInGame(14);
 
 
 class GameState {
-    @observable quarter : number = 1;
-    @observable possessionArrow : Team;
-    @observable homeTimeouts : number = 4;
-    @observable awayTimeouts : number = 4;
-    @observable homeRoster : Roster = new Roster(homePlayers);
-    @observable awayRoster : Roster = new Roster(awayPlayers);
+    quarter : number = 1;
+    possessionArrow : Team;
+    homeTimeouts : number = 4;
+    awayTimeouts : number = 4;
+    homeRoster : Roster = new Roster(homePlayers);
+    awayRoster : Roster = new Roster(awayPlayers);
     possessionStack : Array<Possession> = new Array<Possession>();
-    @observable currentPossession : Possession = null;
+    currentPossession : Possession = null;
 
     constructor(startTeam : Team) {
+        makeAutoObservable(this, {})
         this.currentPossession = new Possession(this.quarter, startTeam)
 
     }
 
-    @action callTimeout(team : Team) {
+    callTimeout(team : Team) {
         if(team === Team.home) {
             this.homeTimeouts--;
         } else {
@@ -61,15 +62,15 @@ class GameState {
         }
     }
 
-    @action increaseQuarter() {
+    increaseQuarter() {
         this.quarter++;
     }
 
-    @action decreaseQuarter() {
+    decreaseQuarter() {
         this.quarter = Math.max(this.quarter-1, 1);
     }
 
-    @action changePossessionArrow() {
+    changePossessionArrow() {
         this.possessionArrow = this.possessionArrow === Team.away ? Team.home : Team.away;
     }
 
@@ -82,10 +83,10 @@ class GameState {
     }
 
 
-    @action endPossession() {
+    endPossession() {
         let team : Team = this.currentPossession.offenseTeam;
-        this.currentPossession.homeLineupString = this.homeRoster.getLineupString();
-        this.currentPossession.awayLineupString = this.awayRoster.getLineupString();
+        this.currentPossession.homeLineupString = this.homeRoster.lineupString;
+        this.currentPossession.awayLineupString = this.awayRoster.lineupString;
         this.currentPossession.quarter = this.quarter;
         this.possessionStack.push(this.currentPossession)
         this.currentPossession = new Possession(this.quarter, team);

@@ -7,13 +7,18 @@ function App() {
 
   const gameState = useContext(GameState)
 
+
+
   return (
     <div className="App">
       This is our app.
       <br/>
-      {gameState.homeRoster.getLineupString()}
+      <button onClick={() => {gameState.increaseQuarter()}}>Click to increase quarter.</button>
+      {gameState.quarter}
       <br/>
-      {gameState.awayRoster.getLineupString()}
+      {gameState.awayTimeouts}
+      <br/>
+      {gameState.homeTimeouts}
     </div>
   );
 }
