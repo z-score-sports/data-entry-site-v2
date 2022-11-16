@@ -10,8 +10,8 @@ enum ReboundType {
 } 
 
 class Rebound extends Action {
-    @observable reboundingPlayer : Player;
-    @observable reboundType : ReboundType;
+    reboundingPlayer : Player;
+    reboundType : ReboundType;
 
     
 

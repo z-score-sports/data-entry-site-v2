@@ -28,19 +28,19 @@ class Foul extends Action {
 
     }
 
-    @action removeStats (): void {
+    removeStats (): void {
         this.freeThrows.forEach((freeThrow : FreeThrow) => {
             freeThrow.removeStats();
         })
         this.foulingPlayer.removeFoul();
     }
 
-    @action addFreeThrow(shootingPlayer:Player, made:boolean) {
+    addFreeThrow(shootingPlayer:Player, made:boolean) {
         let freeThrow : FreeThrow = new FreeThrow(shootingPlayer, made);
         this.freeThrows.push(freeThrow)
     }
 
-    @action removeFreeThrow() {
+    removeFreeThrow() {
         // NOTE: this only removes the last free throw that was attempted
         // in the future, we should be able to remove by id
         let lastFreeThrow : FreeThrow = this.freeThrows.pop()
@@ -48,7 +48,7 @@ class Foul extends Action {
         
     }
 
-    @action editFoulingPlayer(newFoulingPlayer : Player) {
+    editFoulingPlayer(newFoulingPlayer : Player) {
         this.foulingPlayer.removeFoul();
         this.foulingPlayer = newFoulingPlayer;
         this.foulingPlayer.addFoul();

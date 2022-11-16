@@ -8,12 +8,12 @@ import { Block } from "./Block";
  
 class Shot extends Action {
 
-    @observable shooter : Player;
-    @observable region : number;
-    @observable made : boolean;
-    @observable assist : Assist = null;
-    @observable rebound : Rebound = null;
-    @observable block : Block = null;
+    shooter : Player;
+    region : number;
+    made : boolean;
+    assist : Assist = null;
+    rebound : Rebound = null;
+    block : Block = null;
     
     
 
