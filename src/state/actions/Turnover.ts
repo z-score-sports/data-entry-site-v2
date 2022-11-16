@@ -1,4 +1,4 @@
-import { observable, action, computed, reaction } from "mobx"
+import { observable, action, computed, reaction, override } from "mobx"
 
 import { Player } from "../Player";
 import { Action } from "./Action";
@@ -45,11 +45,11 @@ class Steal extends Turnover {
         this.stealingPlayer.addSteal();
     }
 
-    @action removeStats (): void {
+    @override @action removeStats (): void {
         this.stealingPlayer.removeSteal();
     }
 
-    @computed actionJSON (): Object {
+    @override @computed actionJSON (): Object {
         return {
             "action": "steal",
             "actionId": this.actionId,
