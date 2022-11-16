@@ -93,4 +93,6 @@ class GameState {
 
 }
 
+export {GameState}
+
 export default createContext(new GameState(Team.home))

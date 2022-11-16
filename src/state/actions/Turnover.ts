@@ -45,11 +45,11 @@ class Steal extends Turnover {
         this.stealingPlayer.addSteal();
     }
 
-    @override @action removeStats (): void {
+    @override removeStats (): void {
         this.stealingPlayer.removeSteal();
     }
 
-    @override @computed actionJSON (): Object {
+    @override actionJSON (): Object {
         return {
             "action": "steal",
             "actionId": this.actionId,

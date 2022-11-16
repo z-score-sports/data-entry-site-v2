@@ -1,12 +1,26 @@
 import {describe, expect, test} from '@jest/globals';
+import { GameState } from '../state/GameState';
+import { Team } from '../state/Player';
 
 
-describe('Gamestate Module', () => {
-    test("increment quarter", () => {
-        expect(1).toBe(1);
+describe('Gamestate Class', () => {
+    test("Increment quarter", () => {
+        const gameState = new GameState(Team.home);
+        expect(gameState.quarter).toBe(1);
+        gameState.increaseQuarter();
+        expect(gameState.quarter).toBe(2);
     })
 
     test("decrement quarter", () => {
-        expect(-1).toBe(-1);
+        const gameState = new GameState(Team.home);
+        expect(gameState.quarter).toBe(1);
+        gameState.decreaseQuarter();
+        expect(gameState.quarter).toBe(1);
+        gameState.increaseQuarter();
+        gameState.increaseQuarter();
+        gameState.decreaseQuarter();
+        expect(gameState.quarter).toBe(2);
     })
+
+    
  })
