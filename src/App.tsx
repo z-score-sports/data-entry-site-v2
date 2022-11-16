@@ -11,9 +11,11 @@ function App() {
     <div className="App">
       This is our app.
       <br/>
-      {gameState.homeRoster.getLineupString()}
+      {gameState.quarter}
       <br/>
-      {gameState.awayRoster.getLineupString()}
+      {gameState.awayTimeouts}
+      <br/>
+      {gameState.homeTimeouts}
     </div>
   );
 }
