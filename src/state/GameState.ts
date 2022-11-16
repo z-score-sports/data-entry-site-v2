@@ -85,8 +85,8 @@ class GameState {
 
     endPossession() {
         let team : Team = this.currentPossession.offenseTeam;
-        this.currentPossession.homeLineupString = this.homeRoster.getLineupString();
-        this.currentPossession.awayLineupString = this.awayRoster.getLineupString();
+        this.currentPossession.homeLineupString = this.homeRoster.lineupString;
+        this.currentPossession.awayLineupString = this.awayRoster.lineupString;
         this.currentPossession.quarter = this.quarter;
         this.possessionStack.push(this.currentPossession)
         this.currentPossession = new Possession(this.quarter, team);

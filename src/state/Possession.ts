@@ -1,4 +1,4 @@
-import { observable, action, computed, reaction } from "mobx"
+import { observable, action, computed, reaction, makeAutoObservable } from "mobx"
 
 
 import { Action } from "./actions/Action";
@@ -15,15 +15,22 @@ class Possession {
     offenseTeam : Team;
     homeLineupString : string = "";
     awayLineupString : string = "";
-    @observable actions : Array<Shot|Foul|Turnover> = new Array<Shot|Foul|Turnover>();
+    actions : Array<Shot|Foul|Turnover> = new Array<Shot|Foul|Turnover>();
     
     constructor(quarter : number, offenseTeam : Team) {
+        makeAutoObservable(this, {
+            possessionId: false,
+            quarter: false,
+            homeLineupString: false,
+            awayLineupString: false
+            
+        })
         this.possessionId = crypto.randomUUID();
         this.quarter = quarter;
         this.offenseTeam = offenseTeam;
     }
 
-    @computed getLastShot() : Shot {
+    get lastShot() : Shot {
         for(let i = this.actions.length-1; i >= 0; i--) {
             let tempAction : Action = this.actions[i]
             if(tempAction instanceof Shot) {
@@ -33,7 +40,7 @@ class Possession {
         return null
     }
 
-    @computed getLastFoul() : Foul {
+    get lastFoul() : Foul {
         for(let i = this.actions.length-1; i >= 0; i--) {
             let tempAction : Action = this.actions[i]
             if(tempAction instanceof Foul) {
@@ -43,7 +50,7 @@ class Possession {
         return null
     }
 
-    @computed getLastTurnover() : Turnover {
+    get lastTurnover() : Turnover {
         for(let i = this.actions.length-1; i >= 0; i--) {
             let tempAction : Action = this.actions[i]
             if(tempAction instanceof Turnover) {
@@ -53,7 +60,7 @@ class Possession {
         return null
     }
 
-    @computed getLastFTorShot() : Shot | FreeThrow {
+    get lastFTorShot() : Shot | FreeThrow {
         for(let i = this.actions.length-1; i >= 0; i--) {
             let tempAction : Action = this.actions[i]
             if (tempAction instanceof Shot) {
@@ -66,28 +73,28 @@ class Possession {
         return null
     }
 
-    @action addShot(shooter:Player, region: 1|2|3|4|5|6|7|8|9, made:boolean) {
+    addShot(shooter:Player, region: 1|2|3|4|5|6|7|8|9, made:boolean) {
         let newShot : Shot = new Shot(shooter, region, made);
         this.actions.push(newShot);
     }
 
-    @action addFoul(foulingPlayer:Player) {
+    addFoul(foulingPlayer:Player) {
         let newFoul : Foul = new Foul(foulingPlayer);
         this.actions.push(newFoul);
     }
 
-    @action addTurnover(offensivePlayer:Player) {
+    addTurnover(offensivePlayer:Player) {
         let newTurnover : Turnover = new Turnover(offensivePlayer);
         this.actions.push(newTurnover);
     }
 
-    @action addSteal(offensivePlayer:Player, stealingPlayer : Player) {
+    addSteal(offensivePlayer:Player, stealingPlayer : Player) {
         let newSteal : Steal = new Steal(offensivePlayer, stealingPlayer);
         this.actions.push(newSteal);
     }
 
-    @action addAssist(assistingPlayer:Player) {
-        let prevShot : Shot = this.getLastShot();
+    addAssist(assistingPlayer:Player) {
+        let prevShot : Shot = this.lastShot;
         if(!prevShot) {
             console.log("warning: trying to add an assist before shot")
             return
@@ -95,8 +102,8 @@ class Possession {
         prevShot.addAssist(assistingPlayer);
     }
 
-    @action addBock(blockingPlayer:Player) {
-        let prevShot : Shot = this.getLastShot();
+    addBock(blockingPlayer:Player) {
+        let prevShot : Shot = this.lastShot;
         if(!prevShot) {
             console.log("warning: trying to add a block before shot")
             return
@@ -104,8 +111,8 @@ class Possession {
         prevShot.addBlock(blockingPlayer);
     }
     
-    @action addFreeThrow(shootingPlayer : Player, made : boolean) {
-        let prevFoul : Foul = this.getLastFoul();
+    addFreeThrow(shootingPlayer : Player, made : boolean) {
+        let prevFoul : Foul = this.lastFoul;
         if(!prevFoul) {
             console.log("warning: trying to add free throw before foul.")
             return
@@ -113,8 +120,8 @@ class Possession {
         prevFoul.addFreeThrow(shootingPlayer, made);
     }
 
-    @action addRebound(reboundingPlayer : Player, reboundType : ReboundType) {
-        let prevFTorShot : Shot | FreeThrow = this.getLastFTorShot();
+    addRebound(reboundingPlayer : Player, reboundType : ReboundType) {
+        let prevFTorShot : Shot | FreeThrow = this.lastFTorShot;
         if(!prevFTorShot) {
             console.log("warning: trying to add a rebound to nonesistent shot or free throw")
             return
@@ -122,13 +129,13 @@ class Possession {
         prevFTorShot.addRebound(reboundingPlayer, reboundType);
     }
 
-    @action removeStats() {
+    removeStats() {
         this.actions.forEach((action) => {
             action.removeStats();
         })
     }
     
-    @action removeAction() {
+    removeAction() {
         //going to assume that the only action you can remove is the last one
         let action : Action = this.actions.pop();
         action.removeStats();
