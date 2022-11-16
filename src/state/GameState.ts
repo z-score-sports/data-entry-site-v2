@@ -50,6 +50,7 @@ class GameState {
 
     constructor(startTeam : Team) {
         makeAutoObservable(this, {})
+        this.possessionArrow = startTeam === Team.home ? Team.away : Team.home;
         this.currentPossession = new Possession(this.quarter, startTeam)
 
     }
