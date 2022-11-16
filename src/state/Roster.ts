@@ -5,7 +5,7 @@ import { Player } from "./Player";
 
 class Roster {
 
-    @observable players : Map<number, Player> = new Map<number,Player>();
+    players : Map<number, Player> = new Map<number,Player>();
 
     public constructor(players : Array<Player>) {
         makeAutoObservable(this, {
