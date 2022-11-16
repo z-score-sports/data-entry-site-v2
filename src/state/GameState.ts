@@ -57,9 +57,9 @@ class GameState {
 
     callTimeout(team : Team) {
         if(team === Team.home) {
-            this.homeTimeouts--;
+            this.homeTimeouts = Math.max(this.homeTimeouts-1, 0);
         } else {
-            this.awayTimeouts--;
+            this.awayTimeouts = Math.max(this.awayTimeouts-1, 0);
         }
     }
 
@@ -73,14 +73,6 @@ class GameState {
 
     changePossessionArrow() {
         this.possessionArrow = this.possessionArrow === Team.away ? Team.home : Team.away;
-    }
-
-    substitute(team:Team, playerGoingIn:number, playerGoingOut:number) {
-        if(team === Team.home) {
-            this.homeRoster.substitute(playerGoingIn, playerGoingOut);
-        } else {
-            this.awayRoster.substitute(playerGoingIn, playerGoingOut);
-        }
     }
 
 

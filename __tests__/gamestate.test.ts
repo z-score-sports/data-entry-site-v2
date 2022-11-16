@@ -27,9 +27,9 @@ describe('Quarter tests', () => {
         expect(gameState.quarter).toBe(1);
     })
 
- })
+})
 
- describe("Possession arrow tests", () => {
+describe("Possession arrow tests", () => {
     test("Home arrow to away arrow", () => {
         const gameState = new GameState(Team.away);
         expect(gameState.possessionArrow).toBe(Team.home);
@@ -44,4 +44,25 @@ describe('Quarter tests', () => {
         expect(gameState.possessionArrow).toBe(Team.home);
     })
     
- })
+})
+
+describe("Timeout Tests", () => {
+    test("Call home and away timeout", () => {
+        const gameState = new GameState(Team.home);
+        let homeStartTimeouts : number = gameState.homeTimeouts;
+        let awayStartTimeouts : number = gameState.awayTimeouts;
+        gameState.callTimeout(Team.home);
+        expect(gameState.homeTimeouts).toBe(Math.max(homeStartTimeouts-1, 0));
+        gameState.callTimeout(Team.away);
+        expect(gameState.awayTimeouts).toBe(Math.max(awayStartTimeouts-1, 0));
+    })
+
+    test("Call timeout with 0 remaining", () => {
+        const gameState = new GameState(Team.home);
+        let homeStartTimeouts : number = gameState.homeTimeouts;
+        for(let i:number = 1; i <= homeStartTimeouts; i++) {
+            gameState.callTimeout(Team.home);
+        }
+        expect(gameState.homeTimeouts).toBe(0);
+    })
+})
