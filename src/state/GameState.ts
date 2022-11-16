@@ -1,4 +1,4 @@
-import { observable, action, computed, reaction, makeObservable, makeAutoObservable } from "mobx"
+import { makeAutoObservable } from "mobx"
 import { createContext } from "react";
 
 import { Team, Player } from "./Player";
@@ -51,7 +51,7 @@ class GameState {
     constructor(startTeam : Team) {
         makeAutoObservable(this, {})
         this.possessionArrow = startTeam === Team.home ? Team.away : Team.home;
-        this.currentPossession = new Possession(this.quarter, startTeam)
+        this.currentPossession = new Possession(startTeam)
 
     }
 
@@ -77,12 +77,12 @@ class GameState {
 
 
     endPossession() {
-        let team : Team = this.currentPossession.offenseTeam;
+        let nextTeam : Team = this.currentPossession.offenseTeam === Team.home ? Team.away : Team.home;
         this.currentPossession.homeLineupString = this.homeRoster.lineupString;
         this.currentPossession.awayLineupString = this.awayRoster.lineupString;
         this.currentPossession.quarter = this.quarter;
         this.possessionStack.push(this.currentPossession)
-        this.currentPossession = new Possession(this.quarter, team);
+        this.currentPossession = new Possession(nextTeam);
     }
 
 }

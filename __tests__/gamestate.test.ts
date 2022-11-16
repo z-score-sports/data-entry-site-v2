@@ -1,6 +1,7 @@
 import {describe, expect, test} from '@jest/globals';
 import { GameState } from '../src/state/GameState';
 import { Team } from '../src/state/Player';
+import { Possession } from '../src/state/Possession';
 
 
 describe('Quarter tests', () => {
@@ -64,5 +65,24 @@ describe("Timeout Tests", () => {
             gameState.callTimeout(Team.home);
         }
         expect(gameState.homeTimeouts).toBe(0);
+    })
+})
+
+
+describe("End possession tests", () => {
+    test("End first possession", () => {
+        // TODO: gamestate here is constructed with test players instead of the default players in GameState.ts
+        const gameState = new GameState(Team.home);
+        const quarter : number = gameState.quarter;
+        const curPos : Possession = gameState.currentPossession;
+
+        gameState.endPossession();
+        
+        expect(curPos.quarter).toBe(quarter);
+        expect(curPos.homeLineupString).not.toBeNull();
+        expect(curPos.awayLineupString).not.toBeNull();
+        expect(gameState.currentPossession).not.toBe(curPos);
+        expect(gameState.currentPossession.offenseTeam).toBe(Team.away);
+        
     })
 })
