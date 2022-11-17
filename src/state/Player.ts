@@ -33,7 +33,7 @@ class Player {
         this.team = team;
     }
 
-    get TeamStr() : "home" | "away"  {
+    get teamStr() : "home" | "away"  {
         if(this.team === Team.home) {
             return "home"
         } else {

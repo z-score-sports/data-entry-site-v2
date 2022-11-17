@@ -43,15 +43,17 @@ class GameState {
     possessionArrow : Team;
     homeTimeouts : number = 4;
     awayTimeouts : number = 4;
-    homeRoster : Roster = new Roster(homePlayers);
-    awayRoster : Roster = new Roster(awayPlayers);
+    homeRoster : Roster;
+    awayRoster : Roster;
     possessionStack : Array<Possession> = new Array<Possession>();
     currentPossession : Possession = null;
 
-    constructor(startTeam : Team) {
+    constructor(startTeam : Team, homeRoster:Roster = new Roster(homePlayers), awayRoster:Roster = new Roster(awayPlayers)) {
         makeAutoObservable(this, {})
         this.possessionArrow = startTeam === Team.home ? Team.away : Team.home;
         this.currentPossession = new Possession(startTeam)
+        this.homeRoster = homeRoster;
+        this.awayRoster = awayRoster;
 
     }
 
