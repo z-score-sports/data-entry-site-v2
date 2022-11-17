@@ -1,0 +1,54 @@
+.teamdescription {
+    width: fit-content;
+    display: flex;
+    flex-direction: column;
+    gap: 0.25em;
+}
+
+.teamname {
+    font-size: x-large;
+    font-weight: normal;
+    
+}
+
+.timeouts {
+    margin: 0;
+    padding: 0;
+}
+
+.scoreboarddata {
+    display: flex;
+    height: 100%;
+    align-items: center;
+}
+
+.centerscoreboard {
+    width: 15vw;
+}
+
+.scoreboard__scores {
+    display: flex;
+    justify-content: space-between;
+
+}
+
+.score {
+    font-size: x-large;
+    font-weight:normal;
+    display: flex;
+    justify-content: center;
+}
+
+.width3 {
+    width: 33%;
+}
+
+.score__center {
+    display: flex;
+    align-items: center;
+}
+
+.quarter {
+    margin: 0;
+    padding-bottom: .5em;
+}

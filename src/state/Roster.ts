@@ -47,6 +47,14 @@ class Roster {
         playerGIn.subOut();
     }
 
+    get teamFouls() : number  {
+        let totalFouls : number = 0;
+        this.players.forEach((player, playerNum) => {
+            totalFouls += player.fouls;
+        })
+        return totalFouls;
+    }
+
     get lineupString() {
         let lineupArr : Array<string> = new Array<string>();
         this.players.forEach((player, playerNumber) => {
@@ -57,6 +65,14 @@ class Roster {
         })
         lineupArr.sort();
         return lineupArr.toString();
+    }
+
+    get pointsScored() {
+        let totalPoints : number = 0;
+        this.players.forEach((player, playerNumber) => {
+            totalPoints += player.totalPoints
+        })
+        return totalPoints;
     }
 
 
