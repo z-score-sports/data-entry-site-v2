@@ -54,6 +54,7 @@ class FreeThrow extends Action {
         //miss to made -> add free throw made
         //made to miss -> remove free throw made
         if(newMade === true && this.made === false) {
+            this.removeRebound();
             this.shootingPlayer.addFreeThrowMade();
         } else {
             this.shootingPlayer.removeFreeThrowMade();
@@ -80,6 +81,7 @@ class FreeThrow extends Action {
     }
 
     addRebound(reboundingPlayer: Player, reboundType : ReboundType) {
+        // TODO: We can actually infer the rebound type, but this might be where the code gets messy
         if(this.made) {
             console.log("warning: trying to add a rebound to a made free throw")
             return

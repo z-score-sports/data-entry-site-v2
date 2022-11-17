@@ -77,6 +77,9 @@ class GameState {
         this.possessionArrow = this.possessionArrow === Team.away ? Team.home : Team.away;
     }
 
+    //might want to add some additional helper methods
+    // Example: getOffensivePlayer(number)
+    // Example: getOffensivePlayerInGame(number)
 
     endPossession() {
         let nextTeam : Team = this.currentPossession.offenseTeam === Team.home ? Team.away : Team.home;

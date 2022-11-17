@@ -3,6 +3,7 @@ import {Turnover} from "../src/state/actions/Turnover"
 import {Assist} from "../src/state/actions/Assist"
 import {Block} from "../src/state/actions/Block"
 import {Rebound, ReboundType} from "../src/state/actions/Rebound"
+import {FreeThrow} from "../src/state/actions/FreeThrow"
 import { Player, Team } from '../src/state/Player';
 
 describe("Assist class tests", () => {
@@ -87,6 +88,64 @@ describe("Rebound class tests", () => {
         expect(offRebound.reboundTypeString).toBe("offensive");
         const defRebound = new Rebound(player, ReboundType.defensive);
         expect(defRebound.reboundTypeString).toBe("defensive");
+
+    })
+})
+
+describe("Free throw class tests", () => {
+    test("Made free throw and editing made", () => {
+        const player = new Player("000000", 0, "John", "Doe", Team.home);
+        const ft = new FreeThrow(player, true);
+        expect(ft.shootingPlayer).toBe(player)
+        expect(player.freeThrowsAttempted).toBe(1);
+        expect(player.freeThrowsMade).toBe(1);
+        ft.editMade(false);
+        expect(player.freeThrowsAttempted).toBe(1);
+        expect(player.freeThrowsMade).toBe(0);
+    })
+
+    test("Miessed free throw editing player", () => {
+        const player = new Player("000000", 0, "John", "Doe", Team.home);
+        const newPlayer = new Player("000001", 1, "Adam", "Davis", Team.home);
+        const ft = new FreeThrow(player, false);
+        expect(ft.shootingPlayer.freeThrowsMade).toBe(0);
+        expect(ft.shootingPlayer.freeThrowsAttempted).toBe(1);
+        ft.editShootingPlayer(newPlayer);
+        expect(player.freeThrowsMade).toBe(0);
+        expect(player.freeThrowsAttempted).toBe(0);
+        expect(ft.shootingPlayer.freeThrowsMade).toBe(0);
+        expect(ft.shootingPlayer.freeThrowsAttempted).toBe(1);
+
+    })
+
+    test("Rebound attaching", () => {
+        const player = new Player("000000", 0, "John", "Doe", Team.home);
+        const rebPlayer = new Player("000001", 1, "Adam", "Davis", Team.home);
+        const ft = new FreeThrow(player, true);
+        ft.addRebound(rebPlayer, ReboundType.offensive);
+        expect(ft.rebound).toBe(null);
+        ft.editMade(false);
+        ft.addRebound(rebPlayer, ReboundType.offensive);
+        expect(ft.rebound).not.toBe(null);
+        ft.editMade(true);
+        expect(ft.rebound).toBe(null);
+    })
+
+    test("Remove stats", () => {
+        const player = new Player("000000", 0, "John", "Doe", Team.home);
+        const rebPlayer = new Player("000001", 1, "Adam", "Davis", Team.home);
+        const ft = new FreeThrow(player, false);
+        ft.addRebound(rebPlayer, ReboundType.offensive)
+        //checks to ensure that a second rebound isn't added to stats
+        ft.addRebound(rebPlayer, ReboundType.offensive);
+        expect(player.freeThrowsMade).toBe(0);
+        expect(player.freeThrowsAttempted).toBe(1);
+        expect(rebPlayer.rebounds).toBe(1);
+        ft.removeStats();
+        expect(player.freeThrowsMade).toBe(0);
+        expect(player.freeThrowsAttempted).toBe(0);
+        expect(rebPlayer.rebounds).toBe(0);
+
 
     })
 })
