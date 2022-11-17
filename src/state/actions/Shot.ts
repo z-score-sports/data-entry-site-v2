@@ -3,7 +3,7 @@ import { observable, action, computed, reaction, makeAutoObservable, makeObserva
 import { Player } from "../Player";
 import { Action } from "./Action";
 import { Assist } from "./Assist";
-import { Rebound, ReboundType } from "./Rebound";
+import { Rebound } from "./Rebound";
 import { Block } from "./Block";
  
 class Shot extends Action {
@@ -142,12 +142,12 @@ class Shot extends Action {
 
     }
 
-    addRebound(reboundingPlayer : Player, reboundType : ReboundType) {
+    addRebound(reboundingPlayer : Player) {
         if(this.made) {
             console.log("warning: cannot add a rebound to a made shot.")
             return
         }
-        let newRebound : Rebound = new Rebound(reboundingPlayer, reboundType);
+        let newRebound : Rebound = new Rebound(reboundingPlayer);
         this.rebound = newRebound;
     }
 

@@ -2,7 +2,7 @@ import { observable, action, computed, reaction, makeObservable } from "mobx"
 
 import { Player } from "../Player";
 import { Action } from "./Action";
-import { Rebound, ReboundType } from "./Rebound";
+import { Rebound } from "./Rebound";
 
 
 class FreeThrow extends Action {
@@ -80,7 +80,7 @@ class FreeThrow extends Action {
         }
     }
 
-    addRebound(reboundingPlayer: Player, reboundType : ReboundType) {
+    addRebound(reboundingPlayer: Player) {
         // TODO: We can actually infer the rebound type, but this might be where the code gets messy
         if(this.made) {
             console.log("warning: trying to add a rebound to a made free throw")
@@ -89,7 +89,7 @@ class FreeThrow extends Action {
             console.log("warning: trying to add a second rebound to free throw.")
             return 
         }
-        let rebound : Rebound = new Rebound(reboundingPlayer, reboundType);
+        let rebound : Rebound = new Rebound(reboundingPlayer);
         this.rebound = rebound;
 
     }

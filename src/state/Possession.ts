@@ -4,7 +4,6 @@ import { observable, action, computed, reaction, makeAutoObservable } from "mobx
 import { Action } from "./actions/Action";
 import { Foul } from "./actions/Foul";
 import { FreeThrow } from "./actions/FreeThrow";
-import { ReboundType } from "./actions/Rebound";
 import { Shot } from "./actions/Shot";
 import { Steal, Turnover } from "./actions/Turnover";
 import { Player, Team } from "./Player";
@@ -119,13 +118,13 @@ class Possession {
         prevFoul.addFreeThrow(shootingPlayer, made);
     }
 
-    addRebound(reboundingPlayer : Player, reboundType : ReboundType) {
+    addRebound(reboundingPlayer : Player) {
         let prevFTorShot : Shot | FreeThrow = this.lastFTorShot;
         if(!prevFTorShot) {
             console.log("warning: trying to add a rebound to nonesistent shot or free throw")
             return
         }
-        prevFTorShot.addRebound(reboundingPlayer, reboundType);
+        prevFTorShot.addRebound(reboundingPlayer);
     }
 
     removeStats() {
