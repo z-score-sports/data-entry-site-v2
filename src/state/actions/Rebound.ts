@@ -21,7 +21,6 @@ class Rebound extends Action {
             reboundingPlayer: observable,
             reboundType: observable,
             removeStats: action,
-            editReboundType: action,
             editPlayer: action,
             reboundTypeString: computed,
             actionJSON: computed
@@ -36,13 +35,12 @@ class Rebound extends Action {
     removeStats (): void {
         this.reboundingPlayer.removeRebound();
     }
-    
-    editReboundType(newReboundType : ReboundType) {
-        this.reboundType = newReboundType;
-    }
 
     editPlayer(newPlayer : Player) {
         this.reboundingPlayer.removeRebound();
+        if(newPlayer.team !== this.reboundingPlayer.team) {
+            this.reboundType = this.reboundType === ReboundType.offensive ? ReboundType.defensive : ReboundType.offensive;
+        }
         this.reboundingPlayer = newPlayer;
         this.reboundingPlayer.addRebound();
     }
