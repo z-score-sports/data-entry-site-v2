@@ -4,20 +4,19 @@ import { observable, action, computed, reaction, makeAutoObservable } from "mobx
 import { Action } from "./actions/Action";
 import { Foul } from "./actions/Foul";
 import { FreeThrow } from "./actions/FreeThrow";
-import { ReboundType } from "./actions/Rebound";
 import { Shot } from "./actions/Shot";
 import { Steal, Turnover } from "./actions/Turnover";
 import { Player, Team } from "./Player";
 
 class Possession {
     possessionId : string;
-    quarter : number;
+    quarter : number = null;
     offenseTeam : Team;
-    homeLineupString : string = "";
-    awayLineupString : string = "";
+    homeLineupString : string = null;
+    awayLineupString : string = null;
     actions : Array<Shot|Foul|Turnover> = new Array<Shot|Foul|Turnover>();
     
-    constructor(quarter : number, offenseTeam : Team) {
+    constructor(offenseTeam : Team) {
         makeAutoObservable(this, {
             possessionId: false,
             quarter: false,
@@ -26,7 +25,6 @@ class Possession {
             
         })
         this.possessionId = crypto.randomUUID();
-        this.quarter = quarter;
         this.offenseTeam = offenseTeam;
     }
 
@@ -120,13 +118,13 @@ class Possession {
         prevFoul.addFreeThrow(shootingPlayer, made);
     }
 
-    addRebound(reboundingPlayer : Player, reboundType : ReboundType) {
+    addRebound(reboundingPlayer : Player) {
         let prevFTorShot : Shot | FreeThrow = this.lastFTorShot;
         if(!prevFTorShot) {
             console.log("warning: trying to add a rebound to nonesistent shot or free throw")
             return
         }
-        prevFTorShot.addRebound(reboundingPlayer, reboundType);
+        prevFTorShot.addRebound(reboundingPlayer);
     }
 
     removeStats() {

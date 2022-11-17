@@ -1,4 +1,4 @@
-import { observable, action, computed, reaction, makeObservable, makeAutoObservable } from "mobx"
+import { makeAutoObservable } from "mobx"
 import { createContext } from "react";
 
 import { Team, Player } from "./Player";
@@ -43,22 +43,25 @@ class GameState {
     possessionArrow : Team;
     homeTimeouts : number = 4;
     awayTimeouts : number = 4;
-    homeRoster : Roster = new Roster(homePlayers);
-    awayRoster : Roster = new Roster(awayPlayers);
+    homeRoster : Roster;
+    awayRoster : Roster;
     possessionStack : Array<Possession> = new Array<Possession>();
     currentPossession : Possession = null;
 
-    constructor(startTeam : Team) {
+    constructor(startTeam : Team, homeRoster:Roster = new Roster(homePlayers), awayRoster:Roster = new Roster(awayPlayers)) {
         makeAutoObservable(this, {})
-        this.currentPossession = new Possession(this.quarter, startTeam)
+        this.possessionArrow = startTeam === Team.home ? Team.away : Team.home;
+        this.currentPossession = new Possession(startTeam)
+        this.homeRoster = homeRoster;
+        this.awayRoster = awayRoster;
 
     }
 
     callTimeout(team : Team) {
         if(team === Team.home) {
-            this.homeTimeouts--;
+            this.homeTimeouts = Math.max(this.homeTimeouts-1, 0);
         } else {
-            this.awayTimeouts--;
+            this.awayTimeouts = Math.max(this.awayTimeouts-1, 0);
         }
     }
 
@@ -74,24 +77,21 @@ class GameState {
         this.possessionArrow = this.possessionArrow === Team.away ? Team.home : Team.away;
     }
 
-    substitute(team:Team, playerGoingIn:number, playerGoingOut:number) {
-        if(team === Team.home) {
-            this.homeRoster.substitute(playerGoingIn, playerGoingOut);
-        } else {
-            this.awayRoster.substitute(playerGoingIn, playerGoingOut);
-        }
-    }
-
+    //might want to add some additional helper methods
+    // Example: getOffensivePlayer(number)
+    // Example: getOffensivePlayerInGame(number)
 
     endPossession() {
-        let team : Team = this.currentPossession.offenseTeam;
+        let nextTeam : Team = this.currentPossession.offenseTeam === Team.home ? Team.away : Team.home;
         this.currentPossession.homeLineupString = this.homeRoster.lineupString;
         this.currentPossession.awayLineupString = this.awayRoster.lineupString;
         this.currentPossession.quarter = this.quarter;
         this.possessionStack.push(this.currentPossession)
-        this.currentPossession = new Possession(this.quarter, team);
+        this.currentPossession = new Possession(nextTeam);
     }
 
 }
+
+export {GameState}
 
 export default createContext(new GameState(Team.home))
