@@ -5,8 +5,10 @@ import CircleIcon from '@mui/icons-material/Circle';
 import CircleOutlinedIcon from '@mui/icons-material/CircleOutlined';
 import { Button } from '@mui/material';
 import { Team } from '../state/Player';
-import ArrowBackIosNewOutlinedIcon from '@mui/icons-material/ArrowBackIosNewOutlined';
-import ArrowForwardIosOutlinedIcon from '@mui/icons-material/ArrowForwardIosOutlined';
+
+import KeyboardDoubleArrowLeftOutlinedIcon from '@mui/icons-material/KeyboardDoubleArrowLeftOutlined';
+import KeyboardDoubleArrowRightOutlinedIcon from '@mui/icons-material/KeyboardDoubleArrowRightOutlined';
+
 
 import "../css/ScoreBoard.css";
 
@@ -25,13 +27,13 @@ const TeamDescriptionComponent: React.FC<TeamDescriptionProps> = observer((props
                 {[...Array(props.maxTimeouts)].map((e, i) => {
                     return (
                         <>
-                            {i < props.timeouts && <CircleIcon fontSize='small'></CircleIcon>}
-                            {i >= props.timeouts && <CircleOutlinedIcon fontSize='small'></CircleOutlinedIcon>}
+                            {i < props.timeouts && <CircleIcon fontSize='inherit'></CircleIcon>}
+                            {i >= props.timeouts && <CircleOutlinedIcon fontSize='inherit'></CircleOutlinedIcon>}
                         </>
                     )
                 })}
             </div>             
-            <Button variant="outlined" size="small" onClick={props.timeoutFunction}>Timeout</Button>
+            {/* <Button variant="outlined" size="small" onClick={props.timeoutFunction}>Timeout</Button> */}
             
         </div>
     )
@@ -46,26 +48,19 @@ function ScoreBoard() {
             <div className="scoreboarddata">
                 <TeamDescriptionComponent name='Away' timeouts={gameState.awayTimeouts} maxTimeouts={4} timeoutFunction={() => {gameState.callTimeout(Team.away)}}/>
                 <div className="centerscoreboard">
-                    <div className="scoreboard__scores">
-                        <div className='score width3'>{gameState.awayRoster.pointsScored}</div>
-                        {/* // potential pos arrow */}
-                        <div className='score__center width3'>
-                            <div className="width3 leftarrow">
-                                {gameState.possessionArrow === Team.home ? 
-                                    <ArrowBackIosNewOutlinedIcon fontSize='small'/> : <div/> }
-                            </div>
-                            <div className="width3 quarter">
-                                Q{gameState.quarter}
-                            </div>
-                            <div className="width3 rightarrow">
-                            {gameState.possessionArrow === Team.away ? 
-                                    <ArrowForwardIosOutlinedIcon fontSize='small'/> : <div/> }
-                            </div>
-                        </div>
-                        {/* // potential pos arrow */}
-                        <div className='score width3'>{10}</div>
+                    <div className="score">
+                        {gameState.awayRoster.pointsScored}
                     </div>
-                    <Button variant='outlined' size='small' onClick={() => {gameState.increaseQuarter()}}>Increase</Button>
+                    <div className="quarter">
+                        <KeyboardDoubleArrowLeftOutlinedIcon className='posarrow__icon' fontSize="large" color={gameState.possessionArrow === Team.away ? "primary" : "disabled"} onClick={() => {gameState.possessionArrow = Team.away}}/>
+                        <div>
+                            Q{gameState.quarter}
+                        </div>
+                        <KeyboardDoubleArrowRightOutlinedIcon className='posarrow__icon' fontSize="large" color={gameState.possessionArrow === Team.home ? "primary" : "disabled"} onClick={() => {gameState.possessionArrow = Team.home}}/>
+                    </div>
+                    <div className="score">
+                        {gameState.homeRoster.pointsScored}
+                    </div>
                 </div>
                 <TeamDescriptionComponent name='Home' timeouts={gameState.homeTimeouts} maxTimeouts={4} timeoutFunction={() => {gameState.callTimeout(Team.home)}}/>
             </div>
