@@ -28,7 +28,7 @@ class PointsPublisher extends Publisher {
     }
 
     public notify (oldImage:PointsImage, newImage:PointsImage): void {
-        const info = {
+        const info : PointsMessage = {
             type: "points",
             oldImage: oldImage,
             newImage: newImage

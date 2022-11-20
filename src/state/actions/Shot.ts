@@ -66,10 +66,11 @@ class Shot extends Action {
 
     removeStats (): void {
         // first the properties unique to the shot 
-
-        let image = this.image
-        const publisher = PointsPublisher.getInstance()
-        publisher.notify(image, null)
+        if(this.assist) {this.assist.removeStats()}
+        if(this.rebound) {this.rebound.removeStats()}
+        if(this.block) {this.block.removeStats()}
+        
+        PointsPublisher.getInstance().notify(this.image, null)
     }
 
     editShooter(newShooter : Player) {
@@ -107,15 +108,12 @@ class Shot extends Action {
         
         let newAssist : Assist = new Assist(assistingPlayer);
         this.assist = newAssist;
-
     }
 
     removeAssist() {
         if(!this.assist) {return ;}
         this.assist.removeStats();
         this.assist = null;
-
-
     }
 
     addRebound(reboundingPlayer : Player) {
@@ -129,7 +127,6 @@ class Shot extends Action {
 
     removeRebound() {
         if (!this.rebound){return;}
-
         this.rebound.removeStats();
         this.rebound = null;
 
