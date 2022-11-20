@@ -6,6 +6,11 @@ import { Assist } from "./Assist";
 import { Rebound } from "./Rebound";
 import { Block } from "./Block";
  
+
+interface ShotImage {
+    player: Player
+    points: number
+}
 class Shot extends Action {
 
     shooter : Player;
@@ -176,6 +181,13 @@ class Shot extends Action {
 
     }
 
+    get image() : ShotImage {
+        return {
+            player: this.shooter,
+            points: this.shotPoints
+        }
+    }
+
     get actionJSON (): Object {
         return {
             "action": "shot",
@@ -193,3 +205,4 @@ class Shot extends Action {
 }
 
 export {Shot}
+export type {ShotImage}

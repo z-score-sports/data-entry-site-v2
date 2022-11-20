@@ -3,6 +3,9 @@ import { observable, action, computed, reaction, makeObservable } from "mobx"
 import { Player } from "../Player";
 import { Action } from "./Action";
 
+interface ReboundImage {
+    player: Player
+}
 
 class Rebound extends Action {
     reboundingPlayer : Player;
@@ -32,6 +35,11 @@ class Rebound extends Action {
         this.reboundingPlayer.addRebound();
     }
 
+    get image() :ReboundImage {
+        return {
+            player: this.reboundingPlayer
+        }
+    }
 
     get actionJSON (): Object {
         return {
@@ -44,3 +52,4 @@ class Rebound extends Action {
 }
 
 export {Rebound}
+export type {ReboundImage}

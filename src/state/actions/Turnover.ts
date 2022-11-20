@@ -3,6 +3,9 @@ import { observable, action, computed, reaction, makeObservable, override } from
 import { Player } from "../Player";
 import { Action } from "./Action";
 
+interface StealImage {
+    player: Player
+}
 
 class Turnover extends Action {
     offensivePlayer : Player = null;
@@ -26,6 +29,10 @@ class Turnover extends Action {
     }
 
     removeStats (): void {return}
+
+    get image() : Object {
+        return {}
+    }
 
     get actionJSON (): Object {
         return {
@@ -62,6 +69,12 @@ class Steal extends Turnover {
         this.stealingPlayer.removeSteal();
     }
 
+    get image() : StealImage {
+        return {
+            player: this.stealingPlayer
+        }
+    }
+
     get actionJSON (): Object {
         return {
             "action": "steal",
@@ -73,5 +86,6 @@ class Steal extends Turnover {
 }
 
 export {Turnover, Steal}
+export type {StealImage}
 
 

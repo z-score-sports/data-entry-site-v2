@@ -3,7 +3,9 @@ import { observable, action, computed, reaction, makeObservable } from "mobx"
 import { Player } from "../Player";
 import { Action } from "./Action";
 
-
+interface AssistImage {
+    player: Player
+}
 class Assist extends Action {
     assistingPlayer : Player;
     
@@ -31,6 +33,11 @@ class Assist extends Action {
     }
 
 
+    get image() : AssistImage {
+        return {
+            player: this.assistingPlayer
+        }
+    }
     get actionJSON (): Object {
         return {
             "action": "assist",
@@ -42,3 +49,4 @@ class Assist extends Action {
 }
 
 export {Assist}
+export type {AssistImage}

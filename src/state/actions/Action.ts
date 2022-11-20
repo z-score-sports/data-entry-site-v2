@@ -18,6 +18,7 @@ export abstract class Action {
 
     abstract removeStats() : void;
 
+    abstract get image() : Object;
     abstract get actionJSON() : Object;
 }
 

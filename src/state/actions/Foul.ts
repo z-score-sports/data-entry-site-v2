@@ -4,6 +4,9 @@ import { Player } from "../Player";
 import { Action } from "./Action";
 import { FreeThrow } from "./FreeThrow";
 
+interface FoulImage {
+    player: Player
+}
 
 class Foul extends Action {
     foulingPlayer : Player;
@@ -61,6 +64,12 @@ class Foul extends Action {
         return this.freeThrows[this.freeThrows.length-1]
     }
 
+    get image() : FoulImage {
+        return {
+            player: this.foulingPlayer
+        }
+    }
+
     get actionJSON (): Object {
         return {
             "action": "foul",
@@ -75,3 +84,4 @@ class Foul extends Action {
 
 
 export {Foul}
+export type {FoulImage}

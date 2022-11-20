@@ -1,0 +1,60 @@
+// Points
+{
+    type: points,
+    oldImage: {
+        player: Player
+        points: 1|2|3,
+    }
+    newImage: {
+        player: Player
+        points: 1|2|3
+    }
+}
+
+// Assists, rebounds, and fouls
+{
+    type: rebound/assist/foul
+    oldImage: {
+        player: Player
+    }, 
+    newImage: {
+        player: Player
+    }
+}
+
+// +/-
+{
+    type: plusminus,
+    oldImage: {
+        offense: 0|1,
+        offenseLineup: Array<Player>, or the lineup string
+        defenseLineup: Array<Player>, or the lineup string
+        points: 1|2|3|4
+    },
+    newImage: {
+        offense: 0|1,
+        offenseLineup: Array<Player>, or the lineup string
+        defenseLineup: Array<Player>, or the lineup string
+        points: 1|2|3|4
+    }
+}
+
+// subs (maybe don't need)
+// Add the difference in time to each player in the old Image
+// set the new start times 
+{
+    type: substitution,
+    oldImage: {
+        team: 0|1
+        subTime: Q1:12:00,
+        lineup: Array<Player>;
+    },
+    newImage: {
+        team: 0|1,
+        subTime: Q1:05:40,
+        lineup: Array<Player>;
+
+    }
+    
+
+}

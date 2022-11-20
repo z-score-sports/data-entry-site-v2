@@ -1,7 +1,12 @@
+import { FreeThrowImage } from "../actions/FreeThrow";
+import { ShotImage } from "../actions/Shot";
+import { Player } from "../Player";
 import { Publisher } from "./Publisher";
 
 interface PointsMessage {
-    points: number;
+    type: string
+    oldImage: ShotImage | FreeThrowImage
+    newImage: ShotImage | FreeThrowImage
 }
 
 class PointsPublisher extends Publisher {
@@ -20,5 +25,11 @@ class PointsPublisher extends Publisher {
 
     }
 
+    public notify (info: PointsMessage): void {
+        super.notify(info)
+    }
+
     
 }
+
+export {PointsPublisher}

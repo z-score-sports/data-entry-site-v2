@@ -5,6 +5,11 @@ import { Action } from "./Action";
 import { Rebound } from "./Rebound";
 
 
+interface FreeThrowImage {
+    player: Player
+    points: number
+}
+
 class FreeThrow extends Action {
 
     shootingPlayer:Player;
@@ -110,6 +115,13 @@ class FreeThrow extends Action {
         }
     }
 
+    get image(): FreeThrowImage {
+        return {
+            player: this.shootingPlayer,
+            points: this.made ? 1 : 0
+        }
+    }
+
     public get actionJSON (): Object {
         return {
             "action": "freethrow",
@@ -123,3 +135,4 @@ class FreeThrow extends Action {
 }
 
 export {FreeThrow}
+export type {FreeThrowImage}
