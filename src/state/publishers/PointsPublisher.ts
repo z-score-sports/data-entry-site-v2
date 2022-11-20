@@ -9,6 +9,8 @@ interface PointsMessage {
     newImage: ShotImage | FreeThrowImage
 }
 
+type PointsImage = ShotImage | FreeThrowImage;
+
 class PointsPublisher extends Publisher {
 
     private static instance: PointsPublisher;
@@ -25,11 +27,19 @@ class PointsPublisher extends Publisher {
 
     }
 
-    public notify (info: PointsMessage): void {
-        super.notify(info)
+    public notify (oldImage:PointsImage, newImage:PointsImage): void {
+        const info = {
+            type: "points",
+            oldImage: oldImage,
+            newImage: newImage
+        }
+        this.subscribers.forEach((sub) => {
+            sub.update(info)
+        })
     }
 
     
 }
 
 export {PointsPublisher}
+export type {PointsMessage}

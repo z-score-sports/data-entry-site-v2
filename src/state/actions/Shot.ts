@@ -5,6 +5,7 @@ import { Action } from "./Action";
 import { Assist } from "./Assist";
 import { Rebound } from "./Rebound";
 import { Block } from "./Block";
+import { PointsPublisher } from "../publishers/PointsPublisher";
  
 
 interface ShotImage {
@@ -48,12 +49,8 @@ class Shot extends Action {
         this.region = region;
         this.made = made;
         
-        this.shooter.addFGAttempt();
-        if(this.made) {
-            this.shooter.addFGMade();
-        }
-        let points : number = this.shotPoints;
-        this.shooter.addFGPoints(points);
+        let newImage = this.image
+        PointsPublisher.getInstance().notify(null, newImage);
 
     }
 
@@ -69,63 +66,37 @@ class Shot extends Action {
 
     removeStats (): void {
         // first the properties unique to the shot 
-        this.shooter.removeFGAttempt();
-        if(this.made) {
-            this.shooter.removeFGMade();
-        }
-        this.shooter.removeFGPoints(this.shotPoints)
 
-        this.assist.removeStats();
-        this.rebound.removeStats();
-        this.block.removeStats();
-        
+        let image = this.image
+        const publisher = PointsPublisher.getInstance()
+        publisher.notify(image, null)
     }
 
     editShooter(newShooter : Player) {
-        let points : number = this.shotPoints;
         
-        this.shooter.removeFGAttempt();
-        if(this.made) {
-            this.shooter.removeFGMade();
-        }
-        this.shooter.removeFGPoints(points)
-
+        let oldImage = this.image
         this.shooter = newShooter;
+        let newImage = this.image
 
-        this.shooter.addFGAttempt();
-        if(this.made) {
-            this.shooter.addFGMade();
-        }
-        this.shooter.addFGPoints(points);
+        PointsPublisher.getInstance().notify(oldImage, newImage);
+
+        
 
     }
 
     editRegion(newRegion : 1|2|3|4|5|6|7|8|9) {
-        //we edit the region explicitly
-        //track points before and after adjusting the region...
-        //add the difference
-        let pointsBefore : number = this.shotPoints;
+        let oldImage = this.image
         this.region = newRegion;
-        let pointsAfter : number = this.shotPoints;
-        this.shooter.addFGPoints(pointsAfter - pointsBefore);
+        let newImage = this.image
+        PointsPublisher.getInstance().notify(oldImage, newImage);
         
     }
 
     editMade(newMade: boolean) {
-
-        if (newMade && !this.made) {
-            this.made = newMade // setting made to true
-            let points : number = this.shotPoints;
-            this.shooter.addFGMade();
-            this.shooter.addFGPoints(points);
-        } else if(!newMade && this.made) { 
-            // case when we need to decrement stats from the shooter
-            let points : number = this.shotPoints;
-            this.made = newMade;
-            this.shooter.removeFGMade();
-            this.shooter.removeFGPoints(points)
-
-        }
+        let oldImage = this.image
+        this.made = newMade;
+        let newImage = this.image
+        PointsPublisher.getInstance().notify(oldImage, newImage);
     }
 
     addAssist(assistingPlayer : Player) {

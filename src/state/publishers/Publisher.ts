@@ -18,12 +18,7 @@ abstract class Publisher {
         this.subscribers.splice(index, 1);
     }
 
-    public notify(info:Object) {
-        this.subscribers.forEach((sub) => {
-            sub.update(info);
-        })
-        
-    }
+    abstract notify(oldImage:Object, newImage:Object) : void
 }
 
 export {Publisher}
