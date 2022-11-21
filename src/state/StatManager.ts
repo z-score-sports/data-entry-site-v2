@@ -61,3 +61,5 @@ class StatManager implements Subscriber {
 
     }
 }
+
+export {StatManager}

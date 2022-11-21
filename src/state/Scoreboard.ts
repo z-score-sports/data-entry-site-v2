@@ -31,6 +31,24 @@ class Scoreboard implements Subscriber {
         }
     }
 
+    public callTimeout(team:Team) {
+        if(team === Team.home) {
+            this.homeTimeouts = Math.max(this.homeTimeouts-1, 0);
+        } else {
+            this.awayTimeouts = Math.max(this.awayTimeouts-1, 0);
+        }
+    }
+
+    public increaseQuarter() {
+        this.quarter +=1;
+    }
+
+    public decreaseQuarter() {
+        this.quarter = Math.max(this.quarter-1, 1);
+    }
+
+
+
     private handlePointsUpdate(context:PointsMessage) {
         // remove the first
         let oldImage = context.oldImage

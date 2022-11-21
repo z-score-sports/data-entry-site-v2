@@ -5,6 +5,8 @@ import React, { createContext } from "react";
 import { Team, Player } from "./Player";
 import { Possession } from "./Possession";
 import { Roster } from "./Roster";
+import { Scoreboard } from "./Scoreboard";
+import { StatManager } from "./StatManager";
 
 const p1_h = new Player("000000", 0, "A", "Adams", Team.home);
 const p2_h = new Player("000001", 1, "B", "Baker", Team.home);
@@ -40,8 +42,8 @@ tempAwayRoster.putInGame(14);
 
 
 class GameState {
-    quarter : number = 1;
-    possessionArrow : Team;
+    scoreboard : Scoreboard;
+    statManager : StatManager;
     homeTimeouts : number = 4;
     awayTimeouts : number = 4;
     homeRoster : Roster;
@@ -51,31 +53,12 @@ class GameState {
 
     constructor(startTeam : Team, homeRoster:Roster = new Roster(homePlayers), awayRoster:Roster = new Roster(awayPlayers)) {
         makeAutoObservable(this, {})
-        this.possessionArrow = startTeam === Team.home ? Team.away : Team.home;
+        this.scoreboard = new Scoreboard(Team.home, 4);
+        this.statManager = new StatManager();
         this.currentPossession = new Possession(startTeam)
         this.homeRoster = homeRoster;
         this.awayRoster = awayRoster;
 
-    }
-
-    callTimeout(team : Team) {
-        if(team === Team.home) {
-            this.homeTimeouts = Math.max(this.homeTimeouts-1, 0);
-        } else {
-            this.awayTimeouts = Math.max(this.awayTimeouts-1, 0);
-        }
-    }
-
-    increaseQuarter() {
-        this.quarter++;
-    }
-
-    decreaseQuarter() {
-        this.quarter = Math.max(this.quarter-1, 1);
-    }
-
-    changePossessionArrow() {
-        this.possessionArrow = this.possessionArrow === Team.away ? Team.home : Team.away;
     }
 
     //might want to add some additional helper methods
