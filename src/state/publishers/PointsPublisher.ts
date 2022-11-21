@@ -3,8 +3,8 @@ import { ShotImage } from "../actions/Shot";
 import { Player } from "../Player";
 import { Publisher } from "./Publisher";
 
-interface PointsMessage {
-    type: string
+type PointsMessage = {
+    type: "points"
     oldImage: ShotImage | FreeThrowImage
     newImage: ShotImage | FreeThrowImage
 }

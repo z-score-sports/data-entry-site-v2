@@ -36,3 +36,5 @@ class FoulPublisher extends Publisher {
 }
 
 export {FoulPublisher}
+
+export type {FoulMessage}
