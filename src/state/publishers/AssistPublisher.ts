@@ -36,3 +36,4 @@ class AssistPublisher extends Publisher {
 }
 
 export {AssistPublisher}
+export type {AssistMessage}

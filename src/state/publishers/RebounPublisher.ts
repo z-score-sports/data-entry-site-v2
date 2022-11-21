@@ -36,3 +36,4 @@ class ReboundPublisher extends Publisher {
 }
 
 export {ReboundPublisher}
+export type {ReboundMessage}

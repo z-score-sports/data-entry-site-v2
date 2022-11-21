@@ -3,9 +3,6 @@ import { FoulMessage, FoulPublisher } from "./publishers/FoulPublisher";
 import { PointsMessage, PointsPublisher } from "./publishers/PointsPublisher";
 import { Subscriber } from "./Subscriber";
 
-
-type ScoreboardMessage = PointsMessage | FoulMessage;
-
 class Scoreboard implements Subscriber {
     quarter: number = 1
     awayPoints : number = 0;
