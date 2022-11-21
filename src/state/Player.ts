@@ -23,6 +23,8 @@ class Player {
     steals : number = 0;
     freeThrowsAttempted : number = 0;
     freeThrowsMade : number = 0;
+    plusMinus: number = 0;
+    minutes: number = 0;
 
     public constructor(playerId:string, num:number, firstName:string, lastName:string, team:Team){
         makeAutoObservable(this)
