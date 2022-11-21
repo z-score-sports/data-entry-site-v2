@@ -8,7 +8,7 @@ class Roster {
     players : Map<number, Player> = new Map<number,Player>();
     teamName: string
 
-    public constructor(players : Array<Player>, tName: String) {
+    public constructor(players : Array<Player>, tName: string) {
         makeAutoObservable(this, {})
         players.forEach((player) => {
             let playerNum : number = player.num;
