@@ -2,9 +2,10 @@ import { AssistMessage, AssistPublisher } from "./publishers/AssistPublisher";
 import { FoulMessage, FoulPublisher } from "./publishers/FoulPublisher";
 import { PointsMessage, PointsPublisher } from "./publishers/PointsPublisher";
 import { ReboundMessage, ReboundPublisher } from "./publishers/RebounPublisher";
+import { SubstitutionMessage, SubstitutionPublisher } from "./publishers/SubstitutionPublisher";
 import { Subscriber } from "./Subscriber";
 
-type StatManagerContext = PointsMessage | AssistMessage | ReboundMessage | FoulMessage;
+type StatManagerContext = PointsMessage | AssistMessage | ReboundMessage | FoulMessage | SubstitutionMessage;
 
 class StatManager implements Subscriber {
 
@@ -14,18 +15,21 @@ class StatManager implements Subscriber {
         ReboundPublisher.getInstance().subscribe(this);
         AssistPublisher.getInstance().subscribe(this);
         FoulPublisher.getInstance().subscribe(this);
+        SubstitutionPublisher.getInstance().subscribe(this);
 
 
     }
     public update(context: StatManagerContext) {
-        if(context as PointsMessage) {
+        if(context.type === "points") {
             this.handlePointsUpdate(<PointsMessage> context);
-        } else if(context as AssistMessage) {
+        } else if(context.type === "assist") {
             this.handleAssistUpdate(<AssistMessage> context);
-        } else if(context as ReboundMessage) {
+        } else if(context.type === "rebound") {
             this.handleReboundUpdate(<ReboundMessage> context);
-        } else if(context as FoulMessage) {
+        } else if(context.type === "foul") {
             this.handleFoulUpdate(<FoulMessage> context);
+        } else if(context.type === "substitution") {
+            this.handleSubstitutionUpdate(<SubstitutionMessage> context)
         }
     }
 
@@ -75,6 +79,12 @@ class StatManager implements Subscriber {
             newImage.player.fouls += 1;
         }
 
+    }
+    private handleSubstitutionUpdate(context:SubstitutionMessage) {
+        context.image.lineup.forEach((player) => {
+            player.subOut(context.image.gameTime)
+            player.subIn(context.image.gameTime)
+        })
     }
 }
 

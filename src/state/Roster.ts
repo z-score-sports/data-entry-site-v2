@@ -1,7 +1,13 @@
 import { observable, action, computed, reaction, makeAutoObservable } from "mobx"
 
 
-import { Player } from "./Player";
+import { GameTime, Player, Team } from "./Player";
+import { SubstitutionPublisher } from "./publishers/SubstitutionPublisher";
+
+interface LineupImage {
+    gameTime : GameTime
+    lineup : Array<Player>
+}
 
 class Roster {
 
@@ -25,26 +31,42 @@ class Roster {
         
     }
 
-    substitute(playerGoingIn : number, playerGoingOut: number) {
+    substitute(playerGoingIn : number, playerGoingOut: number, gameTime: GameTime) {
         let playerGIn : Player = this.getPlayer(playerGoingIn);
         let playerGOut : Player = this.getPlayer(playerGoingOut);
         
-        if(playerGIn.inGame && !playerGOut.inGame) {
-            playerGIn.subIn();
-            playerGOut.subOut();
+        if(!playerGIn.inGame && playerGOut.inGame) {
+            playerGIn.subIn(gameTime);
+            playerGOut.subOut(gameTime);
+            let image : LineupImage = {
+                gameTime: gameTime,
+                lineup: this.lineupArray
+            }
+            SubstitutionPublisher.getInstance().notify(image)
         } else {
             console.log("warning: invalid substitution. No lineup changes made.")
         }
     }
 
-    putInGame(playerGoingIn : number) {
+    putInGame(playerGoingIn : number, gameTime:GameTime) {
         let playerGIn : Player = this.getPlayer(playerGoingIn);
-        playerGIn.subIn();
+        playerGIn.subIn(gameTime);
     }
 
-    takeOutOfGame(playerGoingIn : number) {
+    takeOutOfGame(playerGoingIn : number, gameTime:GameTime) {
         let playerGIn : Player = this.getPlayer(playerGoingIn);
-        playerGIn.subOut();
+        playerGIn.subOut(gameTime);
+    }
+
+    get lineupArray() {
+
+        const curLineup : Array<Player> = Array<Player>();
+        this.players.forEach((player, num) => {
+            if(player.inGame) { 
+                curLineup.push(player)
+            }
+        })
+        return curLineup
     }
 
     get lineupString() {
@@ -66,3 +88,4 @@ class Roster {
 
 
 export {Roster};
+export type {LineupImage}

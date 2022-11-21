@@ -139,6 +139,28 @@ class Possession {
         action.removeStats();
     }
 
+    get possessionPoints () {
+        let points : number = 0;
+        this.actions.forEach((action) => {
+            if(action instanceof Shot){
+                points += action.shotPoints;
+            } else if(action instanceof Foul) {
+                action.freeThrows.forEach((ft) => {
+                    points += ft.made ? 1 : 0;
+                })
+            }
+        })
+        return points;
+    }
+    get image() {
+        return {
+            "points": this.possessionPoints,
+            "offense": this.offenseTeam,
+            "homeLineup": this.homeLineupString,
+            "awayLineup": this.awayLineupString
+        }
+    }
+
     // adding other types of actions should come from:
     //1) gamestate uses current possession to get the last Shot/Foul
     //2) calling those action's add method with the properties

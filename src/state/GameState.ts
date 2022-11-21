@@ -2,7 +2,7 @@ import { makeAutoObservable } from "mobx"
 
 import React, { createContext } from "react";
 
-import { Team, Player } from "./Player";
+import { Team, Player, GameTime } from "./Player";
 import { Possession } from "./Possession";
 import { Roster } from "./Roster";
 import { Scoreboard } from "./Scoreboard";
@@ -25,18 +25,19 @@ const p6_a = new Player("000015", 15, "L", "Lopez", Team.away);
 const homePlayers = new Array<Player>(p1_h, p2_h, p3_h, p4_h, p5_h, p6_h);
 const awayPlayers = new Array<Player>(p1_a, p2_a, p3_a, p4_a, p5_a, p6_a);
 
+const gameStart = new GameTime(1, 12, 0);
 const tempHomeRoster = new Roster(homePlayers);
-tempHomeRoster.putInGame(0);
-tempHomeRoster.putInGame(1);
-tempHomeRoster.putInGame(2);
-tempHomeRoster.putInGame(3);
-tempHomeRoster.putInGame(4);
+tempHomeRoster.putInGame(0, gameStart);
+tempHomeRoster.putInGame(1, gameStart);
+tempHomeRoster.putInGame(2, gameStart);
+tempHomeRoster.putInGame(3, gameStart);
+tempHomeRoster.putInGame(4, gameStart);
 const tempAwayRoster = new Roster(awayPlayers);
-tempAwayRoster.putInGame(10);
-tempAwayRoster.putInGame(11);
-tempAwayRoster.putInGame(12);
-tempAwayRoster.putInGame(13);
-tempAwayRoster.putInGame(14);
+tempAwayRoster.putInGame(10, gameStart);
+tempAwayRoster.putInGame(11, gameStart);
+tempAwayRoster.putInGame(12, gameStart);
+tempAwayRoster.putInGame(13, gameStart);
+tempAwayRoster.putInGame(14, gameStart);
 
 
 
