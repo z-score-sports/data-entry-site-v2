@@ -44,8 +44,6 @@ tempAwayRoster.putInGame(14);
 class GameState {
     scoreboard : Scoreboard;
     statManager : StatManager;
-    homeTimeouts : number = 4;
-    awayTimeouts : number = 4;
     homeRoster : Roster;
     awayRoster : Roster;
     possessionStack : Array<Possession> = new Array<Possession>();
@@ -69,7 +67,7 @@ class GameState {
         let nextTeam : Team = this.currentPossession.offenseTeam === Team.home ? Team.away : Team.home;
         this.currentPossession.homeLineupString = this.homeRoster.lineupString;
         this.currentPossession.awayLineupString = this.awayRoster.lineupString;
-        this.currentPossession.quarter = this.quarter;
+        this.currentPossession.quarter = this.scoreboard.quarter;
         this.possessionStack.push(this.currentPossession)
         this.currentPossession = new Possession(nextTeam);
     }
