@@ -6,7 +6,7 @@ import { Player } from "./Player";
 class Roster {
 
     players : Map<number, Player> = new Map<number,Player>();
-    teamName: String
+    teamName: string
 
     public constructor(players : Array<Player>, tName: String) {
         makeAutoObservable(this, {})
