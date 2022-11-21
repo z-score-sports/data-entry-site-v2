@@ -6,13 +6,15 @@ import { Player } from "./Player";
 class Roster {
 
     players : Map<number, Player> = new Map<number,Player>();
+    teamName: string
 
-    public constructor(players : Array<Player>) {
+    public constructor(players : Array<Player>, tName: String) {
         makeAutoObservable(this, {})
         players.forEach((player) => {
             let playerNum : number = player.num;
             this.players.set(playerNum, player);
         })
+        this.teamName = tName
     }
 
     getPlayer(num : number) {
@@ -23,6 +25,9 @@ class Roster {
             return playerGet;
         }
         
+    }
+    getPlayerArr() {
+        return Array.from(this.players.values())
     }
 
     substitute(playerGoingIn : number, playerGoingOut: number) {

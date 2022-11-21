@@ -2,6 +2,7 @@ import React, { useContext } from 'react';
 import { observer } from "mobx-react-lite"
 import '../../App.css';
 import GameState from '../../state/GameState';
+import RosterPanel from '../elements/RosterPanel'
 
 function LeftPanel() {
 
@@ -9,7 +10,8 @@ function LeftPanel() {
 
   return (
     <div className = "lPanel">
-      This is the left panel
+      <RosterPanel team={gameState.homeRoster}/>
+      <RosterPanel team={gameState.awayRoster}/>
     </div>
   );
 }

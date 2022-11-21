@@ -23,13 +23,13 @@ const p6_a = new Player("000015", 15, "L", "Lopez", Team.away);
 const homePlayers = new Array<Player>(p1_h, p2_h, p3_h, p4_h, p5_h, p6_h);
 const awayPlayers = new Array<Player>(p1_a, p2_a, p3_a, p4_a, p5_a, p6_a);
 
-const tempHomeRoster = new Roster(homePlayers);
+const tempHomeRoster = new Roster(homePlayers, "Hawks");
 tempHomeRoster.putInGame(0);
 tempHomeRoster.putInGame(1);
 tempHomeRoster.putInGame(2);
 tempHomeRoster.putInGame(3);
 tempHomeRoster.putInGame(4);
-const tempAwayRoster = new Roster(awayPlayers);
+const tempAwayRoster = new Roster(awayPlayers, 'Eagles');
 tempAwayRoster.putInGame(10);
 tempAwayRoster.putInGame(11);
 tempAwayRoster.putInGame(12);
@@ -49,7 +49,7 @@ class GameState {
     possessionStack : Array<Possession> = new Array<Possession>();
     currentPossession : Possession = null;
 
-    constructor(startTeam : Team, homeRoster:Roster = new Roster(homePlayers), awayRoster:Roster = new Roster(awayPlayers)) {
+    constructor(startTeam : Team, homeRoster:Roster = new Roster(homePlayers, 'Eagles'), awayRoster:Roster = new Roster(awayPlayers, 'Hawks')) {
         makeAutoObservable(this, {})
         this.possessionArrow = startTeam === Team.home ? Team.away : Team.home;
         this.currentPossession = new Possession(startTeam)
