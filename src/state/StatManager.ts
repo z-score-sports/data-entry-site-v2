@@ -32,32 +32,48 @@ class StatManager implements Subscriber {
     private handlePointsUpdate(context:PointsMessage) {
         let oldImage = context.oldImage;
         let newImage = context.newImage;
-        oldImage.player.points -= oldImage.points;
-        newImage.player.points += newImage.points;
+        if(oldImage){
+            oldImage.player.points -= oldImage.points;
+        }
+        if(newImage) {
+            newImage.player.points += newImage.points;
+        }
 
     }
 
     private handleAssistUpdate(context:AssistMessage) {
         let oldImage = context.oldImage
         let newImage = context.newImage
-        oldImage.player.assists -= 1;
-        newImage.player.assists += 1;
+        if(oldImage){
+            oldImage.player.assists -= 1;
+        }
+        if(newImage) {
+            newImage.player.assists += 1;
+        }
 
     }
 
     private handleReboundUpdate(context:ReboundMessage) {
         let oldImage = context.oldImage
         let newImage = context.newImage
-        oldImage.player.rebounds -= 1;
-        newImage.player.rebounds += 1;
+        if(oldImage){
+            oldImage.player.rebounds -= 1;
+        }
+        if(newImage) {
+            newImage.player.rebounds += 1;
+        }
 
     }
 
     private handleFoulUpdate(context:FoulMessage) {
         let oldImage = context.oldImage
         let newImage = context.newImage
-        oldImage.player.fouls -= 1;
-        newImage.player.fouls += 1;
+        if(oldImage){
+            oldImage.player.fouls -= 1;
+        }
+        if(newImage) {
+            newImage.player.fouls += 1;
+        }
 
     }
 }

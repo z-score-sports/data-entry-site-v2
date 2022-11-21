@@ -1,3 +1,4 @@
+import { makeAutoObservable, flow } from "mobx";
 import { Team } from "./Player";
 import { FoulMessage, FoulPublisher } from "./publishers/FoulPublisher";
 import { PointsMessage, PointsPublisher } from "./publishers/PointsPublisher";
@@ -14,6 +15,9 @@ class Scoreboard implements Subscriber {
 
 
     public constructor(startPosArrow:Team, timeouts:number) {
+
+        makeAutoObservable(this, {
+        })
         this.possessionArrow = startPosArrow;
         this.totalTimeouts = timeouts;
         this.awayTimeouts = timeouts;
@@ -51,6 +55,7 @@ class Scoreboard implements Subscriber {
 
     private handlePointsUpdate(context:PointsMessage) {
         // remove the first
+        console.log("getting the points update")
         let oldImage = context.oldImage
         let newImage = context.newImage
         if(oldImage) {
