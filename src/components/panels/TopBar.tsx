@@ -10,12 +10,8 @@ function TopBar() {
 
   return (
     <div className = 'tBar'>
-        <button onClick={() => {gameState.increaseQuarter()}}>Click to increase quarter.</button>
-      {gameState.quarter}
-      <br/>
-      {gameState.awayTimeouts}
-      <br/>
-      {gameState.homeTimeouts}
+      {gameState.scoreboard.quarter}
+      
     </div>
   );
 }

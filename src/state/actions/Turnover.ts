@@ -56,17 +56,13 @@ class Steal extends Turnover {
             actionJSON: override,
         })
         this.stealingPlayer = stealingPlayer;
-        this.stealingPlayer.addSteal();
     }
 
     editStealingPlayer(newStealingPlayer : Player) {
-        this.stealingPlayer.removeSteal();
         this.stealingPlayer = newStealingPlayer;
-        this.stealingPlayer.addSteal();
     }
 
     removeStats (): void {
-        this.stealingPlayer.removeSteal();
     }
 
     get image() : StealImage {

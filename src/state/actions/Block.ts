@@ -19,17 +19,13 @@ class Block extends Action {
             actionJSON: computed,
         })
         this.blockingPlayer = blockingPlayer;
-        this.blockingPlayer.addBlock();
     }
 
     public removeStats (): void {
-        this.blockingPlayer.removeBlock();
     }
 
     public editBlockingPlayer(newBlockingPlayer : Player) {
-        this.blockingPlayer.removeBlock();
         this.blockingPlayer = newBlockingPlayer;
-        this.blockingPlayer.addBlock();
     }
 
 

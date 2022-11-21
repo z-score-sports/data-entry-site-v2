@@ -17,7 +17,7 @@ class Roster {
 
     getPlayer(num : number) {
         let playerGet : Player | undefined = this.players.get(num);
-        if(typeof playerGet == undefined) {
+        if(typeof playerGet === undefined) {
             return null
         } else {
             return playerGet;

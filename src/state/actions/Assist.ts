@@ -1,6 +1,7 @@
 import { observable, action, computed, reaction, makeObservable } from "mobx"
 
 import { Player } from "../Player";
+import { AssistPublisher } from "../publishers/AssistPublisher";
 import { Action } from "./Action";
 
 interface AssistImage {
@@ -19,17 +20,21 @@ class Assist extends Action {
             actionJSON : computed,
         })
         this.assistingPlayer = assistingPlayer;
-        this.assistingPlayer.addAssist();
+        
+
+        AssistPublisher.getInstance().notify(null, this.image);
+
     }
 
     public removeStats (): void {
-        this.assistingPlayer.removeAssist();
+        AssistPublisher.getInstance().notify(this.image, null);
     }
 
     public editAssistingPlayer(newAssistingPlayer : Player) {
-        this.assistingPlayer.removeAssist();
+        let oldImage = this.image
         this.assistingPlayer = newAssistingPlayer;
-        this.assistingPlayer.addAssist();
+        let newImage = this.image;
+        AssistPublisher.getInstance().notify(oldImage, newImage);
     }
 
 

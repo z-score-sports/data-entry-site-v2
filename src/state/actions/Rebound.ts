@@ -1,6 +1,7 @@
 import { observable, action, computed, reaction, makeObservable } from "mobx"
 
 import { Player } from "../Player";
+import { ReboundPublisher } from "../publishers/RebounPublisher";
 import { Action } from "./Action";
 
 interface ReboundImage {
@@ -21,18 +22,20 @@ class Rebound extends Action {
 
         })
         this.reboundingPlayer = reboundingPlayer;
-        this.reboundingPlayer.addRebound();
+        
+        ReboundPublisher.getInstance().notify(null, this.image);
 
     }
 
     removeStats (): void {
-        this.reboundingPlayer.removeRebound();
+        ReboundPublisher.getInstance().notify(this.image, null);
     }
 
     editPlayer(newPlayer : Player) {
-        this.reboundingPlayer.removeRebound();
+        let oldImage = this.image;
         this.reboundingPlayer = newPlayer;
-        this.reboundingPlayer.addRebound();
+        let newImage = this.image;
+        ReboundPublisher.getInstance().notify(oldImage, newImage);
     }
 
     get image() :ReboundImage {

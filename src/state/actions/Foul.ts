@@ -1,6 +1,7 @@
 import { observable, action, computed, reaction, makeObservable } from "mobx"
 
 import { Player } from "../Player";
+import { FoulPublisher } from "../publishers/FoulPublisher";
 import { Action } from "./Action";
 import { FreeThrow } from "./FreeThrow";
 
@@ -27,15 +28,15 @@ class Foul extends Action {
             
         })
         this.foulingPlayer = foulingPlayer;
-        this.foulingPlayer.addFoul();
 
+        FoulPublisher.getInstance().notify(null, this.image);
     }
 
     removeStats (): void {
         this.freeThrows.forEach((freeThrow : FreeThrow) => {
             freeThrow.removeStats();
         })
-        this.foulingPlayer.removeFoul();
+        FoulPublisher.getInstance().notify(this.image, null);
     }
 
     addFreeThrow(shootingPlayer:Player, made:boolean) {
@@ -52,9 +53,11 @@ class Foul extends Action {
     }
 
     editFoulingPlayer(newFoulingPlayer : Player) {
-        this.foulingPlayer.removeFoul();
+
+        let oldImage = this.image
         this.foulingPlayer = newFoulingPlayer;
-        this.foulingPlayer.addFoul();
+        let newImage = this.image;
+        FoulPublisher.getInstance().notify(oldImage, newImage);
     }
 
     get lastFreeThrow() : FreeThrow {
