@@ -3,7 +3,7 @@ import { Publisher } from "./Publisher";
 
 
 interface ReboundMessage {
-    type: string
+    type: "rebound"
     oldImage: ReboundImage
     newImage: ReboundImage
 }

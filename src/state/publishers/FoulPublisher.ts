@@ -3,7 +3,7 @@ import { Publisher } from "./Publisher";
 
 
 interface FoulMessage {
-    type: string
+    type: "foul"
     oldImage: FoulImage
     newImage: FoulImage
 }

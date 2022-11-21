@@ -3,7 +3,7 @@ import { Publisher } from "./Publisher";
 
 
 interface AssistMessage {
-    type: string
+    type: "assist"
     oldImage: AssistImage
     newImage: AssistImage
 }

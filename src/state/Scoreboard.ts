@@ -31,7 +31,7 @@ class Scoreboard implements Subscriber {
         }
     }
 
-    public handlePointsUpdate(context:PointsMessage) {
+    private handlePointsUpdate(context:PointsMessage) {
         // remove the first
         let oldImage = context.oldImage
         let newImage = context.newImage
@@ -55,7 +55,7 @@ class Scoreboard implements Subscriber {
         }
     }
 
-    public handleFoulUpdate(context:FoulMessage) {
+    private handleFoulUpdate(context:FoulMessage) {
         let oldImage = context.oldImage
         let newImage = context.newImage
         if(oldImage) {
