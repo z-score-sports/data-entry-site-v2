@@ -1,11 +1,17 @@
-import { AssistImage } from "../actions/Assist";
-import { Publisher } from "./Publisher";
+import { Assist } from "../actions/Assist";
+import { Player } from "../Player";
+import { Publisher, createDelete } from "./Publisher";
 
 
-interface AssistMessage {
-    type: "assist"
-    oldImage: AssistImage
-    newImage: AssistImage
+interface AssistInMessage {
+    type: createDelete
+    action: Assist
+}
+
+interface AssistOutMessage {
+    publisher: "assist"
+    type: createDelete
+    player: Player
 }
 
 class AssistPublisher extends Publisher {
@@ -21,14 +27,16 @@ class AssistPublisher extends Publisher {
         return this.instance
     }
 
-    public notify (oldImage:AssistImage, newImage:AssistImage) {
-        const info : AssistMessage = {
-            type: "assist",
-            oldImage: oldImage,
-            newImage: newImage,
+    public notify (message: AssistInMessage) {
+        if(!message.action) {return;}
+        const outMessage : AssistOutMessage = {
+            publisher: "assist",
+            type: message.type,
+            player: message.action.assistingPlayer
         }
+
         this.subscribers.forEach((sub) => {
-            sub.update(info)
+            sub.update(outMessage)
         })
 
     }
@@ -36,4 +44,4 @@ class AssistPublisher extends Publisher {
 }
 
 export {AssistPublisher}
-export type {AssistMessage}
+export type {AssistInMessage, AssistOutMessage}

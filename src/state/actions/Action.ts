@@ -16,9 +16,6 @@ export abstract class Action {
         return this.actionId;
     }
 
-    abstract removeStats() : void;
-
-    abstract get image() : Object;
     abstract get actionJSON() : Object;
 }
 

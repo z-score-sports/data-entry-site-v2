@@ -1,15 +1,21 @@
-import { FreeThrowImage } from "../actions/FreeThrow";
-import { ShotImage } from "../actions/Shot";
-import { Player } from "../Player";
-import { Publisher } from "./Publisher";
 
-interface PointsMessage {
-    type: "points"
-    oldImage: ShotImage | FreeThrowImage
-    newImage: ShotImage | FreeThrowImage
+import { FreeThrow } from "../actions/FreeThrow";
+import { Shot } from "../actions/Shot";
+import { Player } from "../Player";
+import { createDelete, Publisher } from "./Publisher";
+
+
+interface PointsInMessage {
+    type: createDelete
+    action: Shot | FreeThrow
 }
 
-type PointsImage = ShotImage | FreeThrowImage;
+interface PointsOutMessage {
+    publisher: "points"
+    type: createDelete
+    points: number
+    player: Player
+}
 
 class PointsPublisher extends Publisher {
 
@@ -27,14 +33,29 @@ class PointsPublisher extends Publisher {
 
     }
 
-    public notify (oldImage:PointsImage, newImage:PointsImage): void {
-        const info : PointsMessage = {
-            type: "points",
-            oldImage: oldImage,
-            newImage: newImage
+    public notify (message: PointsInMessage): void {
+        if(!message.action) {return;}
+
+        let points: number = 0;
+        let player: Player = null
+        if(message.action instanceof Shot) {
+            points = message.action.shotPoints
+            player = message.action.shootingPlayer
+        } else if (message.action instanceof FreeThrow){
+            points = message.action.made ? 1 : 0
+            player = message.action.shootingPlayer
         }
+        
+        const outMessage : PointsOutMessage = {
+            publisher: "points",
+            type: message.type,
+            points: points,
+            player: player
+            
+        }
+        
         this.subscribers.forEach((sub) => {
-            sub.update(info)
+            sub.update(outMessage)
         })
     }
 
@@ -42,4 +63,5 @@ class PointsPublisher extends Publisher {
 }
 
 export {PointsPublisher}
-export type {PointsMessage}
+
+export type {PointsInMessage, PointsOutMessage}

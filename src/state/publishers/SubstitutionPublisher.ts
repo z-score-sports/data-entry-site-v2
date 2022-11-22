@@ -1,10 +1,19 @@
-import { LineupImage } from "../Roster";
-import { Publisher } from "./Publisher";
+import { Substitution } from "../actions/Substitution";
+import { GameTime, Player } from "../Player";
+import { createDelete, Publisher } from "./Publisher";
 
 
-interface SubstitutionMessage {
-    type: "substitution"
-    image: LineupImage
+interface SubstitutionInMessage {
+    type: createDelete
+    action: Substitution
+}
+
+interface SubstitutionOutMessage {
+    publisher: "substitution"
+    type: createDelete
+    playerGoingIn: Player
+    playerGoingOut: Player
+    gameTime: GameTime
 }
 
 class SubstitutionPublisher extends Publisher {
@@ -20,13 +29,16 @@ class SubstitutionPublisher extends Publisher {
         return this.instance
     }
 
-    public notify (image:LineupImage) {
-        const info : SubstitutionMessage = {
-            type: "substitution",
-            image: image,
+    public notify (message : SubstitutionInMessage) {
+        const outMessage : SubstitutionOutMessage = {
+            publisher: "substitution",
+            type: message.type,
+            playerGoingIn: message.action.playerGoingIn,
+            playerGoingOut: message.action.playerGoingOut,
+            gameTime: message.action.gameTime
         }
         this.subscribers.forEach((sub) => {
-            sub.update(info)
+            sub.update(outMessage)
         })
 
     }
@@ -34,4 +46,4 @@ class SubstitutionPublisher extends Publisher {
 }
 
 export {SubstitutionPublisher}
-export type {SubstitutionMessage}
+export type {SubstitutionInMessage, SubstitutionOutMessage}

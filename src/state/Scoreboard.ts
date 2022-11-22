@@ -1,7 +1,7 @@
 import { makeAutoObservable, flow } from "mobx";
 import { Team } from "./Player";
-import { FoulMessage, FoulPublisher } from "./publishers/FoulPublisher";
-import { PointsMessage, PointsPublisher } from "./publishers/PointsPublisher";
+import { FoulOutMessage, FoulPublisher } from "./publishers/FoulPublisher";
+import { PointsOutMessage, PointsPublisher } from "./publishers/PointsPublisher";
 import { Subscriber } from "./Subscriber";
 
 class Scoreboard implements Subscriber {
@@ -12,6 +12,8 @@ class Scoreboard implements Subscriber {
     awayTimeouts : number;
     homeTimeouts : number;
     totalTimeouts : number;
+    homeFouls : number = 0;
+    awayFouls : number = 0;
 
 
     public constructor(startPosArrow:Team, timeouts:number) {
@@ -27,11 +29,11 @@ class Scoreboard implements Subscriber {
         FoulPublisher.getInstance().subscribe(this);
     }
 
-    public update(context: PointsMessage | FoulMessage) {
-        if(context as PointsMessage) {
-            this.handlePointsUpdate(<PointsMessage> context)
-        } else if (context as FoulMessage) {
-            this.handleFoulUpdate(<FoulMessage> context)
+    public update(context: PointsOutMessage | FoulOutMessage) {
+        if(context.publisher === "points") {
+            this.handlePointsUpdate(<PointsOutMessage> context)
+        } else if (context.publisher === "foul") {
+            this.handleFoulUpdate(<FoulOutMessage> context)
         }
     }
 
@@ -53,48 +55,36 @@ class Scoreboard implements Subscriber {
 
 
 
-    private handlePointsUpdate(context:PointsMessage) {
-        // remove the first
-        console.log("getting the points update")
-        let oldImage = context.oldImage
-        let newImage = context.newImage
-        if(oldImage) {
-            let team = oldImage.player.team
-            let points = oldImage.points
-            if(team === Team.home){
-                this.homePoints -= points
+    private handlePointsUpdate(context:PointsOutMessage) {
+
+        if(context.type === "CREATE") {
+            if(context.player.team === Team.home){
+                this.homePoints += context.points
             } else {
-                this.awayPoints -= points
+                this.awayPoints += context.points
+            }
+        }else if (context.type === "DELETE") {
+            if(context.player.team === Team.home){
+                this.homePoints -= context.points
+            } else {
+                this.awayPoints -= context.points
             }
         }
-        if(newImage) {
-            let team = newImage.player.team
-            let points = newImage.points
-            if(team === Team.home) {
-                this.homePoints += points
-            } else {
-                this.awayPoints += points
-            }
-        }
+        
     }
 
-    private handleFoulUpdate(context:FoulMessage) {
-        let oldImage = context.oldImage
-        let newImage = context.newImage
-        if(oldImage) {
-            let team = oldImage.player.team
-            if(team === Team.home) {
-                //update home fouls
+    private handleFoulUpdate(context:FoulOutMessage) {
+        if(context.type === "CREATE") {
+            if(context.player.team === Team.home){
+                this.homeFouls += 1
             } else {
-                //update away fouls
+                this.awayFouls += 1
             }
-        }
-        if(newImage) {
-            let team = newImage.player.team
-            if(team === Team.home) {
-                //update home fouls
+        }else if (context.type === "DELETE") {
+            if(context.player.team === Team.home){
+                this.homeFouls -= 1
             } else {
-                //update away fouls
+                this.awayFouls -= 1
             }
         }
     }

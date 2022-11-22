@@ -1,15 +1,23 @@
-import { AssistMessage, AssistPublisher } from "./publishers/AssistPublisher";
-import { FoulMessage, FoulPublisher } from "./publishers/FoulPublisher";
-import { PointsMessage, PointsPublisher } from "./publishers/PointsPublisher";
-import { ReboundMessage, ReboundPublisher } from "./publishers/RebounPublisher";
-import { SubstitutionMessage, SubstitutionPublisher } from "./publishers/SubstitutionPublisher";
+import { Team } from "./Player";
+import { AssistOutMessage, AssistPublisher } from "./publishers/AssistPublisher";
+import { FoulOutMessage, FoulPublisher } from "./publishers/FoulPublisher";
+import { PointsOutMessage, PointsPublisher } from "./publishers/PointsPublisher";
+import { ReboundOutMessage, ReboundPublisher } from "./publishers/ReboundPublisher";
+import { SubstitutionOutMessage, SubstitutionPublisher } from "./publishers/SubstitutionPublisher";
+import { Roster } from "./Roster";
 import { Subscriber } from "./Subscriber";
 
-type StatManagerContext = PointsMessage | AssistMessage | ReboundMessage | FoulMessage | SubstitutionMessage;
+type StatManagerContext = PointsOutMessage | ReboundOutMessage | AssistOutMessage | FoulOutMessage | SubstitutionOutMessage;
 
 class StatManager implements Subscriber {
 
-    public constructor() {
+    homeRoster : Roster;
+    awayRoster : Roster;
+
+    public constructor(homeRoster : Roster, awayRoster: Roster) {
+
+        this.homeRoster = homeRoster;
+        this.awayRoster = awayRoster;
 
         PointsPublisher.getInstance().subscribe(this);
         ReboundPublisher.getInstance().subscribe(this);
@@ -19,72 +27,96 @@ class StatManager implements Subscriber {
 
 
     }
+
+    getRoster(team: Team) {
+        if(team === Team.home){
+            return this.homeRoster
+        } else {
+            return this.awayRoster
+        }
+    }
+
     public update(context: StatManagerContext) {
-        if(context.type === "points") {
-            this.handlePointsUpdate(<PointsMessage> context);
-        } else if(context.type === "assist") {
-            this.handleAssistUpdate(<AssistMessage> context);
-        } else if(context.type === "rebound") {
-            this.handleReboundUpdate(<ReboundMessage> context);
-        } else if(context.type === "foul") {
-            this.handleFoulUpdate(<FoulMessage> context);
-        } else if(context.type === "substitution") {
-            this.handleSubstitutionUpdate(<SubstitutionMessage> context)
+        if(context.publisher === "points") {
+            this.handlePointsUpdate(<PointsOutMessage> context);
+        } else if(context.publisher === "assist") {
+            this.handleAssistUpdate(<AssistOutMessage> context);
+        } else if(context.publisher === "rebound") {
+            this.handleReboundUpdate(<ReboundOutMessage> context);
+        } else if(context.publisher === "foul") {
+            this.handleFoulUpdate(<FoulOutMessage> context);
+        } else if(context.publisher === "substitution") {
+            this.handleSubstitutionUpdate(<SubstitutionOutMessage> context)
         }
     }
 
-    private handlePointsUpdate(context:PointsMessage) {
-        let oldImage = context.oldImage;
-        let newImage = context.newImage;
-        if(oldImage){
-            oldImage.player.points -= oldImage.points;
-        }
-        if(newImage) {
-            newImage.player.points += newImage.points;
+    private handlePointsUpdate(context:PointsOutMessage) {
+        if(context.type === "CREATE"){
+            context.player.points += context.points
+            // now for the plus minus
+            let playerTeam : Team = context.player.team
+            let otherTeam : Team = context.player.team === Team.home ? Team.away : Team.home
+
+            this.getRoster(playerTeam).players.forEach((player) => {
+                if(player.inGame){
+                    player.plusminus += context.points
+                }
+            })
+            this.getRoster(otherTeam).players.forEach((player) => {
+                if(player.inGame){
+                    player.plusminus -= context.points
+                }
+            })
+            
+            
+        } else if (context.type === "DELETE") {
+            context.player.points -= context.points
+            // now for the plus minus
+            let playerTeam : Team = context.player.team
+            let otherTeam : Team = context.player.team === Team.home ? Team.away : Team.home
+
+            this.getRoster(playerTeam).players.forEach((player) => {
+                if(player.inGame){
+                    player.plusminus -= context.points
+                }
+            })
+            this.getRoster(otherTeam).players.forEach((player) => {
+                if(player.inGame){
+                    player.plusminus += context.points
+                }
+            })
         }
 
     }
 
-    private handleAssistUpdate(context:AssistMessage) {
-        let oldImage = context.oldImage
-        let newImage = context.newImage
-        if(oldImage){
-            oldImage.player.assists -= 1;
-        }
-        if(newImage) {
-            newImage.player.assists += 1;
+    private handleAssistUpdate(context:AssistOutMessage) {
+        if(context.type === "CREATE"){
+            context.player.assists += 1;
+        } else if (context.type === "DELETE") {
+            context.player.assists -= 1;
         }
 
     }
 
-    private handleReboundUpdate(context:ReboundMessage) {
-        let oldImage = context.oldImage
-        let newImage = context.newImage
-        if(oldImage){
-            oldImage.player.rebounds -= 1;
-        }
-        if(newImage) {
-            newImage.player.rebounds += 1;
+    private handleReboundUpdate(context:ReboundOutMessage) {
+        if(context.type === "CREATE"){
+            context.player.rebounds += 1;
+        } else if (context.type === "DELETE") {
+            context.player.rebounds -= 1;
         }
 
     }
 
-    private handleFoulUpdate(context:FoulMessage) {
-        let oldImage = context.oldImage
-        let newImage = context.newImage
-        if(oldImage){
-            oldImage.player.fouls -= 1;
-        }
-        if(newImage) {
-            newImage.player.fouls += 1;
+    private handleFoulUpdate(context:FoulOutMessage) {
+        if(context.type === "CREATE"){
+            context.player.fouls += 1;
+        } else if (context.type === "DELETE") {
+            context.player.fouls -= 1;
         }
 
     }
-    private handleSubstitutionUpdate(context:SubstitutionMessage) {
-        context.image.lineup.forEach((player) => {
-            player.subOut(context.image.gameTime)
-            player.subIn(context.image.gameTime)
-        })
+    private handleSubstitutionUpdate(context:SubstitutionOutMessage) {
+        
     }
 }
 

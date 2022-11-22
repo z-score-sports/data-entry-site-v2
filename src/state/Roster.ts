@@ -6,15 +6,17 @@ import { SubstitutionPublisher } from "./publishers/SubstitutionPublisher";
 
 interface LineupImage {
     gameTime : GameTime
+    team: Team
     lineup : Array<Player>
 }
 
 class Roster {
-
+    team: Team
     players : Map<number, Player> = new Map<number,Player>();
 
-    public constructor(players : Array<Player>) {
+    public constructor(players : Array<Player>, team:Team) {
         makeAutoObservable(this, {})
+        this.team = team
         players.forEach((player) => {
             let playerNum : number = player.num;
             this.players.set(playerNum, player);
@@ -29,44 +31,6 @@ class Roster {
             return playerGet;
         }
         
-    }
-
-    substitute(playerGoingIn : number, playerGoingOut: number, gameTime: GameTime) {
-        let playerGIn : Player = this.getPlayer(playerGoingIn);
-        let playerGOut : Player = this.getPlayer(playerGoingOut);
-        
-        if(!playerGIn.inGame && playerGOut.inGame) {
-            playerGIn.subIn(gameTime);
-            playerGOut.subOut(gameTime);
-            let image : LineupImage = {
-                gameTime: gameTime,
-                lineup: this.lineupArray
-            }
-            SubstitutionPublisher.getInstance().notify(image)
-        } else {
-            console.log("warning: invalid substitution. No lineup changes made.")
-        }
-    }
-
-    putInGame(playerGoingIn : number, gameTime:GameTime) {
-        let playerGIn : Player = this.getPlayer(playerGoingIn);
-        playerGIn.subIn(gameTime);
-    }
-
-    takeOutOfGame(playerGoingIn : number, gameTime:GameTime) {
-        let playerGIn : Player = this.getPlayer(playerGoingIn);
-        playerGIn.subOut(gameTime);
-    }
-
-    get lineupArray() {
-
-        const curLineup : Array<Player> = Array<Player>();
-        this.players.forEach((player, num) => {
-            if(player.inGame) { 
-                curLineup.push(player)
-            }
-        })
-        return curLineup
     }
 
     get lineupString() {

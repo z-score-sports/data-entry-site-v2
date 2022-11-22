@@ -1,9 +1,9 @@
 import { makeAutoObservable } from "mobx"
 
 import React, { createContext } from "react";
+import { ActionStack } from "./ActionStack";
 
 import { Team, Player, GameTime } from "./Player";
-import { Possession } from "./Possession";
 import { Roster } from "./Roster";
 import { Scoreboard } from "./Scoreboard";
 import { StatManager } from "./StatManager";
@@ -26,18 +26,10 @@ const homePlayers = new Array<Player>(p1_h, p2_h, p3_h, p4_h, p5_h, p6_h);
 const awayPlayers = new Array<Player>(p1_a, p2_a, p3_a, p4_a, p5_a, p6_a);
 
 const gameStart = new GameTime(1, 12, 0);
-const tempHomeRoster = new Roster(homePlayers);
-tempHomeRoster.putInGame(0, gameStart);
-tempHomeRoster.putInGame(1, gameStart);
-tempHomeRoster.putInGame(2, gameStart);
-tempHomeRoster.putInGame(3, gameStart);
-tempHomeRoster.putInGame(4, gameStart);
-const tempAwayRoster = new Roster(awayPlayers);
-tempAwayRoster.putInGame(10, gameStart);
-tempAwayRoster.putInGame(11, gameStart);
-tempAwayRoster.putInGame(12, gameStart);
-tempAwayRoster.putInGame(13, gameStart);
-tempAwayRoster.putInGame(14, gameStart);
+const tempHomeRoster = new Roster(homePlayers, Team.home);
+
+const tempAwayRoster = new Roster(awayPlayers, Team.away);
+
 
 
 
@@ -47,30 +39,15 @@ class GameState {
     statManager : StatManager;
     homeRoster : Roster;
     awayRoster : Roster;
-    possessionStack : Array<Possession> = new Array<Possession>();
-    currentPossession : Possession = null;
+    actionStack : ActionStack;
 
-    constructor(startTeam : Team, homeRoster:Roster = new Roster(homePlayers), awayRoster:Roster = new Roster(awayPlayers)) {
+    constructor(startTeam : Team, homeRoster:Roster = new Roster(homePlayers, Team.home), awayRoster:Roster = new Roster(awayPlayers, Team.away)) {
         makeAutoObservable(this, {})
         this.scoreboard = new Scoreboard(Team.home, 4);
-        this.statManager = new StatManager();
-        this.currentPossession = new Possession(startTeam)
+        this.statManager = new StatManager(homeRoster, awayRoster);
         this.homeRoster = homeRoster;
         this.awayRoster = awayRoster;
 
-    }
-
-    //might want to add some additional helper methods
-    // Example: getOffensivePlayer(number)
-    // Example: getOffensivePlayerInGame(number)
-
-    endPossession() {
-        let nextTeam : Team = this.currentPossession.offenseTeam === Team.home ? Team.away : Team.home;
-        this.currentPossession.homeLineupString = this.homeRoster.lineupString;
-        this.currentPossession.awayLineupString = this.awayRoster.lineupString;
-        this.currentPossession.quarter = this.scoreboard.quarter;
-        this.possessionStack.push(this.currentPossession)
-        this.currentPossession = new Possession(nextTeam);
     }
 
 }

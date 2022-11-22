@@ -21,4 +21,7 @@ abstract class Publisher {
     abstract notify(oldImage:Object, newImage:Object) : void
 }
 
+type createDelete = "CREATE" | "DELETE"
+
 export {Publisher}
+export type {createDelete}

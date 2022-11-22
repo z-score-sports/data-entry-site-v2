@@ -3,10 +3,6 @@ import { observable, action, computed, reaction, makeObservable } from "mobx"
 import { Action } from "./Action";
 import { Player } from "../Player";
 
-interface BlockImage {
-    player: Player
-}
-
 class Block extends Action {
     blockingPlayer : Player;
 
@@ -14,26 +10,11 @@ class Block extends Action {
         super();
         makeObservable(this, {
             blockingPlayer: observable,
-            removeStats: action,
-            editBlockingPlayer: action,
             actionJSON: computed,
         })
         this.blockingPlayer = blockingPlayer;
     }
 
-    public removeStats (): void {
-    }
-
-    public editBlockingPlayer(newBlockingPlayer : Player) {
-        this.blockingPlayer = newBlockingPlayer;
-    }
-
-
-    get image() : BlockImage {
-        return {
-            player: this.blockingPlayer
-        }
-    }
     get actionJSON (): Object {
         return {
             "action" : "block",
@@ -45,4 +26,3 @@ class Block extends Action {
 }
 
 export {Block}
-export type {BlockImage}

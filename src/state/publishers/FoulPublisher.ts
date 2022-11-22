@@ -1,11 +1,17 @@
-import { FoulImage } from "../actions/Foul";
-import { Publisher } from "./Publisher";
+import { Foul } from "../actions/Foul";
+import { Player } from "../Player";
+import { createDelete, Publisher } from "./Publisher";
 
 
-interface FoulMessage {
-    type: "foul"
-    oldImage: FoulImage
-    newImage: FoulImage
+interface FoulInMessage {
+    type: createDelete
+    action: Foul
+}
+
+interface FoulOutMessage {
+    publisher: "foul"
+    type: createDelete
+    player: Player
 }
 
 class FoulPublisher extends Publisher {
@@ -21,14 +27,17 @@ class FoulPublisher extends Publisher {
         return this.instance
     }
 
-    public notify (oldImage:FoulImage, newImage:FoulImage) {
-        const info : FoulMessage = {
-            type: "foul",
-            oldImage: oldImage,
-            newImage: newImage,
+    public notify (message: FoulInMessage) {
+        if(!message.action) {return;}
+
+        const outMessage : FoulOutMessage = {
+            publisher: "foul",
+            type: message.type,
+            player: message.action.foulingPlayer
         }
+
         this.subscribers.forEach((sub) => {
-            sub.update(info)
+            sub.update(outMessage)
         })
 
     }
@@ -37,4 +46,4 @@ class FoulPublisher extends Publisher {
 
 export {FoulPublisher}
 
-export type {FoulMessage}
+export type {FoulInMessage, FoulOutMessage}

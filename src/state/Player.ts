@@ -58,7 +58,6 @@ class Player {
     plusminus : number = 0;
     minutes : number = 0;
     fouls : number = 0;
-    private lastTimeIn : GameTime;
 
     public constructor(playerId:string, num:number, firstName:string, lastName:string, team:Team){
         makeAutoObservable(this)
@@ -67,17 +66,6 @@ class Player {
         this.firstName = firstName;
         this.lastName = lastName;
         this.team = team;
-    }
-
-    subIn(gameTime : GameTime) {
-        this.lastTimeIn = gameTime;
-        this.inGame = true;
-    }
-    subOut(gameTime : GameTime) {
-        let minutes = GameTime.timeDiff(this.lastTimeIn, gameTime);
-        this.minutes += minutes
-        this.lastTimeIn = null
-        this.inGame = false;
     }
 
     
