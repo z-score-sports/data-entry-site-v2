@@ -1,81 +1,96 @@
 import { Action } from "./actions/Action";
+import { Assist } from "./actions/Assist";
+import { Block } from "./actions/Block";
+import { PossessionEnd } from "./actions/PossessionEnd";
 import { region, Shot } from "./actions/Shot";
 import { Team } from "./Player";
 import { GameRoster } from "./Roster";
 
-interface IStack<T> {
-    push(item: T) : void;
-    pop() : T | undefined;
-    peek() : T | undefined;
-    size() : number
-    clear() : void;
-}
 
-class Stack<T> implements IStack<T> {
-    private storage: T[] = [];
-
-    push(item: T): void {
-        this.storage.push(item);
-    }
-
-    pop(): T | undefined {
-        return this.storage.pop();
-    }
-
-    peek(): T | undefined {
-        return this.storage[this.size() - 1];
-    }
-
-    size(): number {
-        return this.storage.length
-    }
-
-    clear() : void {
-        this.storage = [];
-    }
-
-}
 
 class ActionStack {
 
     // validation is done here
     curPos : Team;
     gameRoster : GameRoster
-    mainStack : Stack<Action> = new Stack<Action>();
-    undoStack : Stack<Action> = new Stack<Action>();
+    mainStack : Action[] = [];
+    undoStack : Action[] = [];
 
     constructor(gameRoster : GameRoster, startPos : Team) {
         this.gameRoster = gameRoster
         this.curPos = startPos
     }
 
-    addAssist() {
+    addAssist(assistingPlayerNumber:number) {
         /*
         Conditions: 
             1) Shot is found before last end possession
             2) The latest shot was made
-            3) assisting player is on the same team as the shooting player
         */
+        let player = this.gameRoster.getRoster(this.curPos).getPlayer(assistingPlayerNumber)
 
-        this.undoStack.clear()
+        if(!player || !player.inGame){return;}
+        
+        let validShotFound : boolean = false
+        for (let index = this.mainStack.length-1; index >=  0; index--) {
+            let action = this.mainStack[index]
+            if(action instanceof PossessionEnd){
+                return;
+            } else if(action instanceof Shot){
+                if(!action.made) {
+                    return
+                } else {
+                    validShotFound = true
+                    break
+                }
+            }
+        }
+        if(!validShotFound){return;} // handles case where it reaches the end
+
+        let newAssist = new Assist(player);
+        newAssist.createNotify();
+        this.mainStack.push(newAssist)
+        this.undoStack = [];
 
     }
 
-    addBlock() {
+    addBlock(blockingPlayerNumber:number) {
         /*
         Conditions: 
             1) Shot is found before last end possession
             2) The latest shot was missed
         */
+        let player = this.gameRoster.getRoster(this.curPos).getPlayer(blockingPlayerNumber)
 
-        this.undoStack.clear()
+        if(!player || !player.inGame){return;}
+
+        let validShotFound : boolean = false
+        for (let index = this.mainStack.length-1; index >=  0; index--) {
+            let action = this.mainStack[index]
+            if(action instanceof PossessionEnd){
+                return;
+            } else if(action instanceof Shot){
+                if(action.made) {
+                    return
+                } else {
+                    validShotFound = true
+                    break
+                }
+            }
+        }
+        if(!validShotFound){return;} // handles case where it reaches the end
+
+        let newBlock = new Block(player);
+        newBlock.createNotify();
+        this.mainStack.push(newBlock)
+        this.undoStack = [];
     }
 
     addFoul() {
         /*
         Conditions: None
         */
-        this.undoStack.clear()
+        this.undoStack = [];
     }
 
     addFreeThrow() {
@@ -83,21 +98,22 @@ class ActionStack {
         Conditions: 
             1) Foul action is found before the last endPosession
         */
-        this.undoStack.clear()
+        this.undoStack = [];
     }
 
     addPossessionEnd() {
-        /*
-        Conditions: None
-        */
-        this.undoStack.clear()
+
+        let newPosEnd = new PossessionEnd();
+        this.mainStack.push(newPosEnd);
+        this.curPos = this.curPos === Team.home ? Team.away : Team.home // just flips the possession        
+        this.undoStack = [];
     }
 
     addQuarterEnd() {
         /*
         Conditions: None, but if the last action isn't a end possession, add an end possession action too
         */
-        this.undoStack.clear()
+        this.undoStack = [];
     }
 
     addRebound() {
@@ -106,7 +122,7 @@ class ActionStack {
             1) Shot is found before last end possession
             2) The latest shot was missed
         */
-        this.undoStack.clear()
+        this.undoStack = [];
     }
 
     addShot(shootingPlayerNumber:number, region:region, made:boolean) {
@@ -118,41 +134,47 @@ class ActionStack {
         let newShot = new Shot(player, region, made)
         newShot.createNotify();
         this.mainStack.push(newShot)
-        this.undoStack.clear()
+        this.undoStack = [];
     }
 
     addSubstitution() {
         /*
         Conditions: None
         */
-        this.undoStack.clear()
+        this.undoStack = [];
     }
 
     addTurnover() {
-        this.undoStack.clear()
+        this.undoStack = [];
     }
 
     addSteal() {
-        this.undoStack.clear()
+        this.undoStack = [];
     }
 
     undo() : void {
-        if(this.mainStack.size() === 0) {
+        if(this.mainStack.length === 0) {
             return
         }
 
         let action = this.mainStack.pop();
+        if(action instanceof PossessionEnd){
+            this.curPos = this.curPos === Team.home ? Team.away : Team.home // just flips the possession
+        }
         action.deleteNotify();
         this.undoStack.push(action);
 
     }
 
     redo() : void {
-        if(this.undoStack.size() === 0){
+        if(this.undoStack.length=== 0){
             return
         }
 
         let action = this.undoStack.pop();
+        if(action instanceof PossessionEnd){
+            this.curPos = this.curPos === Team.home ? Team.away : Team.home // just flips the possession
+        }
         action.createNotify();
         this.mainStack.push(action);
 
@@ -162,4 +184,4 @@ class ActionStack {
 
 }
 
-export {ActionStack, Stack}
+export {ActionStack}
