@@ -1,8 +1,11 @@
+import { makeAutoObservable } from "mobx";
 import { Action } from "./actions/Action";
 import { Assist } from "./actions/Assist";
 import { Block } from "./actions/Block";
+import { Foul } from "./actions/Foul";
+import { FreeThrow } from "./actions/FreeThrow";
 import { PossessionEnd } from "./actions/PossessionEnd";
-import { QuarterEnd } from "./actions/QuarterEnd";
+import { Rebound } from "./actions/Rebound";
 import { region, Shot } from "./actions/Shot";
 import { Steal, Turnover } from "./actions/Turnover";
 import { Team } from "./Player";
@@ -19,6 +22,10 @@ class ActionStack {
     undoStack : Action[] = [];
 
     constructor(gameRoster : GameRoster, startPos : Team) {
+        makeAutoObservable(this, {
+            undoStack: false
+        })
+
         this.gameRoster = gameRoster
         this.curPos = startPos
     }
@@ -88,18 +95,51 @@ class ActionStack {
         this.undoStack = [];
     }
 
-    addFoul() {
+    addFoul(foulingPlayerNumber : number, foulingTeam: Team) {
         /*
         Conditions: None
         */
+
+        let player = this.gameRoster.getRoster(foulingTeam).getPlayer(foulingPlayerNumber)
+        if(!player || !player.inGame){return;}
+
+        let newFoul = new Foul(player)
+        newFoul.createNotify();
+        this.mainStack.push(newFoul)
         this.undoStack = [];
     }
 
-    addFreeThrow() {
+    addFreeThrow(shootingPlayerNumber:number, made:boolean) {
         /*
         Conditions: 
             1) Foul action is found before the last endPosession
+            2) foul is committed by the defense
+            3) shooting player is on the offense
         */
+        
+        let player = this.gameRoster.getRoster(this.curPos).getPlayer(shootingPlayerNumber)
+
+        if(!player || !player.inGame){return;}
+
+        let validFoulFound : boolean = false
+        for (let index = this.mainStack.length-1; index >=  0; index--) {
+            let action = this.mainStack[index]
+            if(action instanceof PossessionEnd){
+                return;
+            } else if(action instanceof Foul){
+                if(action.foulingPlayer.team === this.curPos) { // if shooter on the same team as fouler
+                    return
+                } else {
+                    validFoulFound = true
+                    break
+                }
+            }
+        }
+        if(!validFoulFound){return;} // handles case where it reaches the end
+
+        let newFreeThrow = new FreeThrow(player, made);
+        newFreeThrow.createNotify();
+        this.mainStack.push(newFreeThrow)
         this.undoStack = [];
     }
 
@@ -112,12 +152,19 @@ class ActionStack {
         this.undoStack = [];
     }
 
-    addRebound() {
+    addRebound(reboundingPlayerNumber:number, team:Team) {
         /*
         Conditions: 
             1) Shot is found before last end possession
             2) The latest shot was missed
         */
+
+        let player = this.gameRoster.getRoster(team).getPlayer(reboundingPlayerNumber)
+        if(!player || !player.inGame){return;}
+
+        let newRebound = new Rebound(player);
+        newRebound.createNotify();
+        this.mainStack.push(newRebound);
         this.undoStack = [];
     }
 
