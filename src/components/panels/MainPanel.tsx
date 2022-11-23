@@ -9,8 +9,12 @@ function MainPanel() {
   const gameState = useContext(GameStateContext)
 
   const addShot = () => {
-      console.log("Add shot clicked")
       gameState.actionStack.addShot(0, 3, true)
+  }
+
+  const undoAction = () => {
+      gameState.actionStack.undo()
+
   }
 
   return (
@@ -18,6 +22,7 @@ function MainPanel() {
       <p>{gameState.actionStack.curPos}</p>
       This is the main panel
       <button onClick={addShot}>Add shot to player 0</button>
+      <button onClick={undoAction}>Undo</button>
     </div>
   );
 }

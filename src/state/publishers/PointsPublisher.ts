@@ -29,13 +29,11 @@ class PointsPublisher extends Publisher {
         if(!PointsPublisher.instance) {
             this.instance = new PointsPublisher();
         }
-        console.log("getting the instance of the points publisher")
         return this.instance;
 
     }
 
     public notify (message: PointsInMessage): void {
-        console.log(this.subscribers.length)
         if(!message.action) {return;}
 
         let points: number = 0;

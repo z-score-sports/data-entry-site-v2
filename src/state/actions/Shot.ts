@@ -40,7 +40,6 @@ class Shot extends Action {
     }
 
     createNotify (): void {
-        console.log("preparing to notify points publisher")
         PointsPublisher.getInstance().notify({
             type: "CREATE",
             action: this

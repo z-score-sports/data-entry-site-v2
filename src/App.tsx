@@ -8,13 +8,17 @@ import RightPanel from './components/panels/RightPanel';
 import { GameState } from './state/GameState';
 import { Team } from './state/Player';
 
-const GameStateContext = createContext<GameState>(new GameState());
+
+const gameState = new GameState();
+gameState.makeSubscriptions();
+const GameStateContext = createContext<GameState>(gameState);
+
 
 
 function App() {
 
   return (
-    <GameStateContext.Provider value={new GameState()}>
+    <GameStateContext.Provider value={gameState}>
       <div className="App">
         <TopBar/>
         <div className='MainSection'>

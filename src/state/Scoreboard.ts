@@ -1,7 +1,7 @@
-import { makeAutoObservable, flow } from "mobx";
+import { makeAutoObservable, flow} from "mobx";
 import { Team } from "./Player";
-import { FoulOutMessage, FoulPublisher } from "./publishers/FoulPublisher";
-import { PointsOutMessage, PointsPublisher } from "./publishers/PointsPublisher";
+import { FoulOutMessage } from "./publishers/FoulPublisher";
+import { PointsOutMessage } from "./publishers/PointsPublisher";
 import { Subscriber } from "./Subscriber";
 
 class Scoreboard implements Subscriber {
@@ -18,8 +18,7 @@ class Scoreboard implements Subscriber {
 
     public constructor(startPosArrow:Team, timeouts:number) {
 
-        makeAutoObservable(this, {
-        })
+        makeAutoObservable(this)
         this.possessionArrow = startPosArrow;
         this.totalTimeouts = timeouts;
         this.awayTimeouts = timeouts;

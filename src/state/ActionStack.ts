@@ -169,7 +169,6 @@ class ActionStack {
     }
 
     addShot(shootingPlayerNumber:number, region:region, made:boolean) {
-        console.log("addShot method in ActionStack")
 
         let player = this.gameRoster.getRoster(this.curPos).getPlayer(shootingPlayerNumber)
         //conditions: shooter exists and is in the game

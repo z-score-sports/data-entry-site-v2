@@ -59,8 +59,8 @@ class GameState {
     }
 
     makeSubscriptions() {
-        PointsPublisher.getInstance().subscribe(this.statManager)
         PointsPublisher.getInstance().subscribe(this.scoreboard)
+        PointsPublisher.getInstance().subscribe(this.statManager)
     }
 
 }
