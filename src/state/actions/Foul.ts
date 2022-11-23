@@ -16,14 +16,17 @@ class Foul extends Action {
         })
         this.foulingPlayer = foulingPlayer;
 
+        this.createNotify();
+    }
+
+    createNotify (): void {
         FoulPublisher.getInstance().notify({
             type: "CREATE",
             action: this
         })
-
     }
 
-    remove () {
+    deleteNotify () {
         FoulPublisher.getInstance().notify({
             type: "DELETE",
             action: this

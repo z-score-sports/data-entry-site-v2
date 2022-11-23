@@ -11,7 +11,11 @@ class QuarterEnd extends Action {
         })
     }
     
-    remove () {
+    createNotify (): void {
+        
+    }
+
+    deleteNotify (): void {
         
     }
 

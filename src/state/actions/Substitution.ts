@@ -21,13 +21,16 @@ class Substitution extends Action {
         this.playerGoingOut = playerGoingOut
         this.gameTime = gameTime
 
+        this.createNotify();
+    }
+
+    createNotify (): void {
         SubstitutionPublisher.getInstance().notify({
             type: "CREATE",
             action: this
         })
     }
-
-    remove () {
+    deleteNotify () {
         SubstitutionPublisher.getInstance().notify({
             type: "DELETE",
             action: this

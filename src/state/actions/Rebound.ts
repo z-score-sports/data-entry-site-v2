@@ -17,14 +17,19 @@ class Rebound extends Action {
 
         })
         this.reboundingPlayer = reboundingPlayer;
+        this.createNotify();
+
+    }
+
+
+    createNotify (): void {
         ReboundPublisher.getInstance().notify({
             type: "CREATE",
             action: this
         })
-
     }
 
-    remove() {
+    deleteNotify (): void {
         ReboundPublisher.getInstance().notify({
             type: "DELETE",
             action: this

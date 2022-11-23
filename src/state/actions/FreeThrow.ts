@@ -21,13 +21,18 @@ class FreeThrow extends Action {
         this.made = made;
         //always add a free throw attempt
 
+        this.createNotify();
+        
+    }
+
+    createNotify (): void {
         PointsPublisher.getInstance().notify({
             type: "CREATE",
             action: this
         })
     }
 
-    remove() {
+    deleteNotify () {
         PointsPublisher.getInstance().notify({
             type: "DELETE",
             action: this

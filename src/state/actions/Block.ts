@@ -15,9 +15,13 @@ class Block extends Action {
         this.blockingPlayer = blockingPlayer;
     }
 
-    remove () {
+    createNotify (): void {
         
     }
+
+    deleteNotify (): void {
+        
+    } 
 
     get actionJSON (): Object {
         return {

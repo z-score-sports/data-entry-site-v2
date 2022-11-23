@@ -24,10 +24,7 @@ class Shot extends Action {
         this.region = region;
         this.made = made;
 
-        PointsPublisher.getInstance().notify({
-            type: "CREATE",
-            action: this
-        })
+        this.createNotify();
 
     }
 
@@ -41,7 +38,14 @@ class Shot extends Action {
         }
     }
 
-    remove() {
+    createNotify (): void {
+        PointsPublisher.getInstance().notify({
+            type: "CREATE",
+            action: this
+        }) 
+    }
+
+    deleteNotify () {
         PointsPublisher.getInstance().notify({
             type: "DELETE",
             action: this

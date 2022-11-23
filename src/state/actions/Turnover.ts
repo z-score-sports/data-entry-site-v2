@@ -19,8 +19,12 @@ class Turnover extends Action {
 
     }
 
-    remove() {
+    createNotify (): void {
+        
+    }
 
+    deleteNotify (): void {
+        
     }
 
     get actionJSON (): Object {
@@ -45,7 +49,11 @@ class Steal extends Turnover {
         this.stealingPlayer = stealingPlayer;
     }
 
-    remove() {
+    createNotify (): void {
+        
+    }
+
+    deleteNotify (): void {
         
     }
 

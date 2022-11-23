@@ -11,7 +11,11 @@ class PossessionEnd extends Action {
         })
     }
 
-    remove() {
+    createNotify (): void {
+        
+    }
+
+    deleteNotify (): void {
         
     }
 

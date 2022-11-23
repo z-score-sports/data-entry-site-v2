@@ -16,13 +16,17 @@ class Assist extends Action {
         })
         this.assistingPlayer = assistingPlayer;
 
+        this.createNotify();
+    }
+
+    createNotify() {
         AssistPublisher.getInstance().notify({
             type: "CREATE",
             action: this
         })
     }
 
-    remove () {
+    deleteNotify () {
         AssistPublisher.getInstance().notify({
             type: "DELETE",
             action: this
