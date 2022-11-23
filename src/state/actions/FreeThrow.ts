@@ -20,6 +20,18 @@ class FreeThrow extends Action {
         this.shootingPlayer = shootingPlayer;
         this.made = made;
         //always add a free throw attempt
+
+        PointsPublisher.getInstance().notify({
+            type: "CREATE",
+            action: this
+        })
+    }
+
+    remove() {
+        PointsPublisher.getInstance().notify({
+            type: "DELETE",
+            action: this
+        })
     }
 
     public get actionJSON (): Object {

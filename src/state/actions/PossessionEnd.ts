@@ -11,6 +11,10 @@ class PossessionEnd extends Action {
         })
     }
 
+    remove() {
+        
+    }
+
     get actionJSON (): Object {
         return {
             "action": "possessionend",

@@ -12,6 +12,8 @@ export abstract class Action {
         this.actionId = crypto.randomUUID();
     }
 
+    abstract remove() : void
+
     get actionString() {
         return this.actionId;
     }

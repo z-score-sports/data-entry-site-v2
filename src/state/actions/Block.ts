@@ -15,6 +15,10 @@ class Block extends Action {
         this.blockingPlayer = blockingPlayer;
     }
 
+    remove () {
+        
+    }
+
     get actionJSON (): Object {
         return {
             "action" : "block",

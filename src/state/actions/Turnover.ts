@@ -19,6 +19,10 @@ class Turnover extends Action {
 
     }
 
+    remove() {
+
+    }
+
     get actionJSON (): Object {
         return {
             "action": "turnover",
@@ -39,6 +43,10 @@ class Steal extends Turnover {
             actionJSON: override,
         })
         this.stealingPlayer = stealingPlayer;
+    }
+
+    remove() {
+        
     }
 
     get actionJSON (): Object {

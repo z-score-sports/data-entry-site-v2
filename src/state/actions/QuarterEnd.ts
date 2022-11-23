@@ -10,6 +10,10 @@ class QuarterEnd extends Action {
             actionJSON : computed,
         })
     }
+    
+    remove () {
+        
+    }
 
     get actionJSON (): Object {
         return {

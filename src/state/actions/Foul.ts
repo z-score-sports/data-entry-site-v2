@@ -1,6 +1,7 @@
 import { observable, action, computed, reaction, makeObservable } from "mobx"
 
 import { Player } from "../Player";
+import { FoulPublisher } from "../publishers/FoulPublisher";
 import { Action } from "./Action";
 
 class Foul extends Action {
@@ -15,6 +16,19 @@ class Foul extends Action {
         })
         this.foulingPlayer = foulingPlayer;
 
+        FoulPublisher.getInstance().notify({
+            type: "CREATE",
+            action: this
+        })
+
+    }
+
+    remove () {
+        FoulPublisher.getInstance().notify({
+            type: "DELETE",
+            action: this
+        })
+        
     }
 
     get actionJSON (): Object {
