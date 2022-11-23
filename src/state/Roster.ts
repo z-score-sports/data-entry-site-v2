@@ -2,8 +2,6 @@ import { observable, action, computed, reaction, makeAutoObservable } from "mobx
 
 
 import { Player, Team } from "./Player";
-import { SubstitutionPublisher } from "./publishers/SubstitutionPublisher";
-
 
 class GameRoster {
     
@@ -29,14 +27,16 @@ class GameRoster {
 class Roster {
     team: Team
     players : Map<number, Player> = new Map<number,Player>();
+    teamName: string
 
-    public constructor(players : Array<Player>, team:Team) {
+    public constructor(players : Array<Player>, team:Team, tName:string) {
         makeAutoObservable(this, {})
         this.team = team
         players.forEach((player) => {
             let playerNum : number = player.num;
             this.players.set(playerNum, player);
         })
+        this.teamName = tName
     }
 
     getPlayer(num : number) {
@@ -47,6 +47,9 @@ class Roster {
             return playerGet;
         }
         
+    }
+    getPlayerArr() {
+        return Array.from(this.players.values())
     }
 
     get lineupString() {

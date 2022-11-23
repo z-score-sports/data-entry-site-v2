@@ -2,6 +2,7 @@ import { observable, action, computed, reaction, makeAutoObservable, makeObserva
 
 import { Player } from "../Player";
 import { PointsPublisher } from "../publishers/PointsPublisher";
+
 import { Action } from "./Action";
 
 type region = 1|2|3|4|5|6|7|8|9;
@@ -39,6 +40,7 @@ class Shot extends Action {
     }
 
     createNotify (): void {
+        console.log("preparing to notify points publisher")
         PointsPublisher.getInstance().notify({
             type: "CREATE",
             action: this

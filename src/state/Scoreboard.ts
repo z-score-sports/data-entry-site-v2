@@ -24,9 +24,7 @@ class Scoreboard implements Subscriber {
         this.totalTimeouts = timeouts;
         this.awayTimeouts = timeouts;
         this.homeTimeouts = timeouts;
-
-        PointsPublisher.getInstance().subscribe(this)
-        FoulPublisher.getInstance().subscribe(this);
+        
     }
 
     public update(context: PointsOutMessage | FoulOutMessage) {

@@ -17,12 +17,6 @@ class StatManager implements Subscriber {
 
         this.gameRoster = gameRoster
 
-        PointsPublisher.getInstance().subscribe(this);
-        ReboundPublisher.getInstance().subscribe(this);
-        AssistPublisher.getInstance().subscribe(this);
-        FoulPublisher.getInstance().subscribe(this);
-        SubstitutionPublisher.getInstance().subscribe(this);
-
 
     }
 

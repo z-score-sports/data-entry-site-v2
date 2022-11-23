@@ -2,10 +2,11 @@ import { makeAutoObservable } from "mobx"
 
 import React, { createContext } from "react";
 import { ActionStack } from "./ActionStack";
-
 import { Team, Player, GameTime } from "./Player";
+import { PointsPublisher } from "./publishers/PointsPublisher";
 import { GameRoster, Roster } from "./Roster";
 import { Scoreboard } from "./Scoreboard";
+
 import { StatManager } from "./StatManager";
 
 const p1_h = new Player("000000", 0, "A", "Adams", Team.home);
@@ -25,14 +26,21 @@ const p6_a = new Player("000015", 15, "L", "Lopez", Team.away);
 const homePlayers = new Array<Player>(p1_h, p2_h, p3_h, p4_h, p5_h, p6_h);
 const awayPlayers = new Array<Player>(p1_a, p2_a, p3_a, p4_a, p5_a, p6_a);
 
-const gameStart = new GameTime(1, 12, 0);
-const tempHomeRoster = new Roster(homePlayers, Team.home);
-const tempAwayRoster = new Roster(awayPlayers, Team.away);
+p1_h.inGame = true;
+p2_h.inGame = true;
+p3_h.inGame = true;
+p4_h.inGame = true;
+p5_h.inGame = true;
+p1_a.inGame = true;
+p2_a.inGame = true;
+p3_a.inGame = true;
+p4_a.inGame = true;
+p5_a.inGame = true;
+
+const tempHomeRoster = new Roster(homePlayers, Team.home, "Home");
+const tempAwayRoster = new Roster(awayPlayers, Team.away, "Away");
 
 const tempGameRoster = new GameRoster(tempHomeRoster, tempAwayRoster)
-
-
-
 
 
 class GameState {
@@ -46,7 +54,13 @@ class GameState {
         this.scoreboard = new Scoreboard(Team.home, 4);
         this.statManager = new StatManager(gameRoster);
         this.gameRoster = gameRoster
+        this.actionStack = new ActionStack(this.gameRoster, Team.home);
 
+    }
+
+    makeSubscriptions() {
+        PointsPublisher.getInstance().subscribe(this.statManager)
+        PointsPublisher.getInstance().subscribe(this.scoreboard)
     }
 
 }
