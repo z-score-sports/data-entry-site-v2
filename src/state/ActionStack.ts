@@ -2,7 +2,9 @@ import { Action } from "./actions/Action";
 import { Assist } from "./actions/Assist";
 import { Block } from "./actions/Block";
 import { PossessionEnd } from "./actions/PossessionEnd";
+import { QuarterEnd } from "./actions/QuarterEnd";
 import { region, Shot } from "./actions/Shot";
+import { Steal, Turnover } from "./actions/Turnover";
 import { Team } from "./Player";
 import { GameRoster } from "./Roster";
 
@@ -104,15 +106,9 @@ class ActionStack {
     addPossessionEnd() {
 
         let newPosEnd = new PossessionEnd();
+        newPosEnd.createNotify();
         this.mainStack.push(newPosEnd);
         this.curPos = this.curPos === Team.home ? Team.away : Team.home // just flips the possession        
-        this.undoStack = [];
-    }
-
-    addQuarterEnd() {
-        /*
-        Conditions: None, but if the last action isn't a end possession, add an end possession action too
-        */
         this.undoStack = [];
     }
 
@@ -144,12 +140,33 @@ class ActionStack {
         this.undoStack = [];
     }
 
-    addTurnover() {
+    addTurnover(offensivePlayerNumber:number) {
+
+        let offensivePlayer = this.gameRoster.getRoster(this.curPos).getPlayer(offensivePlayerNumber)
+        //conditions: shooter exists and is in the game
+        if(!offensivePlayer || !offensivePlayer.inGame){return;}
+
+        let newTurnover = new Turnover(offensivePlayer)
+        newTurnover.createNotify();
+        this.mainStack.push(newTurnover);
         this.undoStack = [];
     }
 
-    addSteal() {
+    addSteal(offensivePlayerNumber:number, defensivePlayerNumber:number) {
+        
+        let offensivePlayer = this.gameRoster.getRoster(this.curPos).getPlayer(offensivePlayerNumber)
+        if(!offensivePlayer || !offensivePlayer.inGame){return;}
+
+        let defense = this.curPos === Team.home ? Team.away : Team.home;
+        
+        let defensivePlayer = this.gameRoster.getRoster(defense).getPlayer(defensivePlayerNumber)
+        if(!defensivePlayer || !defensivePlayer.inGame){return;}
+
+        let newSteal = new Steal(offensivePlayer, defensivePlayer);
+        newSteal.createNotify();
+        this.mainStack.push(newSteal)
         this.undoStack = [];
+
     }
 
     undo() : void {
