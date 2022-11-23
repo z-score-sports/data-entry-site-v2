@@ -17,7 +17,6 @@ class Rebound extends Action {
 
         })
         this.reboundingPlayer = reboundingPlayer;
-        this.createNotify();
 
     }
 

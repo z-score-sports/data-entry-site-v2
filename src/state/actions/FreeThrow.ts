@@ -21,7 +21,6 @@ class FreeThrow extends Action {
         this.made = made;
         //always add a free throw attempt
 
-        this.createNotify();
         
     }
 

@@ -16,7 +16,6 @@ class Foul extends Action {
         })
         this.foulingPlayer = foulingPlayer;
 
-        this.createNotify();
     }
 
     createNotify (): void {

@@ -16,7 +16,6 @@ class Assist extends Action {
         })
         this.assistingPlayer = assistingPlayer;
 
-        this.createNotify();
     }
 
     createNotify() {

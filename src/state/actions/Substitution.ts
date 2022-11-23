@@ -21,7 +21,6 @@ class Substitution extends Action {
         this.playerGoingOut = playerGoingOut
         this.gameTime = gameTime
 
-        this.createNotify();
     }
 
     createNotify (): void {

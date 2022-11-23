@@ -4,7 +4,7 @@ import React, { createContext } from "react";
 import { ActionStack } from "./ActionStack";
 
 import { Team, Player, GameTime } from "./Player";
-import { Roster } from "./Roster";
+import { GameRoster, Roster } from "./Roster";
 import { Scoreboard } from "./Scoreboard";
 import { StatManager } from "./StatManager";
 
@@ -27,8 +27,9 @@ const awayPlayers = new Array<Player>(p1_a, p2_a, p3_a, p4_a, p5_a, p6_a);
 
 const gameStart = new GameTime(1, 12, 0);
 const tempHomeRoster = new Roster(homePlayers, Team.home);
-
 const tempAwayRoster = new Roster(awayPlayers, Team.away);
+
+const gameRoster = new GameRoster(tempHomeRoster, tempAwayRoster)
 
 
 
@@ -37,16 +38,14 @@ const tempAwayRoster = new Roster(awayPlayers, Team.away);
 class GameState {
     scoreboard : Scoreboard;
     statManager : StatManager;
-    homeRoster : Roster;
-    awayRoster : Roster;
+    gameRoster : GameRoster
     actionStack : ActionStack;
 
-    constructor(startTeam : Team, homeRoster:Roster = new Roster(homePlayers, Team.home), awayRoster:Roster = new Roster(awayPlayers, Team.away)) {
+    constructor(gameRoster: GameRoster) {
         makeAutoObservable(this, {})
         this.scoreboard = new Scoreboard(Team.home, 4);
-        this.statManager = new StatManager(homeRoster, awayRoster);
-        this.homeRoster = homeRoster;
-        this.awayRoster = awayRoster;
+        this.statManager = new StatManager(gameRoster);
+        this.gameRoster = gameRoster
 
     }
 
@@ -54,4 +53,4 @@ class GameState {
 
 export {GameState}
 
-export default createContext(new GameState(Team.home))
+export default createContext(new GameState(gameRoster))

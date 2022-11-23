@@ -1,14 +1,30 @@
 import { observable, action, computed, reaction, makeAutoObservable } from "mobx"
 
 
-import { GameTime, Player, Team } from "./Player";
+import { Player, Team } from "./Player";
 import { SubstitutionPublisher } from "./publishers/SubstitutionPublisher";
 
-interface LineupImage {
-    gameTime : GameTime
-    team: Team
-    lineup : Array<Player>
+
+class GameRoster {
+    
+    homeRoster : Roster
+    awayRoster : Roster
+
+    constructor(homeRoster : Roster, awayRoster: Roster) {
+        this.homeRoster = homeRoster
+        this.awayRoster = awayRoster
+    }
+
+    getRoster(team : Team){
+        if(team === Team.home){
+            return this.homeRoster
+        } else {
+            return this.awayRoster
+        }
+    }
 }
+
+
 
 class Roster {
     team: Team
@@ -51,5 +67,4 @@ class Roster {
 }
 
 
-export {Roster};
-export type {LineupImage}
+export {GameRoster, Roster};

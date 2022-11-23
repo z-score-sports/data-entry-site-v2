@@ -3,6 +3,8 @@ import { observable, action, computed, reaction, makeAutoObservable, makeObserva
 import { Player } from "../Player";
 import { PointsPublisher } from "../publishers/PointsPublisher";
 import { Action } from "./Action";
+
+type region = 1|2|3|4|5|6|7|8|9;
  
 class Shot extends Action {
 
@@ -12,7 +14,7 @@ class Shot extends Action {
     
     
 
-    constructor(shootingPlayer:Player, region: 1|2|3|4|5|6|7|8|9, made:boolean) {
+    constructor(shootingPlayer:Player, region: region, made:boolean) {
         super();
         makeObservable(this, {
             shootingPlayer: observable,
@@ -23,9 +25,7 @@ class Shot extends Action {
         this.shootingPlayer = shootingPlayer;
         this.region = region;
         this.made = made;
-
-        this.createNotify();
-
+        
     }
 
     get shotPoints() : number {
@@ -66,3 +66,5 @@ class Shot extends Action {
 }
 
 export {Shot}
+
+export type {region}

@@ -4,20 +4,18 @@ import { FoulOutMessage, FoulPublisher } from "./publishers/FoulPublisher";
 import { PointsOutMessage, PointsPublisher } from "./publishers/PointsPublisher";
 import { ReboundOutMessage, ReboundPublisher } from "./publishers/ReboundPublisher";
 import { SubstitutionOutMessage, SubstitutionPublisher } from "./publishers/SubstitutionPublisher";
-import { Roster } from "./Roster";
+import { GameRoster } from "./Roster";
 import { Subscriber } from "./Subscriber";
 
 type StatManagerContext = PointsOutMessage | ReboundOutMessage | AssistOutMessage | FoulOutMessage | SubstitutionOutMessage;
 
 class StatManager implements Subscriber {
 
-    homeRoster : Roster;
-    awayRoster : Roster;
+    gameRoster : GameRoster
 
-    public constructor(homeRoster : Roster, awayRoster: Roster) {
+    public constructor(gameRoster : GameRoster) {
 
-        this.homeRoster = homeRoster;
-        this.awayRoster = awayRoster;
+        this.gameRoster = gameRoster
 
         PointsPublisher.getInstance().subscribe(this);
         ReboundPublisher.getInstance().subscribe(this);
@@ -26,14 +24,6 @@ class StatManager implements Subscriber {
         SubstitutionPublisher.getInstance().subscribe(this);
 
 
-    }
-
-    getRoster(team: Team) {
-        if(team === Team.home){
-            return this.homeRoster
-        } else {
-            return this.awayRoster
-        }
     }
 
     public update(context: StatManagerContext) {
@@ -57,12 +47,12 @@ class StatManager implements Subscriber {
             let playerTeam : Team = context.player.team
             let otherTeam : Team = context.player.team === Team.home ? Team.away : Team.home
 
-            this.getRoster(playerTeam).players.forEach((player) => {
+            this.gameRoster.getRoster(playerTeam).players.forEach((player) => {
                 if(player.inGame){
                     player.plusminus += context.points
                 }
             })
-            this.getRoster(otherTeam).players.forEach((player) => {
+            this.gameRoster.getRoster(otherTeam).players.forEach((player) => {
                 if(player.inGame){
                     player.plusminus -= context.points
                 }
@@ -75,12 +65,12 @@ class StatManager implements Subscriber {
             let playerTeam : Team = context.player.team
             let otherTeam : Team = context.player.team === Team.home ? Team.away : Team.home
 
-            this.getRoster(playerTeam).players.forEach((player) => {
+            this.gameRoster.getRoster(playerTeam).players.forEach((player) => {
                 if(player.inGame){
                     player.plusminus -= context.points
                 }
             })
-            this.getRoster(otherTeam).players.forEach((player) => {
+            this.gameRoster.getRoster(otherTeam).players.forEach((player) => {
                 if(player.inGame){
                     player.plusminus += context.points
                 }
