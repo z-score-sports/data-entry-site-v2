@@ -29,7 +29,7 @@ const gameStart = new GameTime(1, 12, 0);
 const tempHomeRoster = new Roster(homePlayers, Team.home);
 const tempAwayRoster = new Roster(awayPlayers, Team.away);
 
-const gameRoster = new GameRoster(tempHomeRoster, tempAwayRoster)
+const tempGameRoster = new GameRoster(tempHomeRoster, tempAwayRoster)
 
 
 
@@ -41,7 +41,7 @@ class GameState {
     gameRoster : GameRoster
     actionStack : ActionStack;
 
-    constructor(gameRoster: GameRoster) {
+    constructor(gameRoster: GameRoster = tempGameRoster) {
         makeAutoObservable(this, {})
         this.scoreboard = new Scoreboard(Team.home, 4);
         this.statManager = new StatManager(gameRoster);
@@ -53,4 +53,4 @@ class GameState {
 
 export {GameState}
 
-export default createContext(new GameState(gameRoster))
+export default createContext(new GameState())

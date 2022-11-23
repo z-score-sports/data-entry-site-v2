@@ -31,9 +31,9 @@ class Scoreboard implements Subscriber {
 
     public update(context: PointsOutMessage | FoulOutMessage) {
         if(context.publisher === "points") {
-            this.handlePointsUpdate(<PointsOutMessage> context)
+            this.handlePointsUpdate(context as PointsOutMessage)
         } else if (context.publisher === "foul") {
-            this.handleFoulUpdate(<FoulOutMessage> context)
+            this.handleFoulUpdate(context as FoulOutMessage)
         }
     }
 

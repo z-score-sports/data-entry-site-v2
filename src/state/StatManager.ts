@@ -28,15 +28,15 @@ class StatManager implements Subscriber {
 
     public update(context: StatManagerContext) {
         if(context.publisher === "points") {
-            this.handlePointsUpdate(<PointsOutMessage> context);
+            this.handlePointsUpdate(context as PointsOutMessage);
         } else if(context.publisher === "assist") {
-            this.handleAssistUpdate(<AssistOutMessage> context);
+            this.handleAssistUpdate(context as AssistOutMessage);
         } else if(context.publisher === "rebound") {
-            this.handleReboundUpdate(<ReboundOutMessage> context);
+            this.handleReboundUpdate(context as ReboundOutMessage);
         } else if(context.publisher === "foul") {
-            this.handleFoulUpdate(<FoulOutMessage> context);
+            this.handleFoulUpdate(context as FoulOutMessage);
         } else if(context.publisher === "substitution") {
-            this.handleSubstitutionUpdate(<SubstitutionOutMessage> context)
+            this.handleSubstitutionUpdate(context as SubstitutionOutMessage)
         }
     }
 
