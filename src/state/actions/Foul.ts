@@ -19,6 +19,7 @@ class Foul extends Action {
     }
 
     createNotify (): void {
+        
         FoulPublisher.getInstance().notify({
             type: "CREATE",
             action: this

@@ -3,7 +3,11 @@ import { makeAutoObservable } from "mobx"
 import React, { createContext } from "react";
 import { ActionStack } from "./ActionStack";
 import { Team, Player, GameTime } from "./Player";
+import { AssistPublisher } from "./publishers/AssistPublisher";
+import { FoulPublisher } from "./publishers/FoulPublisher";
 import { PointsPublisher } from "./publishers/PointsPublisher";
+import { ReboundPublisher } from "./publishers/ReboundPublisher";
+import { SubstitutionPublisher } from "./publishers/SubstitutionPublisher";
 import { GameRoster, Roster } from "./Roster";
 import { Scoreboard } from "./Scoreboard";
 
@@ -61,6 +65,15 @@ class GameState {
     makeSubscriptions() {
         PointsPublisher.getInstance().subscribe(this.scoreboard)
         PointsPublisher.getInstance().subscribe(this.statManager)
+
+        FoulPublisher.getInstance().subscribe(this.scoreboard)
+        FoulPublisher.getInstance().subscribe(this.statManager)
+
+        ReboundPublisher.getInstance().subscribe(this.statManager)
+
+        AssistPublisher.getInstance().subscribe(this.statManager)
+
+        SubstitutionPublisher.getInstance().subscribe(this.statManager)
     }
 
 }

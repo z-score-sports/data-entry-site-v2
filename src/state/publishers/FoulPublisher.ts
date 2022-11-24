@@ -30,6 +30,7 @@ class FoulPublisher extends Publisher {
     public notify (message: FoulInMessage) {
         if(!message.action) {return;}
 
+
         const outMessage : FoulOutMessage = {
             publisher: "foul",
             type: message.type,
