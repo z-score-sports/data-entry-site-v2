@@ -12,8 +12,6 @@ class Turnover extends Action {
         super();
         makeObservable(this, {
             offensivePlayer: observable,
-            editOffensivePlayer: action,
-            removeStats: action,
             actionJSON: computed,
 
         })
@@ -21,11 +19,13 @@ class Turnover extends Action {
 
     }
 
-    editOffensivePlayer(newOffensivePlayer : Player) {
-        this.offensivePlayer = newOffensivePlayer
+    createNotify (): void {
+        
     }
 
-    removeStats (): void {return}
+    deleteNotify (): void {
+        
+    }
 
     get actionJSON (): Object {
         return {
@@ -44,22 +44,17 @@ class Steal extends Turnover {
         super(offensivePlayer);
         makeObservable(this, {
             stealingPlayer: observable,
-            editStealingPlayer: observable,
-            removeStats: override,
             actionJSON: override,
         })
         this.stealingPlayer = stealingPlayer;
-        this.stealingPlayer.addSteal();
     }
 
-    editStealingPlayer(newStealingPlayer : Player) {
-        this.stealingPlayer.removeSteal();
-        this.stealingPlayer = newStealingPlayer;
-        this.stealingPlayer.addSteal();
+    createNotify (): void {
+        
     }
 
-    removeStats (): void {
-        this.stealingPlayer.removeSteal();
+    deleteNotify (): void {
+        
     }
 
     get actionJSON (): Object {

@@ -1,6 +1,7 @@
 import { observable, action, computed, reaction, makeObservable } from "mobx"
 
 import { Player } from "../Player";
+import { ReboundPublisher } from "../publishers/ReboundPublisher";
 import { Action } from "./Action";
 
 
@@ -12,26 +13,27 @@ class Rebound extends Action {
         super();
         makeObservable(this, {
             reboundingPlayer: observable,
-            removeStats: action,
-            editPlayer: action,
             actionJSON: computed
 
         })
         this.reboundingPlayer = reboundingPlayer;
-        this.reboundingPlayer.addRebound();
 
     }
 
-    removeStats (): void {
-        this.reboundingPlayer.removeRebound();
+
+    createNotify (): void {
+        ReboundPublisher.getInstance().notify({
+            type: "CREATE",
+            action: this
+        })
     }
 
-    editPlayer(newPlayer : Player) {
-        this.reboundingPlayer.removeRebound();
-        this.reboundingPlayer = newPlayer;
-        this.reboundingPlayer.addRebound();
+    deleteNotify (): void {
+        ReboundPublisher.getInstance().notify({
+            type: "DELETE",
+            action: this
+        })
     }
-
 
     get actionJSON (): Object {
         return {

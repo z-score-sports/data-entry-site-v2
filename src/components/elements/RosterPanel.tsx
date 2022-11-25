@@ -26,10 +26,10 @@ function RosterPanel({team}: propsType) {
       {team.getPlayerArr().map((p) => {
         return <tr className = {"pRow" + p.inGame} >
             <th>{p.num}|{p.lastName}</th>
-            <th>{p.totalPoints}</th>
+            <th>{p.points}</th>
             <th>{p.rebounds}</th>
             <th>{p.assists}</th>
-            <th>{p.plusMinus}</th>
+            <th>{p.plusminus}</th>
             <th>{p.minutes}</th>
             <th>{p.fouls}</th>
         </tr>

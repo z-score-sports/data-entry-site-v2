@@ -1,15 +1,37 @@
 import { observable, action, computed, reaction, makeAutoObservable } from "mobx"
 
 
-import { Player } from "./Player";
+import { Player, Team } from "./Player";
+
+class GameRoster {
+    
+    homeRoster : Roster
+    awayRoster : Roster
+
+    constructor(homeRoster : Roster, awayRoster: Roster) {
+        this.homeRoster = homeRoster
+        this.awayRoster = awayRoster
+    }
+
+    getRoster(team : Team){
+        if(team === Team.home){
+            return this.homeRoster
+        } else {
+            return this.awayRoster
+        }
+    }
+}
+
+
 
 class Roster {
-
+    team: Team
     players : Map<number, Player> = new Map<number,Player>();
     teamName: string
 
-    public constructor(players : Array<Player>, tName: string) {
+    public constructor(players : Array<Player>, team:Team, tName:string) {
         makeAutoObservable(this, {})
+        this.team = team
         players.forEach((player) => {
             let playerNum : number = player.num;
             this.players.set(playerNum, player);
@@ -19,7 +41,7 @@ class Roster {
 
     getPlayer(num : number) {
         let playerGet : Player | undefined = this.players.get(num);
-        if(typeof playerGet == undefined) {
+        if(typeof playerGet === undefined) {
             return null
         } else {
             return playerGet;
@@ -28,28 +50,6 @@ class Roster {
     }
     getPlayerArr() {
         return Array.from(this.players.values())
-    }
-
-    substitute(playerGoingIn : number, playerGoingOut: number) {
-        let playerGIn : Player = this.getPlayer(playerGoingIn);
-        let playerGOut : Player = this.getPlayer(playerGoingOut);
-        
-        if(playerGIn.inGame && !playerGOut.inGame) {
-            playerGIn.subIn();
-            playerGOut.subOut();
-        } else {
-            console.log("warning: invalid substitution. No lineup changes made.")
-        }
-    }
-
-    putInGame(playerGoingIn : number) {
-        let playerGIn : Player = this.getPlayer(playerGoingIn);
-        playerGIn.subIn();
-    }
-
-    takeOutOfGame(playerGoingIn : number) {
-        let playerGIn : Player = this.getPlayer(playerGoingIn);
-        playerGIn.subOut();
     }
 
     get lineupString() {
@@ -70,4 +70,4 @@ class Roster {
 }
 
 
-export {Roster};
+export {GameRoster, Roster};

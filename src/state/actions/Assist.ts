@@ -1,8 +1,8 @@
 import { observable, action, computed, reaction, makeObservable } from "mobx"
 
 import { Player } from "../Player";
+import { AssistPublisher } from "../publishers/AssistPublisher";
 import { Action } from "./Action";
-
 
 class Assist extends Action {
     assistingPlayer : Player;
@@ -12,24 +12,25 @@ class Assist extends Action {
         super();
         makeObservable(this, {
             assistingPlayer: observable,
-            removeStats: action,
-            editAssistingPlayer : action,
             actionJSON : computed,
         })
         this.assistingPlayer = assistingPlayer;
-        this.assistingPlayer.addAssist();
+
     }
 
-    public removeStats (): void {
-        this.assistingPlayer.removeAssist();
+    createNotify() {
+        AssistPublisher.getInstance().notify({
+            type: "CREATE",
+            action: this
+        })
     }
 
-    public editAssistingPlayer(newAssistingPlayer : Player) {
-        this.assistingPlayer.removeAssist();
-        this.assistingPlayer = newAssistingPlayer;
-        this.assistingPlayer.addAssist();
+    deleteNotify () {
+        AssistPublisher.getInstance().notify({
+            type: "DELETE",
+            action: this
+        })
     }
-
 
     get actionJSON (): Object {
         return {

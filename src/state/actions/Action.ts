@@ -12,11 +12,12 @@ export abstract class Action {
         this.actionId = crypto.randomUUID();
     }
 
+    abstract createNotify() : void
+    abstract deleteNotify() : void
+
     get actionString() {
         return this.actionId;
     }
-
-    abstract removeStats() : void;
 
     abstract get actionJSON() : Object;
 }

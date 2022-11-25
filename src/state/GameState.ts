@@ -1,10 +1,17 @@
 import { makeAutoObservable } from "mobx"
 
 import React, { createContext } from "react";
+import { ActionStack } from "./ActionStack";
+import { Team, Player, GameTime } from "./Player";
+import { AssistPublisher } from "./publishers/AssistPublisher";
+import { FoulPublisher } from "./publishers/FoulPublisher";
+import { PointsPublisher } from "./publishers/PointsPublisher";
+import { ReboundPublisher } from "./publishers/ReboundPublisher";
+import { SubstitutionPublisher } from "./publishers/SubstitutionPublisher";
+import { GameRoster, Roster } from "./Roster";
+import { Scoreboard } from "./Scoreboard";
 
-import { Team, Player } from "./Player";
-import { Possession } from "./Possession";
-import { Roster } from "./Roster";
+import { StatManager } from "./StatManager";
 
 const p1_h = new Player("000000", 0, "A", "Adams", Team.home);
 const p2_h = new Player("000001", 1, "B", "Baker", Team.home);
@@ -23,76 +30,54 @@ const p6_a = new Player("000015", 15, "L", "Lopez", Team.away);
 const homePlayers = new Array<Player>(p1_h, p2_h, p3_h, p4_h, p5_h, p6_h);
 const awayPlayers = new Array<Player>(p1_a, p2_a, p3_a, p4_a, p5_a, p6_a);
 
-const tempHomeRoster = new Roster(homePlayers, "Hawks");
-tempHomeRoster.putInGame(0);
-tempHomeRoster.putInGame(1);
-tempHomeRoster.putInGame(2);
-tempHomeRoster.putInGame(3);
-tempHomeRoster.putInGame(4);
-const tempAwayRoster = new Roster(awayPlayers, 'Eagles');
-tempAwayRoster.putInGame(10);
-tempAwayRoster.putInGame(11);
-tempAwayRoster.putInGame(12);
-tempAwayRoster.putInGame(13);
-tempAwayRoster.putInGame(14);
+p1_h.inGame = true;
+p2_h.inGame = true;
+p3_h.inGame = true;
+p4_h.inGame = true;
+p5_h.inGame = true;
+p1_a.inGame = true;
+p2_a.inGame = true;
+p3_a.inGame = true;
+p4_a.inGame = true;
+p5_a.inGame = true;
 
+const tempHomeRoster = new Roster(homePlayers, Team.home, "Home");
+const tempAwayRoster = new Roster(awayPlayers, Team.away, "Away");
 
+const tempGameRoster = new GameRoster(tempHomeRoster, tempAwayRoster)
 
 
 class GameState {
-    quarter : number = 1;
-    possessionArrow : Team;
-    homeTimeouts : number = 4;
-    awayTimeouts : number = 4;
-    homeRoster : Roster;
-    awayRoster : Roster;
-    possessionStack : Array<Possession> = new Array<Possession>();
-    currentPossession : Possession = null;
+    scoreboard : Scoreboard;
+    statManager : StatManager;
+    gameRoster : GameRoster
+    actionStack : ActionStack;
 
-    constructor(startTeam : Team, homeRoster:Roster = new Roster(homePlayers, 'Eagles'), awayRoster:Roster = new Roster(awayPlayers, 'Hawks')) {
+    constructor(gameRoster: GameRoster = tempGameRoster) {
         makeAutoObservable(this, {})
-        this.possessionArrow = startTeam === Team.home ? Team.away : Team.home;
-        this.currentPossession = new Possession(startTeam)
-        this.homeRoster = homeRoster;
-        this.awayRoster = awayRoster;
+        this.scoreboard = new Scoreboard(Team.home, 4);
+        this.statManager = new StatManager(gameRoster);
+        this.gameRoster = gameRoster
+        this.actionStack = new ActionStack(this.gameRoster, Team.home);
 
     }
 
-    callTimeout(team : Team) {
-        if(team === Team.home) {
-            this.homeTimeouts = Math.max(this.homeTimeouts-1, 0);
-        } else {
-            this.awayTimeouts = Math.max(this.awayTimeouts-1, 0);
-        }
-    }
+    makeSubscriptions() {
+        PointsPublisher.getInstance().subscribe(this.scoreboard)
+        PointsPublisher.getInstance().subscribe(this.statManager)
 
-    increaseQuarter() {
-        this.quarter++;
-    }
+        FoulPublisher.getInstance().subscribe(this.scoreboard)
+        FoulPublisher.getInstance().subscribe(this.statManager)
 
-    decreaseQuarter() {
-        this.quarter = Math.max(this.quarter-1, 1);
-    }
+        ReboundPublisher.getInstance().subscribe(this.statManager)
 
-    changePossessionArrow() {
-        this.possessionArrow = this.possessionArrow === Team.away ? Team.home : Team.away;
-    }
+        AssistPublisher.getInstance().subscribe(this.statManager)
 
-    //might want to add some additional helper methods
-    // Example: getOffensivePlayer(number)
-    // Example: getOffensivePlayerInGame(number)
-
-    endPossession() {
-        let nextTeam : Team = this.currentPossession.offenseTeam === Team.home ? Team.away : Team.home;
-        this.currentPossession.homeLineupString = this.homeRoster.lineupString;
-        this.currentPossession.awayLineupString = this.awayRoster.lineupString;
-        this.currentPossession.quarter = this.quarter;
-        this.possessionStack.push(this.currentPossession)
-        this.currentPossession = new Possession(nextTeam);
+        SubstitutionPublisher.getInstance().subscribe(this.statManager)
     }
 
 }
 
 export {GameState}
 
-export default createContext(new GameState(Team.home))
+export default createContext(new GameState())

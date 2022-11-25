@@ -1,0 +1,8 @@
+
+Other validations:
+
+Max of 1 rebound, block, and assist -> if a rebound/block/assist is found when adding, unable to add that action
+
+Rebounds can't happen on made shots
+
+The shooting player cannot assist their own shot
