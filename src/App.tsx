@@ -5,20 +5,27 @@ import TopBar from './components/panels/TopBar';
 import LeftPanel from './components/panels/LeftPanel';
 import MainPanel from './components/panels/MainPanel';
 import RightPanel from './components/panels/RightPanel';
-import { GameState } from './state/GameState';
+import {GameState, gameRoster} from './state/GameState';
 import { Team } from './state/Player';
 
 
 const gameState = new GameState();
 gameState.makeSubscriptions();
-const GameStateContext = createContext<GameState>(gameState);
+const GameStateContext = createContext({
+  gameState: gameState,
+  gameRoster: gameRoster
+});
+
 
 
 
 function App() {
 
   return (
-    <GameStateContext.Provider value={gameState}>
+    <GameStateContext.Provider value={{
+      gameState: gameState,
+      gameRoster: gameRoster
+    }}>
       <div className="App">
         <TopBar/>
         <div className='MainSection'>

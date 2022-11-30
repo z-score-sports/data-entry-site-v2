@@ -7,12 +7,12 @@ import { Team } from '../../state/Player';
 
 function LeftPanel() {
 
-  const gameState = useContext(GameStateContext)
+  const context = useContext(GameStateContext)
 
   return (
     <div className = "lPanel">
-      <RosterPanel team={gameState.gameRoster.getRoster(Team.home)}/>
-      <RosterPanel team={gameState.gameRoster.getRoster(Team.away)}/>
+      <RosterPanel team={context.gameRoster.getRoster(Team.home)}/>
+      <RosterPanel team={context.gameRoster.getRoster(Team.away)} />
     </div>
   );
 }

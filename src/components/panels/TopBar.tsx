@@ -6,14 +6,14 @@ import { GameStateContext } from '../../App';
 
 function TopBar() {
 
-  const gameState = useContext(GameStateContext)
+  const context = useContext(GameStateContext)
   
 
   return (
     <div className = 'tBar'>
-      {gameState.scoreboard.quarter}
+      {context.gameState.scoreboard.quarter}
       <br/>
-      {gameState.scoreboard.awayPoints} - {gameState.scoreboard.homePoints}
+      {context.gameState.scoreboard.awayPoints} - {context.gameState.scoreboard.homePoints}
       <button >Click please</button>
       
     </div>

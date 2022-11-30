@@ -10,6 +10,7 @@ import { region, Shot } from "./actions/Shot";
 import { Steal, Turnover } from "./actions/Turnover";
 import { Team } from "./Player";
 import { GameRoster } from "./Roster";
+import {gameRoster} from "./GameState"
 
 
 
@@ -17,16 +18,14 @@ class ActionStack {
 
     // validation is done here
     curPos : Team;
-    gameRoster : GameRoster
     mainStack : Action[] = [];
     undoStack : Action[] = [];
 
-    constructor(gameRoster : GameRoster, startPos : Team) {
+    constructor(startPos : Team) {
         makeAutoObservable(this, {
             undoStack: false
         })
 
-        this.gameRoster = gameRoster
         this.curPos = startPos
     }
 
@@ -36,7 +35,7 @@ class ActionStack {
             1) Shot is found before last end possession
             2) The latest shot was made
         */
-        let player = this.gameRoster.getRoster(this.curPos).getPlayer(assistingPlayerNumber)
+        let player = gameRoster.getRoster(this.curPos).getPlayer(assistingPlayerNumber)
 
         if(!player || !player.inGame){return;}
         
@@ -69,7 +68,7 @@ class ActionStack {
             1) Shot is found before last end possession
             2) The latest shot was missed
         */
-        let player = this.gameRoster.getRoster(this.curPos).getPlayer(blockingPlayerNumber)
+        let player = gameRoster.getRoster(this.curPos).getPlayer(blockingPlayerNumber)
 
         if(!player || !player.inGame){return;}
 
@@ -100,7 +99,7 @@ class ActionStack {
         Conditions: None
         */
 
-        let player = this.gameRoster.getRoster(foulingTeam).getPlayer(foulingPlayerNumber)
+        let player = gameRoster.getRoster(foulingTeam).getPlayer(foulingPlayerNumber)
         if(!player || !player.inGame){return;}
 
         let newFoul = new Foul(player)
@@ -117,7 +116,7 @@ class ActionStack {
             3) shooting player is on the offense
         */
         
-        let player = this.gameRoster.getRoster(this.curPos).getPlayer(shootingPlayerNumber)
+        let player = gameRoster.getRoster(this.curPos).getPlayer(shootingPlayerNumber)
 
         if(!player || !player.inGame){return;}
 
@@ -159,7 +158,7 @@ class ActionStack {
             2) The latest shot was missed
         */
 
-        let player = this.gameRoster.getRoster(team).getPlayer(reboundingPlayerNumber)
+        let player = gameRoster.getRoster(team).getPlayer(reboundingPlayerNumber)
         if(!player || !player.inGame){return;}
 
         let newRebound = new Rebound(player);
@@ -170,7 +169,7 @@ class ActionStack {
 
     addShot(shootingPlayerNumber:number, region:region, made:boolean) {
 
-        let player = this.gameRoster.getRoster(this.curPos).getPlayer(shootingPlayerNumber)
+        let player = gameRoster.getRoster(this.curPos).getPlayer(shootingPlayerNumber)
         //conditions: shooter exists and is in the game
         if(!player || !player.inGame){return;}
         
@@ -189,7 +188,7 @@ class ActionStack {
 
     addTurnover(offensivePlayerNumber:number) {
 
-        let offensivePlayer = this.gameRoster.getRoster(this.curPos).getPlayer(offensivePlayerNumber)
+        let offensivePlayer = gameRoster.getRoster(this.curPos).getPlayer(offensivePlayerNumber)
         //conditions: shooter exists and is in the game
         if(!offensivePlayer || !offensivePlayer.inGame){return;}
 
@@ -201,12 +200,12 @@ class ActionStack {
 
     addSteal(offensivePlayerNumber:number, defensivePlayerNumber:number) {
         
-        let offensivePlayer = this.gameRoster.getRoster(this.curPos).getPlayer(offensivePlayerNumber)
+        let offensivePlayer = gameRoster.getRoster(this.curPos).getPlayer(offensivePlayerNumber)
         if(!offensivePlayer || !offensivePlayer.inGame){return;}
 
         let defense = this.curPos === Team.home ? Team.away : Team.home;
         
-        let defensivePlayer = this.gameRoster.getRoster(defense).getPlayer(defensivePlayerNumber)
+        let defensivePlayer = gameRoster.getRoster(defense).getPlayer(defensivePlayerNumber)
         if(!defensivePlayer || !defensivePlayer.inGame){return;}
 
         let newSteal = new Steal(offensivePlayer, defensivePlayer);

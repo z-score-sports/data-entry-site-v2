@@ -44,21 +44,19 @@ p5_a.inGame = true;
 const tempHomeRoster = new Roster(homePlayers, Team.home, "Home");
 const tempAwayRoster = new Roster(awayPlayers, Team.away, "Away");
 
-const tempGameRoster = new GameRoster(tempHomeRoster, tempAwayRoster)
+const gameRoster = new GameRoster(tempHomeRoster, tempAwayRoster)
 
 
 class GameState {
     scoreboard : Scoreboard;
     statManager : StatManager;
-    gameRoster : GameRoster
     actionStack : ActionStack;
 
-    constructor(gameRoster: GameRoster = tempGameRoster) {
+    constructor() {
         makeAutoObservable(this, {})
         this.scoreboard = new Scoreboard(Team.home, 4);
-        this.statManager = new StatManager(gameRoster);
-        this.gameRoster = gameRoster
-        this.actionStack = new ActionStack(this.gameRoster, Team.home);
+        this.statManager = new StatManager();
+        this.actionStack = new ActionStack(Team.home);
 
     }
 
@@ -78,6 +76,9 @@ class GameState {
 
 }
 
-export {GameState}
+export {GameState, gameRoster}
 
-export default createContext(new GameState())
+export default createContext({
+    gameState: new GameState(),
+    gameRoster: gameRoster
+})
