@@ -11,9 +11,9 @@ function TopBar() {
 
   return (
     <div className = 'tBar'>
-      {context.gameState.scoreboard.quarter}
+      {context.scoreboard.quarter}
       <br/>
-      {context.gameState.scoreboard.awayPoints} - {context.gameState.scoreboard.homePoints}
+      {context.scoreboard.awayPoints} - {context.scoreboard.homePoints}
       <button >Click please</button>
       
     </div>

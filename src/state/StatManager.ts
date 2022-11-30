@@ -4,7 +4,7 @@ import { FoulOutMessage } from "./publishers/FoulPublisher";
 import { PointsOutMessage } from "./publishers/PointsPublisher";
 import { ReboundOutMessage } from "./publishers/ReboundPublisher";
 import { SubstitutionOutMessage } from "./publishers/SubstitutionPublisher";
-import { gameRoster } from "./GameState";
+import { GameContext } from "./GameState";
 import { Subscriber } from "./Subscriber";
 
 type StatManagerContext = PointsOutMessage | ReboundOutMessage | AssistOutMessage | FoulOutMessage | SubstitutionOutMessage;
@@ -36,12 +36,12 @@ class StatManager implements Subscriber {
             let playerTeam : Team = context.player.team
             let otherTeam : Team = context.player.team === Team.home ? Team.away : Team.home
 
-            gameRoster.getRoster(playerTeam).players.forEach((player) => {
+            GameContext.gameRoster.getRoster(playerTeam).players.forEach((player) => {
                 if(player.inGame){
                     player.plusminus += context.points
                 }
             })
-            gameRoster.getRoster(otherTeam).players.forEach((player) => {
+            GameContext.gameRoster.getRoster(otherTeam).players.forEach((player) => {
                 if(player.inGame){
                     player.plusminus -= context.points
                 }
@@ -54,12 +54,12 @@ class StatManager implements Subscriber {
             let playerTeam : Team = context.player.team
             let otherTeam : Team = context.player.team === Team.home ? Team.away : Team.home
 
-            gameRoster.getRoster(playerTeam).players.forEach((player) => {
+            GameContext.gameRoster.getRoster(playerTeam).players.forEach((player) => {
                 if(player.inGame){
                     player.plusminus -= context.points
                 }
             })
-            gameRoster.getRoster(otherTeam).players.forEach((player) => {
+            GameContext.gameRoster.getRoster(otherTeam).players.forEach((player) => {
                 if(player.inGame){
                     player.plusminus += context.points
                 }

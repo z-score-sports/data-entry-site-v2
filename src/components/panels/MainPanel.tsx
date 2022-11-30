@@ -10,32 +10,32 @@ function MainPanel() {
   const context = useContext(GameStateContext)
 
   const addShot = () => {
-      context.gameState.actionStack.addShot(0, 3, true)
+      context.actionStack.addShot(0, 3, true)
   }
 
   const undoAction = () => {
-      context.gameState.actionStack.undo()
+      context.actionStack.undo()
 
   }
 
   const redoAction = () => {
-      context.gameState.actionStack.redo();
+      context.actionStack.redo();
   }
 
   const addFoul = () => {
-    context.gameState.actionStack.addFoul(0, Team.home)
+    context.actionStack.addFoul(0, Team.home)
   }
 
   const addRebound = () => {
-    context.gameState.actionStack.addRebound(1, Team.home)
+    context.actionStack.addRebound(1, Team.home)
   }
   const addAssist = () => {
-    context.gameState.actionStack.addAssist(1)
+    context.actionStack.addAssist(1)
   }
 
   return (
     <div className = "mPanel">
-      <p>{context.gameState.actionStack.curPos}</p>
+      <p>{context.actionStack.curPos}</p>
       This is the main panel
       <div>
         <button onClick={addShot}>Add shot to player 0</button>

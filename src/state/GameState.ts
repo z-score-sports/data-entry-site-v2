@@ -1,4 +1,4 @@
-import { makeAutoObservable } from "mobx"
+import { action, makeAutoObservable } from "mobx"
 
 import React, { createContext } from "react";
 import { ActionStack } from "./ActionStack";
@@ -46,39 +46,52 @@ const tempAwayRoster = new Roster(awayPlayers, Team.away, "Away");
 
 const gameRoster = new GameRoster(tempHomeRoster, tempAwayRoster)
 
+const scoreboard = new Scoreboard(Team.home, 4);
 
-class GameState {
-    scoreboard : Scoreboard;
-    statManager : StatManager;
-    actionStack : ActionStack;
+const statManager = new StatManager();
+const actionStack = new ActionStack(Team.home)
 
-    constructor() {
-        makeAutoObservable(this, {})
-        this.scoreboard = new Scoreboard(Team.home, 4);
-        this.statManager = new StatManager();
-        this.actionStack = new ActionStack(Team.home);
-
-    }
-
-    makeSubscriptions() {
-        PointsPublisher.getInstance().subscribe(this.scoreboard)
-        PointsPublisher.getInstance().subscribe(this.statManager)
-
-        FoulPublisher.getInstance().subscribe(this.scoreboard)
-        FoulPublisher.getInstance().subscribe(this.statManager)
-
-        ReboundPublisher.getInstance().subscribe(this.statManager)
-
-        AssistPublisher.getInstance().subscribe(this.statManager)
-
-        SubstitutionPublisher.getInstance().subscribe(this.statManager)
-    }
-
+interface game {
+    gameRoster: GameRoster,
+    scoreboard: Scoreboard,
+    statManager: StatManager,
+    actionStack: ActionStack
 }
 
-export {GameState, gameRoster}
 
-export default createContext({
-    gameState: new GameState(),
-    gameRoster: gameRoster
-})
+const createGameContext = () : game => {
+    const tempHomeRoster = new Roster(homePlayers, Team.home, "Home");
+    const tempAwayRoster = new Roster(awayPlayers, Team.away, "Away");
+
+    const gameRoster = new GameRoster(tempHomeRoster, tempAwayRoster)
+
+    const scoreboard = new Scoreboard(Team.home, 4);
+
+    const statManager = new StatManager();
+    const actionStack = new ActionStack(Team.home)
+
+
+    PointsPublisher.getInstance().subscribe(scoreboard)
+    PointsPublisher.getInstance().subscribe(statManager)
+    FoulPublisher.getInstance().subscribe(scoreboard)
+    FoulPublisher.getInstance().subscribe(statManager)
+    ReboundPublisher.getInstance().subscribe(statManager)
+    AssistPublisher.getInstance().subscribe(statManager)
+    SubstitutionPublisher.getInstance().subscribe(statManager)
+
+    return {
+        gameRoster: gameRoster,
+        scoreboard: scoreboard,
+        statManager: statManager,
+        actionStack: actionStack
+    }
+    
+    
+}
+
+const GameContext = createGameContext();
+
+
+export {GameContext}
+
+export default createContext(GameContext)
