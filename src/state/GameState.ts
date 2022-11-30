@@ -1,8 +1,6 @@
-import { action, makeAutoObservable } from "mobx"
-
-import React, { createContext } from "react";
+import { createContext } from "react";
 import { ActionStack } from "./ActionStack";
-import { Team, Player, GameTime } from "./Player";
+import { Team, Player } from "./Player";
 import { AssistPublisher } from "./publishers/AssistPublisher";
 import { FoulPublisher } from "./publishers/FoulPublisher";
 import { PointsPublisher } from "./publishers/PointsPublisher";
@@ -40,16 +38,6 @@ p2_a.inGame = true;
 p3_a.inGame = true;
 p4_a.inGame = true;
 p5_a.inGame = true;
-
-const tempHomeRoster = new Roster(homePlayers, Team.home, "Home");
-const tempAwayRoster = new Roster(awayPlayers, Team.away, "Away");
-
-const gameRoster = new GameRoster(tempHomeRoster, tempAwayRoster)
-
-const scoreboard = new Scoreboard(Team.home, 4);
-
-const statManager = new StatManager();
-const actionStack = new ActionStack(Team.home)
 
 interface game {
     gameRoster: GameRoster,

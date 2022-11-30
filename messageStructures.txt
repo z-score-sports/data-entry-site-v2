@@ -6,3 +6,17 @@ Max of 1 rebound, block, and assist -> if a rebound/block/assist is found when a
 Rebounds can't happen on made shots
 
 The shooting player cannot assist their own shot
+
+Statistics to keep track of for each player: 
+- Points
+- Rebounds
+- Assists
+- +/-
+- number of 3 pointers
+- FGM / FGA
+- FTM / FTA
+- Steals
+- Blocks
+- Turnovers
+- Minutes
+- Fouls

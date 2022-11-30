@@ -3,10 +3,6 @@ import { Subscriber } from "../Subscriber";
 abstract class Publisher {
 
     public subscribers : Array<Subscriber> = new Array<Subscriber>();
-
-    public constructor() {
-
-    }
     
     public subscribe(newSubscriber:Subscriber) {
         this.subscribers.push(newSubscriber);
