@@ -1,7 +1,7 @@
 import { observable, action, computed, reaction, makeAutoObservable, makeObservable } from "mobx"
 
 import { Player } from "../Player";
-import { PointsPublisher } from "../publishers/PointsPublisher";
+import { ShotPublisher } from "../publishers/ShotPublisher";
 
 import { Action } from "./Action";
 
@@ -40,14 +40,14 @@ class Shot extends Action {
     }
 
     createNotify (): void {
-        PointsPublisher.getInstance().notify({
+        ShotPublisher.getInstance().notify({
             type: "CREATE",
             action: this
         }) 
     }
 
     deleteNotify () {
-        PointsPublisher.getInstance().notify({
+        ShotPublisher.getInstance().notify({
             type: "DELETE",
             action: this
         })

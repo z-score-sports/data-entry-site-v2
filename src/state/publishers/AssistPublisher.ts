@@ -1,5 +1,4 @@
 import { Assist } from "../actions/Assist";
-import { Player } from "../Player";
 import { Publisher, createDelete } from "./Publisher";
 
 
@@ -11,7 +10,7 @@ interface AssistInMessage {
 interface AssistOutMessage {
     publisher: "assist"
     type: createDelete
-    player: Player
+    action: Assist
 }
 
 class AssistPublisher extends Publisher {
@@ -32,7 +31,7 @@ class AssistPublisher extends Publisher {
         const outMessage : AssistOutMessage = {
             publisher: "assist",
             type: message.type,
-            player: message.action.assistingPlayer
+            action: message.action
         }
 
         this.subscribers.forEach((sub) => {

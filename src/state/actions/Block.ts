@@ -1,7 +1,8 @@
-import { observable, action, computed, reaction, makeObservable } from "mobx"
+import { observable, computed, makeObservable } from "mobx"
 
 import { Action } from "./Action";
 import { Player } from "../Player";
+import { BlockPublisher } from "../publishers/BlockPublisher";
 
 class Block extends Action {
     blockingPlayer : Player;
@@ -16,11 +17,17 @@ class Block extends Action {
     }
 
     createNotify (): void {
-        
+        BlockPublisher.getInstance().notify({
+            type: "CREATE",
+            action: this
+        })
     }
 
     deleteNotify (): void {
-        
+        BlockPublisher.getInstance().notify({
+            type: "DELETE",
+            action: this
+        })
     } 
 
     get actionJSON (): Object {

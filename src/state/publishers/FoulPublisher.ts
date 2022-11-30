@@ -1,5 +1,4 @@
 import { Foul } from "../actions/Foul";
-import { Player } from "../Player";
 import { createDelete, Publisher } from "./Publisher";
 
 
@@ -11,7 +10,7 @@ interface FoulInMessage {
 interface FoulOutMessage {
     publisher: "foul"
     type: createDelete
-    player: Player
+    action: Foul
 }
 
 class FoulPublisher extends Publisher {
@@ -34,7 +33,7 @@ class FoulPublisher extends Publisher {
         const outMessage : FoulOutMessage = {
             publisher: "foul",
             type: message.type,
-            player: message.action.foulingPlayer
+            action: message.action
         }
 
         this.subscribers.forEach((sub) => {

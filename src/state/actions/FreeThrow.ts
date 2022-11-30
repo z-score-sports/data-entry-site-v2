@@ -1,6 +1,7 @@
 import { observable, action, computed, reaction, makeObservable } from "mobx"
 
 import { Player } from "../Player";
+import { FreeThrowPublisher } from "../publishers/FreeThrowPublisher";
 import { PointsPublisher } from "../publishers/PointsPublisher";
 import { Action } from "./Action";
 import { Rebound } from "./Rebound";
@@ -25,14 +26,14 @@ class FreeThrow extends Action {
     }
 
     createNotify (): void {
-        PointsPublisher.getInstance().notify({
+        FreeThrowPublisher.getInstance().notify({
             type: "CREATE",
             action: this
         })
     }
 
     deleteNotify () {
-        PointsPublisher.getInstance().notify({
+        FreeThrowPublisher.getInstance().notify({
             type: "DELETE",
             action: this
         })

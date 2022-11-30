@@ -70,27 +70,27 @@ class StatManager implements Subscriber {
 
     private handleAssistUpdate(context:AssistOutMessage) {
         if(context.type === "CREATE"){
-            context.player.assists += 1;
+            context.action.assistingPlayer.assists += 1;
         } else if (context.type === "DELETE") {
-            context.player.assists -= 1;
+            context.action.assistingPlayer.assists -= 1;
         }
 
     }
 
     private handleReboundUpdate(context:ReboundOutMessage) {
         if(context.type === "CREATE"){
-            context.player.rebounds += 1;
+            context.action.reboundingPlayer.rebounds += 1;
         } else if (context.type === "DELETE") {
-            context.player.rebounds -= 1;
+            context.action.reboundingPlayer.rebounds -= 1;
         }
 
     }
 
     private handleFoulUpdate(context:FoulOutMessage) {
         if(context.type === "CREATE"){
-            context.player.fouls += 1;
+            context.action.foulingPlayer.fouls += 1;
         } else if (context.type === "DELETE") {
-            context.player.fouls -= 1;
+            context.action.foulingPlayer.fouls -= 1;
         }
 
     }

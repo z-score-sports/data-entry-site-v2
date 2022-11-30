@@ -1,6 +1,7 @@
 import { observable, action, computed, reaction, makeObservable, override } from "mobx"
 
 import { Player } from "../Player";
+import { TurnoverPublisher } from "../publishers/TurnoverPublisher";
 import { Action } from "./Action";
 
 
@@ -20,10 +21,18 @@ class Turnover extends Action {
     }
 
     createNotify (): void {
+        TurnoverPublisher.getInstance().notify({
+            type: "CREATE",
+            action: this
+        })
         
     }
 
     deleteNotify (): void {
+        TurnoverPublisher.getInstance().notify({
+            type: "DELETE",
+            action: this
+        })
         
     }
 
@@ -47,14 +56,6 @@ class Steal extends Turnover {
             actionJSON: override,
         })
         this.stealingPlayer = stealingPlayer;
-    }
-
-    createNotify (): void {
-        
-    }
-
-    deleteNotify (): void {
-        
     }
 
     get actionJSON (): Object {

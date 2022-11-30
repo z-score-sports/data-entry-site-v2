@@ -11,7 +11,7 @@ interface ReboundInMessage {
 interface ReboundOutMessage {
     publisher: "rebound"
     type: createDelete
-    player: Player
+    action: Rebound
 }
 
 class ReboundPublisher extends Publisher {
@@ -33,7 +33,7 @@ class ReboundPublisher extends Publisher {
         const outMessage : ReboundOutMessage = {
             publisher: "rebound",
             type: message.type,
-            player: message.action.reboundingPlayer
+            action: message.action
         }
 
 

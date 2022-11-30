@@ -72,13 +72,13 @@ class Scoreboard implements Subscriber {
 
     private handleFoulUpdate(context:FoulOutMessage) {
         if(context.type === "CREATE") {
-            if(context.player.team === Team.home){
+            if(context.action.foulingPlayer.team === Team.home){
                 this.homeFouls += 1
             } else {
                 this.awayFouls += 1
             }
         }else if (context.type === "DELETE") {
-            if(context.player.team === Team.home){
+            if(context.action.foulingPlayer.team === Team.home){
                 this.homeFouls -= 1
             } else {
                 this.awayFouls -= 1
