@@ -1,7 +1,5 @@
 import { makeAutoObservable, flow} from "mobx";
 import { Team } from "./Player";
-import { FoulOutMessage } from "./publishers/FoulPublisher";
-import { PointsOutMessage } from "./publishers/PointsPublisher";
 import { Subscriber } from "./Subscriber";
 
 class Scoreboard implements Subscriber {
@@ -26,11 +24,11 @@ class Scoreboard implements Subscriber {
         
     }
 
-    public update(context: PointsOutMessage | FoulOutMessage) {
+    public update(context: any) {
         if(context.publisher === "points") {
-            this.handlePointsUpdate(context as PointsOutMessage)
+
         } else if (context.publisher === "foul") {
-            this.handleFoulUpdate(context as FoulOutMessage)
+
         }
     }
 
@@ -50,41 +48,6 @@ class Scoreboard implements Subscriber {
         this.quarter = Math.max(this.quarter-1, 1);
     }
 
-
-
-    private handlePointsUpdate(context:PointsOutMessage) {
-
-        if(context.type === "CREATE") {
-            if(context.player.team === Team.home){
-                this.homePoints += context.points
-            } else {
-                this.awayPoints += context.points
-            }
-        }else if (context.type === "DELETE") {
-            if(context.player.team === Team.home){
-                this.homePoints -= context.points
-            } else {
-                this.awayPoints -= context.points
-            }
-        }
-        
-    }
-
-    private handleFoulUpdate(context:FoulOutMessage) {
-        if(context.type === "CREATE") {
-            if(context.action.foulingPlayer.team === Team.home){
-                this.homeFouls += 1
-            } else {
-                this.awayFouls += 1
-            }
-        }else if (context.type === "DELETE") {
-            if(context.action.foulingPlayer.team === Team.home){
-                this.homeFouls -= 1
-            } else {
-                this.awayFouls -= 1
-            }
-        }
-    }
 
     
 }

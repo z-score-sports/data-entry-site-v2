@@ -1,14 +1,12 @@
 import { createContext } from "react";
+import { AssistPublisher } from "./actions/Assist";
+import { BlockPublisher } from "./actions/Block";
+import { FoulPublisher } from "./actions/Foul";
+import { FreeThrowPublisher } from "./actions/FreeThrow";
+import { ReboundPublisher } from "./actions/Rebound";
+import { ShotPublisher } from "./actions/Shot";
 import { ActionStack } from "./ActionStack";
 import { Team, Player } from "./Player";
-import { AssistPublisher } from "./publishers/AssistPublisher";
-import { BlockPublisher } from "./publishers/BlockPublisher";
-import { FoulPublisher } from "./publishers/FoulPublisher";
-import { FreeThrowPublisher } from "./publishers/FreeThrowPublisher";
-import { PointsPublisher } from "./publishers/PointsPublisher";
-import { ReboundPublisher } from "./publishers/ReboundPublisher";
-import { ShotPublisher } from "./publishers/ShotPublisher";
-import { SubstitutionPublisher } from "./publishers/SubstitutionPublisher";
 import { GameRoster, Roster } from "./Roster";
 import { Scoreboard } from "./Scoreboard";
 import { AssistStats } from "./statistics/AssistStats";
@@ -16,8 +14,6 @@ import { BlockStats } from "./statistics/BlockStats";
 import { FoulStats } from "./statistics/FoulStats";
 import { PointStats } from "./statistics/PointStats";
 import { ReboundStats } from "./statistics/ReboundStats";
-
-import { StatManager } from "./StatManager";
 
 const p1_h = new Player("000000", 0, "A", "Adams", Team.home);
 const p2_h = new Player("000001", 1, "B", "Baker", Team.home);
@@ -50,7 +46,6 @@ p5_a.inGame = true;
 interface game {
     gameRoster: GameRoster,
     scoreboard: Scoreboard,
-    statManager: StatManager,
     actionStack: ActionStack
 }
 
@@ -63,7 +58,6 @@ const createGameContext = (): game => {
 
     const scoreboard = new Scoreboard(Team.home, 4);
 
-    const statManager = new StatManager();
     const actionStack = new ActionStack(Team.home)
 
     const pointsStats = new PointStats();
@@ -83,7 +77,6 @@ const createGameContext = (): game => {
     return {
         gameRoster: gameRoster,
         scoreboard: scoreboard,
-        statManager: statManager,
         actionStack: actionStack
     }
 

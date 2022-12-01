@@ -1,7 +1,7 @@
 import { observable, action, computed, reaction, makeObservable } from "mobx"
 
 import { Player } from "../Player";
-import { AssistPublisher } from "../publishers/AssistPublisher";
+import { createDelete, Publisher } from "../Publisher";
 import { Action } from "./Action";
 
 class Assist extends Action {
@@ -42,4 +42,47 @@ class Assist extends Action {
     
 }
 
-export {Assist}
+
+interface AssistInMessage {
+    type: createDelete
+    action: Assist
+}
+
+interface AssistOutMessage {
+    publisher: "assist"
+    type: createDelete
+    action: Assist
+}
+
+class AssistPublisher extends Publisher {
+    private static instance: AssistPublisher
+
+    private constructor() {
+        super()
+    }
+
+    public static getInstance(): AssistPublisher {
+        if (!AssistPublisher.instance) {
+            this.instance = new AssistPublisher();
+        }
+        return this.instance
+    }
+
+    public notify(message: AssistInMessage) {
+        if (!message.action) { return; }
+        const outMessage: AssistOutMessage = {
+            publisher: "assist",
+            type: message.type,
+            action: message.action
+        }
+
+        this.subscribers.forEach((sub) => {
+            sub.update(outMessage)
+        })
+
+    }
+
+}
+
+export { Assist, AssistPublisher }
+export type { AssistInMessage, AssistOutMessage }

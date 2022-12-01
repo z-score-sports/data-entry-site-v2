@@ -1,5 +1,5 @@
 import { Block } from "../actions/Block";
-import { BlockOutMessage } from "../publishers/BlockPublisher";
+import { BlockOutMessage } from "../actions/Block";
 import { Subscriber } from "../Subscriber";
 
 

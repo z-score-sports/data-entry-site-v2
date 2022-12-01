@@ -1,7 +1,7 @@
 import { FreeThrow } from "../actions/FreeThrow";
 import { Shot } from "../actions/Shot";
-import { FreeThrowOutMessage } from "../publishers/FreeThrowPublisher";
-import { ShotOutMessage } from "../publishers/ShotPublisher";
+import { FreeThrowOutMessage } from "../actions/FreeThrow";
+import { ShotOutMessage } from "../actions/Shot";
 import { Subscriber } from "../Subscriber";
 
 type pointsStatsContext = ShotOutMessage | FreeThrowOutMessage

@@ -1,5 +1,5 @@
 import { Assist } from "../actions/Assist";
-import { AssistOutMessage } from "../publishers/AssistPublisher";
+import { AssistOutMessage } from "../actions/Assist";
 import { Subscriber } from "../Subscriber";
 
 class AssistStats implements Subscriber {

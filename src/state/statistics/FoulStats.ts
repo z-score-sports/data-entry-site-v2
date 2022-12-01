@@ -1,5 +1,5 @@
 import { Foul } from "../actions/Foul";
-import { FoulOutMessage } from "../publishers/FoulPublisher";
+import { FoulOutMessage } from "../actions/Foul";
 import { Subscriber } from "../Subscriber";
 
 class FoulStats implements Subscriber {

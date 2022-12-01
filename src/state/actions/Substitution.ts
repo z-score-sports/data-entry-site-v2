@@ -1,7 +1,6 @@
 import { observable, action, computed, reaction, makeObservable } from "mobx"
 
 import { GameTime, Player } from "../Player";
-import { SubstitutionPublisher } from "../publishers/SubstitutionPublisher";
 import { Action } from "./Action";
 
 class Substitution extends Action {
@@ -24,16 +23,9 @@ class Substitution extends Action {
     }
 
     createNotify (): void {
-        SubstitutionPublisher.getInstance().notify({
-            type: "CREATE",
-            action: this
-        })
+
     }
-    deleteNotify () {
-        SubstitutionPublisher.getInstance().notify({
-            type: "DELETE",
-            action: this
-        })
+    deleteNotify() {
     }
 
     get actionJSON (): Object {

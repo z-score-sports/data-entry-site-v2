@@ -1,5 +1,5 @@
 import { Rebound } from "../actions/Rebound";
-import { ReboundOutMessage } from "../publishers/ReboundPublisher";
+import { ReboundOutMessage } from "../actions/Rebound";
 import { Subscriber } from "../Subscriber";
 
 class ReboundStats implements Subscriber {

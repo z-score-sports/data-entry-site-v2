@@ -1,7 +1,7 @@
 import { observable, action, computed, reaction, makeObservable } from "mobx"
 
 import { Player } from "../Player";
-import { FoulPublisher } from "../publishers/FoulPublisher";
+import { createDelete, Publisher } from "../Publisher";
 import { Action } from "./Action";
 
 class Foul extends Action {
@@ -45,4 +45,48 @@ class Foul extends Action {
 }
 
 
-export {Foul}
+interface FoulInMessage {
+    type: createDelete
+    action: Foul
+}
+
+interface FoulOutMessage {
+    publisher: "foul"
+    type: createDelete
+    action: Foul
+}
+
+class FoulPublisher extends Publisher {
+    private static instance: FoulPublisher
+    private constructor() {
+        super()
+    }
+
+    public static getInstance(): FoulPublisher {
+        if (!FoulPublisher.instance) {
+            this.instance = new FoulPublisher();
+        }
+        return this.instance
+    }
+
+    public notify(message: FoulInMessage) {
+        if (!message.action) { return; }
+
+
+        const outMessage: FoulOutMessage = {
+            publisher: "foul",
+            type: message.type,
+            action: message.action
+        }
+
+        this.subscribers.forEach((sub) => {
+            sub.update(outMessage)
+        })
+
+    }
+
+}
+
+export { Foul, FoulPublisher }
+
+export type { FoulInMessage, FoulOutMessage }

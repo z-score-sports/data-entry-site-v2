@@ -1,10 +1,8 @@
 import { observable, action, computed, reaction, makeObservable } from "mobx"
 
 import { Player } from "../Player";
-import { FreeThrowPublisher } from "../publishers/FreeThrowPublisher";
-import { PointsPublisher } from "../publishers/PointsPublisher";
+import { createDelete, Publisher } from "../Publisher";
 import { Action } from "./Action";
-import { Rebound } from "./Rebound";
 
 class FreeThrow extends Action {
 
@@ -50,4 +48,48 @@ class FreeThrow extends Action {
     
 }
 
-export {FreeThrow}
+
+
+interface FreeThrowInMessage {
+    type: createDelete
+    action: FreeThrow
+}
+
+interface FreeThrowOutMessage {
+    publisher: "freethrow"
+    type: createDelete
+    action: FreeThrow
+}
+
+class FreeThrowPublisher extends Publisher {
+    private static instance: FreeThrowPublisher
+    private constructor() {
+        super()
+    }
+
+    public static getInstance(): FreeThrowPublisher {
+        if (!FreeThrowPublisher.instance) {
+            this.instance = new FreeThrowPublisher();
+        }
+        return this.instance
+    }
+
+    public notify(message: FreeThrowInMessage) {
+        if (!message.action) { return; }
+        const outMessage: FreeThrowOutMessage = {
+            publisher: "freethrow",
+            type: message.type,
+            action: message.action
+        }
+
+        this.subscribers.forEach((sub) => {
+            sub.update(outMessage)
+        })
+
+    }
+
+}
+
+export { FreeThrow, FreeThrowPublisher }
+export type { FreeThrowInMessage, FreeThrowOutMessage }
+
