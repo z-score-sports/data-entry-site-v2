@@ -4,11 +4,17 @@ import { Team, Player } from "./Player";
 import { AssistPublisher } from "./publishers/AssistPublisher";
 import { BlockPublisher } from "./publishers/BlockPublisher";
 import { FoulPublisher } from "./publishers/FoulPublisher";
+import { FreeThrowPublisher } from "./publishers/FreeThrowPublisher";
 import { PointsPublisher } from "./publishers/PointsPublisher";
 import { ReboundPublisher } from "./publishers/ReboundPublisher";
+import { ShotPublisher } from "./publishers/ShotPublisher";
 import { SubstitutionPublisher } from "./publishers/SubstitutionPublisher";
 import { GameRoster, Roster } from "./Roster";
 import { Scoreboard } from "./Scoreboard";
+import { AssistStats } from "./statistics/AssistStats";
+import { BlockStats } from "./statistics/BlockStats";
+import { PointStats } from "./statistics/PointStats";
+import { ReboundStats } from "./statistics/ReboundStats";
 
 import { StatManager } from "./StatManager";
 
@@ -48,7 +54,7 @@ interface game {
 }
 
 
-const createGameContext = () : game => {
+const createGameContext = (): game => {
     const tempHomeRoster = new Roster(homePlayers, Team.home, "Home");
     const tempAwayRoster = new Roster(awayPlayers, Team.away, "Away");
 
@@ -59,14 +65,17 @@ const createGameContext = () : game => {
     const statManager = new StatManager();
     const actionStack = new ActionStack(Team.home)
 
+    const pointsStats = new PointStats();
+    const reboundStats = new ReboundStats();
+    const assistStats = new AssistStats();
+    const blockStats = new BlockStats();
 
-    PointsPublisher.getInstance().subscribe(scoreboard)
-    PointsPublisher.getInstance().subscribe(statManager)
-    FoulPublisher.getInstance().subscribe(scoreboard)
-    FoulPublisher.getInstance().subscribe(statManager)
-    ReboundPublisher.getInstance().subscribe(statManager)
-    AssistPublisher.getInstance().subscribe(statManager)
-    SubstitutionPublisher.getInstance().subscribe(statManager)
+    ShotPublisher.getInstance().subscribe(pointsStats)
+    FreeThrowPublisher.getInstance().subscribe(pointsStats)
+    ReboundPublisher.getInstance().subscribe(reboundStats)
+    AssistPublisher.getInstance().subscribe(assistStats)
+    BlockPublisher.getInstance().subscribe(blockStats);
+
 
     return {
         gameRoster: gameRoster,
@@ -74,13 +83,13 @@ const createGameContext = () : game => {
         statManager: statManager,
         actionStack: actionStack
     }
-    
-    
+
+
 }
 
 const GameContext = createGameContext();
 
 
-export {GameContext}
+export { GameContext }
 
 export default createContext(GameContext)
