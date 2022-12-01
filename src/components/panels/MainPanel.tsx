@@ -10,6 +10,9 @@ function MainPanel() {
     const addShot = () => {
         context.actionStack.addShot(0, 3, true);
     };
+    const addMissedShot = () => {
+        context.actionStack.addShot(0, 3, false);
+    };
 
     const undoAction = () => {
         context.actionStack.undo();
@@ -36,6 +39,9 @@ function MainPanel() {
             This is the main panel
             <div>
                 <button onClick={addShot}>Add shot to player 0</button>
+                <button onClick={addMissedShot}>
+                    Add missed shot to player 0
+                </button>
                 <button onClick={undoAction}>Undo</button>
                 <button onClick={redoAction}>Redo</button>
             </div>
