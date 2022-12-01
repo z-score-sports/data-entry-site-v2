@@ -67,6 +67,10 @@ class Player {
     threePointers: number = 0;
     fgm: number = 0;
     fga: number = 0;
+    ftm: number = 0;
+    fta: number = 0;
+    steals: number = 0;
+    turnovers: number = 0;
 
     public constructor(
         playerId: string,

@@ -5,6 +5,7 @@ import { FoulPublisher } from "./actions/Foul";
 import { FreeThrowPublisher } from "./actions/FreeThrow";
 import { ReboundPublisher } from "./actions/Rebound";
 import { ShotPublisher } from "./actions/Shot";
+import { TurnoverPublisher } from "./actions/Turnover";
 import { ActionStack } from "./ActionStack";
 import { Player, Team } from "./Player";
 import { GameRoster, Roster } from "./Roster";
@@ -14,9 +15,12 @@ import {
     BlockStats,
     FieldGoalStats,
     FoulStats,
+    FreeThrowStats,
     PlusMinusStats,
     PointStats,
     ReboundStats,
+    StealStats,
+    TurnoverStats,
 } from "./statistics";
 
 const p1_h = new Player("000000", 0, "A", "Adams", Team.home);
@@ -70,16 +74,22 @@ const createGameContext = (): game => {
     const foulStats = new FoulStats();
     const pmStats = new PlusMinusStats();
     const fgStats = new FieldGoalStats();
+    const ftStats = new FreeThrowStats();
+    const turnoverStats = new TurnoverStats();
+    const stealStats = new StealStats();
 
     ShotPublisher.getInstance().subscribe(pointsStats);
     ShotPublisher.getInstance().subscribe(pmStats);
     ShotPublisher.getInstance().subscribe(fgStats);
     FreeThrowPublisher.getInstance().subscribe(pointsStats);
     FreeThrowPublisher.getInstance().subscribe(pmStats);
+    FreeThrowPublisher.getInstance().subscribe(ftStats);
     ReboundPublisher.getInstance().subscribe(reboundStats);
     AssistPublisher.getInstance().subscribe(assistStats);
     BlockPublisher.getInstance().subscribe(blockStats);
     FoulPublisher.getInstance().subscribe(foulStats);
+    TurnoverPublisher.getInstance().subscribe(turnoverStats);
+    TurnoverPublisher.getInstance().subscribe(stealStats);
 
     return {
         gameRoster: gameRoster,

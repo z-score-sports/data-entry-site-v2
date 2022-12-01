@@ -4,6 +4,7 @@ import { Foul, FoulOutMessage } from "./actions/Foul";
 import { FreeThrow, FreeThrowOutMessage } from "./actions/FreeThrow";
 import { Rebound, ReboundOutMessage } from "./actions/Rebound";
 import { Shot, ShotOutMessage } from "./actions/Shot";
+import { Steal, Turnover, TurnoverOutMessage } from "./actions/Turnover";
 import { GameContext } from "./GameState";
 import { Player, Team } from "./Player";
 import { Subscriber } from "./Subscriber";
@@ -219,14 +220,14 @@ class FieldGoalStats implements Subscriber {
         }
     }
 
-    handleCreate(shot: Shot) {
+    private handleCreate(shot: Shot) {
         shot.shootingPlayer.fga += 1;
         if (shot.made) {
             shot.shootingPlayer.fgm += 1;
         }
     }
 
-    handleDelete(shot: Shot) {
+    private handleDelete(shot: Shot) {
         shot.shootingPlayer.fga -= 1;
         if (shot.made) {
             shot.shootingPlayer.fgm -= 1;
@@ -234,11 +235,71 @@ class FieldGoalStats implements Subscriber {
     }
 }
 
+class FreeThrowStats implements Subscriber {
+    update(context: FreeThrowOutMessage) {
+        if (context.type === "CREATE") {
+            this.handleCreate(context.action);
+        } else if (context.type === "DELETE") {
+            this.handleDelete(context.action);
+        }
+    }
+
+    private handleCreate(freethrow: FreeThrow) {
+        freethrow.shootingPlayer.fta += 1;
+        if (freethrow.made) {
+            freethrow.shootingPlayer.ftm += 1;
+        }
+    }
+    private handleDelete(freethrow: FreeThrow) {
+        freethrow.shootingPlayer.fta -= 1;
+        if (freethrow.made) {
+            freethrow.shootingPlayer.ftm -= 1;
+        }
+    }
+}
+
+class TurnoverStats implements Subscriber {
+    update(context: TurnoverOutMessage) {
+        if (context.type === "CREATE") {
+            this.handleCreate(context.action);
+        } else if (context.type === "DELETE") {
+            this.handleDelete(context.action);
+        }
+    }
+
+    private handleCreate(turnover: Turnover) {
+        turnover.offensivePlayer.turnovers += 1;
+    }
+
+    private handleDelete(turnover: Turnover) {
+        turnover.offensivePlayer.turnovers -= 1;
+    }
+}
+
+class StealStats implements Subscriber {
+    update(context: TurnoverOutMessage) {
+        const curAction: Turnover = context.action;
+        if (curAction instanceof Steal) {
+            if (context.type === "CREATE") {
+                this.handleCreate(curAction);
+            } else if (context.type === "DELETE") {
+                this.handleDelete(curAction);
+            }
+        }
+    }
+
+    private handleCreate(steal: Steal) {
+        steal.stealingPlayer.steals += 1;
+    }
+
+    private handleDelete(steal: Steal) {
+        steal.stealingPlayer.steals -= 1;
+    }
+}
+
 /*
 Stats left: 
-- ftm/fta
 - Steals
-- Blocks
 - Turnovers
 - Minutes
 
@@ -253,4 +314,7 @@ export {
     ThreePointStats,
     PlusMinusStats,
     FieldGoalStats,
+    FreeThrowStats,
+    TurnoverStats,
+    StealStats,
 };
