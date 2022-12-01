@@ -103,5 +103,7 @@ class TurnoverPublisher extends Publisher {
 }
 
 export { Turnover, Steal, TurnoverPublisher };
+export type { TurnoverOutMessage };
+
 
 

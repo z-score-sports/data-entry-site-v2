@@ -299,8 +299,6 @@ class StealStats implements Subscriber {
 
 /*
 Stats left: 
-- Steals
-- Turnovers
 - Minutes
 
 */
