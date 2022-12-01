@@ -13,6 +13,7 @@ import { GameRoster, Roster } from "./Roster";
 import { Scoreboard } from "./Scoreboard";
 import { AssistStats } from "./statistics/AssistStats";
 import { BlockStats } from "./statistics/BlockStats";
+import { FoulStats } from "./statistics/FoulStats";
 import { PointStats } from "./statistics/PointStats";
 import { ReboundStats } from "./statistics/ReboundStats";
 
@@ -69,12 +70,14 @@ const createGameContext = (): game => {
     const reboundStats = new ReboundStats();
     const assistStats = new AssistStats();
     const blockStats = new BlockStats();
+    const foulStats = new FoulStats();
 
     ShotPublisher.getInstance().subscribe(pointsStats)
     FreeThrowPublisher.getInstance().subscribe(pointsStats)
     ReboundPublisher.getInstance().subscribe(reboundStats)
     AssistPublisher.getInstance().subscribe(assistStats)
     BlockPublisher.getInstance().subscribe(blockStats);
+    FoulPublisher.getInstance().subscribe(foulStats)
 
 
     return {
