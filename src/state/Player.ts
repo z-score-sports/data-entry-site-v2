@@ -59,6 +59,9 @@ class Player {
     minutes: number = 0;
     fouls: number = 0;
     blocks: number = 0;
+    threePointers: number = 0;
+    fgm: number = 0;
+    fga: number = 0;
 
     public constructor(playerId: string, num: number, firstName: string, lastName: string, team: Team) {
         makeAutoObservable(this)

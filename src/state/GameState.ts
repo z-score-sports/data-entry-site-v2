@@ -9,11 +9,7 @@ import { ActionStack } from "./ActionStack";
 import { Team, Player } from "./Player";
 import { GameRoster, Roster } from "./Roster";
 import { Scoreboard } from "./Scoreboard";
-import { AssistStats } from "./statistics/AssistStats";
-import { BlockStats } from "./statistics/BlockStats";
-import { FoulStats } from "./statistics/FoulStats";
-import { PointStats } from "./statistics/PointStats";
-import { ReboundStats } from "./statistics/ReboundStats";
+import { PointStats, ReboundStats, AssistStats, BlockStats, FoulStats, PlusMinusStats, FieldGoalStats } from "./statistics";
 
 const p1_h = new Player("000000", 0, "A", "Adams", Team.home);
 const p2_h = new Player("000001", 1, "B", "Baker", Team.home);
@@ -65,13 +61,20 @@ const createGameContext = (): game => {
     const assistStats = new AssistStats();
     const blockStats = new BlockStats();
     const foulStats = new FoulStats();
+    const pmStats = new PlusMinusStats();
+    const fgStats = new FieldGoalStats();
 
     ShotPublisher.getInstance().subscribe(pointsStats)
+    ShotPublisher.getInstance().subscribe(pmStats)
+    ShotPublisher.getInstance().subscribe(fgStats)
     FreeThrowPublisher.getInstance().subscribe(pointsStats)
+    FreeThrowPublisher.getInstance().subscribe(pmStats)
     ReboundPublisher.getInstance().subscribe(reboundStats)
     AssistPublisher.getInstance().subscribe(assistStats)
     BlockPublisher.getInstance().subscribe(blockStats);
     FoulPublisher.getInstance().subscribe(foulStats)
+
+
 
 
     return {
