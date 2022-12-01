@@ -5,48 +5,42 @@ import { createDelete, Publisher } from "../Publisher";
 import { Action } from "./Action";
 
 class FreeThrow extends Action {
+    shootingPlayer: Player;
+    made: boolean;
 
-    shootingPlayer:Player;
-    made : boolean;
-
-
-    public constructor(shootingPlayer:Player, made:boolean) {
+    public constructor(shootingPlayer: Player, made: boolean) {
         super();
         makeObservable(this, {
             shootingPlayer: observable,
             made: observable,
             actionJSON: computed,
-        })
+        });
         this.shootingPlayer = shootingPlayer;
         this.made = made;
-        //always add a free throw attempt
-
-        
     }
 
-    createNotify (): void {
+    createNotify(): void {
         FreeThrowPublisher.getInstance().notify({
             type: "CREATE",
-            action: this
-        })
+            action: this,
+        });
     }
 
-    deleteNotify () {
+    deleteNotify() {
         FreeThrowPublisher.getInstance().notify({
             type: "DELETE",
-            action: this
-        })
+            action: this,
+        });
     }
 
-    public get actionJSON (): Object {
+    public get actionJSON(): Object {
         return {
-            "action": "freethrow",
-            "actionId": this.actionId,
-            "shootingPlayerId": this.shootingPlayer.playerId,
-            "made": this.made,
-        }
+            action: "freethrow",
+            actionId: this.actionId,
+            shootingPlayerId: this.shootingPlayer.playerId,
+            made: this.made,
+        };
     }
-    
 }
 
 

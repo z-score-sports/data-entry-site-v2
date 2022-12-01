@@ -6,10 +6,18 @@ import { FreeThrowPublisher } from "./actions/FreeThrow";
 import { ReboundPublisher } from "./actions/Rebound";
 import { ShotPublisher } from "./actions/Shot";
 import { ActionStack } from "./ActionStack";
-import { Team, Player } from "./Player";
+import { Player, Team } from "./Player";
 import { GameRoster, Roster } from "./Roster";
 import { Scoreboard } from "./Scoreboard";
-import { PointStats, ReboundStats, AssistStats, BlockStats, FoulStats, PlusMinusStats, FieldGoalStats } from "./statistics";
+import {
+    AssistStats,
+    BlockStats,
+    FieldGoalStats,
+    FoulStats,
+    PlusMinusStats,
+    PointStats,
+    ReboundStats,
+} from "./statistics";
 
 const p1_h = new Player("000000", 0, "A", "Adams", Team.home);
 const p2_h = new Player("000001", 1, "B", "Baker", Team.home);
@@ -40,21 +48,20 @@ p4_a.inGame = true;
 p5_a.inGame = true;
 
 interface game {
-    gameRoster: GameRoster,
-    scoreboard: Scoreboard,
-    actionStack: ActionStack
+    gameRoster: GameRoster;
+    scoreboard: Scoreboard;
+    actionStack: ActionStack;
 }
-
 
 const createGameContext = (): game => {
     const tempHomeRoster = new Roster(homePlayers, Team.home, "Home");
     const tempAwayRoster = new Roster(awayPlayers, Team.away, "Away");
 
-    const gameRoster = new GameRoster(tempHomeRoster, tempAwayRoster)
+    const gameRoster = new GameRoster(tempHomeRoster, tempAwayRoster);
 
     const scoreboard = new Scoreboard(Team.home, 4);
 
-    const actionStack = new ActionStack(Team.home)
+    const actionStack = new ActionStack(Team.home);
 
     const pointsStats = new PointStats();
     const reboundStats = new ReboundStats();
@@ -64,31 +71,25 @@ const createGameContext = (): game => {
     const pmStats = new PlusMinusStats();
     const fgStats = new FieldGoalStats();
 
-    ShotPublisher.getInstance().subscribe(pointsStats)
-    ShotPublisher.getInstance().subscribe(pmStats)
-    ShotPublisher.getInstance().subscribe(fgStats)
-    FreeThrowPublisher.getInstance().subscribe(pointsStats)
-    FreeThrowPublisher.getInstance().subscribe(pmStats)
-    ReboundPublisher.getInstance().subscribe(reboundStats)
-    AssistPublisher.getInstance().subscribe(assistStats)
+    ShotPublisher.getInstance().subscribe(pointsStats);
+    ShotPublisher.getInstance().subscribe(pmStats);
+    ShotPublisher.getInstance().subscribe(fgStats);
+    FreeThrowPublisher.getInstance().subscribe(pointsStats);
+    FreeThrowPublisher.getInstance().subscribe(pmStats);
+    ReboundPublisher.getInstance().subscribe(reboundStats);
+    AssistPublisher.getInstance().subscribe(assistStats);
     BlockPublisher.getInstance().subscribe(blockStats);
-    FoulPublisher.getInstance().subscribe(foulStats)
-
-
-
+    FoulPublisher.getInstance().subscribe(foulStats);
 
     return {
         gameRoster: gameRoster,
         scoreboard: scoreboard,
-        actionStack: actionStack
-    }
-
-
-}
+        actionStack: actionStack,
+    };
+};
 
 const GameContext = createGameContext();
 
-
-export { GameContext }
+export { GameContext };
 
 export default createContext(GameContext)

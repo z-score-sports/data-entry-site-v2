@@ -1,6 +1,6 @@
 
 interface Subscriber {
-    update(context: Object) : void;
+    update(context: Object): void;
 }
 
-export type {Subscriber}
+export type { Subscriber };

@@ -5,42 +5,39 @@ import { createDelete, Publisher } from "../Publisher";
 import { Action } from "./Action";
 
 class Block extends Action {
-    blockingPlayer : Player;
+    blockingPlayer: Player;
 
-    public constructor(blockingPlayer : Player) {
+    public constructor(blockingPlayer: Player) {
         super();
         makeObservable(this, {
             blockingPlayer: observable,
             actionJSON: computed,
-        })
+        });
         this.blockingPlayer = blockingPlayer;
     }
 
-    createNotify (): void {
+    createNotify(): void {
         BlockPublisher.getInstance().notify({
             type: "CREATE",
-            action: this
-        })
+            action: this,
+        });
     }
 
-    deleteNotify (): void {
+    deleteNotify(): void {
         BlockPublisher.getInstance().notify({
             type: "DELETE",
-            action: this
-        })
-    } 
-
-    get actionJSON (): Object {
-        return {
-            "action" : "block",
-            "actionId": this.actionId,
-            "blockingPlayerId" : this.blockingPlayer.playerId,
-        }
+            action: this,
+        });
     }
-    
+
+    get actionJSON(): Object {
+        return {
+            action: "block",
+            actionId: this.actionId,
+            blockingPlayerId: this.blockingPlayer.playerId,
+        };
+    }
 }
-
-
 
 interface BlockInMessage {
     type: createDelete

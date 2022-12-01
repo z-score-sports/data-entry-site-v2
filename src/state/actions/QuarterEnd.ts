@@ -1,31 +1,25 @@
-import { computed, makeObservable } from "mobx"
+import { computed, makeObservable } from "mobx";
 
 import { Action } from "./Action";
 
-class QuarterEnd extends Action {    
-
+class QuarterEnd extends Action {
     public constructor() {
         super();
         makeObservable(this, {
-            actionJSON : computed,
-        })
-    }
-    
-    createNotify (): void {
-        
+            actionJSON: computed,
+        });
     }
 
-    deleteNotify (): void {
-        
-    }
+    createNotify(): void {}
 
-    get actionJSON (): Object {
+    deleteNotify(): void {}
+
+    get actionJSON(): Object {
         return {
-            "action": "quarterend",
-            "actionId": this.actionId,
-        }
+            action: "quarterend",
+            actionId: this.actionId,
+        };
     }
-    
 }
 
-export {QuarterEnd}
+export { QuarterEnd };

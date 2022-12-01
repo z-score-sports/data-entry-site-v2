@@ -5,35 +5,28 @@ import { Action } from "./Action";
 
 
 class Turnover extends Action {
-    offensivePlayer : Player = null;
+    offensivePlayer: Player = null;
 
-    constructor(offensivePlayer : Player) {
+    constructor(offensivePlayer: Player) {
         super();
         makeObservable(this, {
             offensivePlayer: observable,
             actionJSON: computed,
-
-        })
+        });
         this.offensivePlayer = offensivePlayer;
-
     }
 
-    createNotify(): void {
-        
-    }
+    createNotify(): void {}
 
-    deleteNotify(): void {
-        
-    }
+    deleteNotify(): void {}
 
-    get actionJSON (): Object {
+    get actionJSON(): Object {
         return {
-            "action": "turnover",
-            "actionId": this.actionId,
-            "offensivePlayer": this.offensivePlayer.playerId
-        }
+            action: "turnover",
+            actionId: this.actionId,
+            offensivePlayer: this.offensivePlayer.playerId,
+        };
     }
-    
 }
 
 class Steal extends Turnover {

@@ -14,13 +14,11 @@ class Scoreboard implements Subscriber {
     awayFouls : number = 0;
 
     public constructor(startPosArrow:Team, timeouts:number) {
-
-        makeAutoObservable(this)
+        makeAutoObservable(this);
         this.possessionArrow = startPosArrow;
         this.totalTimeouts = timeouts;
         this.awayTimeouts = timeouts;
         this.homeTimeouts = timeouts;
-        
     }
 
     public update(context: any) {

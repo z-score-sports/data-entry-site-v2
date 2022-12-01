@@ -5,42 +5,38 @@ import { createDelete, Publisher } from "../Publisher";
 import { Action } from "./Action";
 
 class Foul extends Action {
-    foulingPlayer : Player;    
+    foulingPlayer: Player;
 
-    constructor(foulingPlayer:Player) {
+    constructor(foulingPlayer: Player) {
         super();
         makeObservable(this, {
             foulingPlayer: observable,
             actionJSON: computed,
-        })
+        });
         this.foulingPlayer = foulingPlayer;
-
     }
 
-    createNotify (): void {
-        
+    createNotify(): void {
         FoulPublisher.getInstance().notify({
             type: "CREATE",
-            action: this
-        })
+            action: this,
+        });
     }
 
-    deleteNotify () {
+    deleteNotify() {
         FoulPublisher.getInstance().notify({
             type: "DELETE",
-            action: this
-        })
-        
+            action: this,
+        });
     }
 
-    get actionJSON (): Object {
+    get actionJSON(): Object {
         return {
-            "action": "foul",
-            "actionId": this.actionId,
-            "foulingPlayerId": this.foulingPlayer.playerId,            
-        }
+            action: "foul",
+            actionId: this.actionId,
+            foulingPlayerId: this.foulingPlayer.playerId,
+        };
     }
-    
 }
 
 

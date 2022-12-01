@@ -6,42 +6,38 @@ import { Action } from "./Action";
 
 
 class Rebound extends Action {
-    reboundingPlayer : Player;
+    reboundingPlayer: Player;
 
-    public constructor(reboundingPlayer : Player) {
+    public constructor(reboundingPlayer: Player) {
         super();
         makeObservable(this, {
             reboundingPlayer: observable,
-            actionJSON: computed
-
-        })
+            actionJSON: computed,
+        });
         this.reboundingPlayer = reboundingPlayer;
-
     }
 
-
-    createNotify (): void {
+    createNotify(): void {
         ReboundPublisher.getInstance().notify({
             type: "CREATE",
-            action: this
-        })
+            action: this,
+        });
     }
 
-    deleteNotify (): void {
+    deleteNotify(): void {
         ReboundPublisher.getInstance().notify({
             type: "DELETE",
-            action: this
-        })
+            action: this,
+        });
     }
 
-    get actionJSON (): Object {
+    get actionJSON(): Object {
         return {
-            "action": "rebound",
-            "actionId": this.actionId,
-            "reboundingPlayerId": this.reboundingPlayer.playerId,
-        }
+            action: "rebound",
+            actionId: this.actionId,
+            reboundingPlayerId: this.reboundingPlayer.playerId,
+        };
     }
-    
 }
 
 interface ReboundInMessage {

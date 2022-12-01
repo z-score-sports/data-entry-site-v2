@@ -1,73 +1,63 @@
-import { observable, action, computed, reaction, makeAutoObservable } from "mobx"
-
+import { makeAutoObservable } from "mobx";
 
 import { Player, Team } from "./Player";
 
 class GameRoster {
-    
-    homeRoster : Roster
-    awayRoster : Roster
+    homeRoster: Roster;
+    awayRoster: Roster;
 
-    constructor(homeRoster : Roster, awayRoster: Roster) {
-        this.homeRoster = homeRoster
-        this.awayRoster = awayRoster
+    constructor(homeRoster: Roster, awayRoster: Roster) {
+        this.homeRoster = homeRoster;
+        this.awayRoster = awayRoster;
     }
 
-    getRoster(team : Team){
-        if(team === Team.home){
-            return this.homeRoster
+    getRoster(team: Team) {
+        if (team === Team.home) {
+            return this.homeRoster;
         } else {
-            return this.awayRoster
+            return this.awayRoster;
         }
     }
 }
 
-
-
 class Roster {
-    team: Team
-    players : Map<number, Player> = new Map<number,Player>();
-    teamName: string
+    team: Team;
+    players: Map<number, Player> = new Map<number, Player>();
+    teamName: string;
 
-    public constructor(players : Array<Player>, team:Team, tName:string) {
-        makeAutoObservable(this, {})
-        this.team = team
+    public constructor(players: Array<Player>, team: Team, tName: string) {
+        makeAutoObservable(this, {});
+        this.team = team;
         players.forEach((player) => {
-            let playerNum : number = player.num;
+            let playerNum: number = player.num;
             this.players.set(playerNum, player);
-        })
-        this.teamName = tName
+        });
+        this.teamName = tName;
     }
 
-    getPlayer(num : number) {
-        let playerGet : Player | undefined = this.players.get(num);
-        if(typeof playerGet === undefined) {
-            return null
+    getPlayer(num: number) {
+        let playerGet: Player | undefined = this.players.get(num);
+        if (typeof playerGet === undefined) {
+            return null;
         } else {
             return playerGet;
         }
-        
     }
     getPlayerArr() {
-        return Array.from(this.players.values())
+        return Array.from(this.players.values());
     }
 
     get lineupString() {
-        let lineupArr : Array<string> = new Array<string>();
+        let lineupArr: Array<string> = new Array<string>();
         this.players.forEach((player, playerNumber) => {
-            if(player.inGame) {
-                let numString : string = playerNumber.toString();
-                lineupArr.push(numString)
+            if (player.inGame) {
+                let numString: string = playerNumber.toString();
+                lineupArr.push(numString);
             }
-        })
+        });
         lineupArr.sort();
         return lineupArr.toString();
     }
-
-
-    
-
 }
 
-
-export {GameRoster, Roster};
+export { GameRoster, Roster };
