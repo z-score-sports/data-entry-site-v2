@@ -1,4 +1,4 @@
-import { observable, action, computed, reaction, makeObservable } from "mobx"
+import { computed, makeObservable, observable } from "mobx";
 
 import { Player } from "../Player";
 import { createDelete, Publisher } from "../Publisher";
@@ -12,7 +12,6 @@ class Foul extends Action {
         makeObservable(this, {
             foulingPlayer: observable,
             actionJSON: computed,
-            
         })
         this.foulingPlayer = foulingPlayer;
 
@@ -87,6 +86,6 @@ class FoulPublisher extends Publisher {
 
 }
 
-export { Foul, FoulPublisher }
+export { Foul, FoulPublisher };
+export type { FoulInMessage, FoulOutMessage };
 
-export type { FoulInMessage, FoulOutMessage }

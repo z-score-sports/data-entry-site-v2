@@ -1,4 +1,4 @@
-import { observable, action, computed, reaction, makeObservable } from "mobx"
+import { computed, makeObservable, observable } from "mobx";
 
 import { Player } from "../Player";
 import { createDelete, Publisher } from "../Publisher";
@@ -7,7 +7,6 @@ import { Action } from "./Action";
 
 class Rebound extends Action {
     reboundingPlayer : Player;
-    
 
     public constructor(reboundingPlayer : Player) {
         super();
@@ -87,5 +86,6 @@ class ReboundPublisher extends Publisher {
 
 }
 
-export { Rebound, ReboundPublisher }
-export type { ReboundInMessage, ReboundOutMessage }
+export { Rebound, ReboundPublisher };
+export type { ReboundInMessage, ReboundOutMessage };
+

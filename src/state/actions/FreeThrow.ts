@@ -1,4 +1,4 @@
-import { observable, action, computed, reaction, makeObservable } from "mobx"
+import { computed, makeObservable, observable } from "mobx";
 
 import { Player } from "../Player";
 import { createDelete, Publisher } from "../Publisher";
@@ -8,6 +8,7 @@ class FreeThrow extends Action {
 
     shootingPlayer:Player;
     made : boolean;
+
 
     public constructor(shootingPlayer:Player, made:boolean) {
         super();
@@ -90,6 +91,6 @@ class FreeThrowPublisher extends Publisher {
 
 }
 
-export { FreeThrow, FreeThrowPublisher }
-export type { FreeThrowInMessage, FreeThrowOutMessage }
+export { FreeThrow, FreeThrowPublisher };
+export type { FreeThrowInMessage, FreeThrowOutMessage };
 

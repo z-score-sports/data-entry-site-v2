@@ -1,8 +1,8 @@
-import { observable, computed, makeObservable } from "mobx"
+import { computed, makeObservable, observable } from "mobx";
 
-import { Action } from "./Action";
 import { Player } from "../Player";
 import { createDelete, Publisher } from "../Publisher";
+import { Action } from "./Action";
 
 class Block extends Action {
     blockingPlayer : Player;
@@ -60,6 +60,7 @@ class BlockPublisher extends Publisher {
         super()
     }
 
+
     public static getInstance(): BlockPublisher {
         if (!BlockPublisher.instance) {
             this.instance = new BlockPublisher();
@@ -83,6 +84,7 @@ class BlockPublisher extends Publisher {
 
 }
 
-export { Block, BlockPublisher }
+export { Block, BlockPublisher };
+export type { BlockInMessage, BlockOutMessage };
 
-export type { BlockInMessage, BlockOutMessage }
+

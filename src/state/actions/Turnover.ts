@@ -1,4 +1,4 @@
-import { observable, action, computed, reaction, makeObservable, override } from "mobx"
+import { computed, makeObservable, observable, override } from "mobx";
 
 import { Player } from "../Player";
 import { Action } from "./Action";
@@ -6,7 +6,6 @@ import { Action } from "./Action";
 
 class Turnover extends Action {
     offensivePlayer : Player = null;
-    
 
     constructor(offensivePlayer : Player) {
         super();
@@ -59,6 +58,6 @@ class Steal extends Turnover {
     }
 }
 
-export {Turnover, Steal}
+export { Turnover, Steal };
 
 

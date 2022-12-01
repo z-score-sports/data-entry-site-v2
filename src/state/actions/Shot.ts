@@ -1,4 +1,4 @@
-import { observable, action, computed, reaction, makeAutoObservable, makeObservable } from "mobx"
+import { computed, makeObservable, observable } from "mobx";
 
 import { Player } from "../Player";
 import { createDelete, Publisher } from "../Publisher";
@@ -12,8 +12,6 @@ class Shot extends Action {
     shootingPlayer : Player;
     region : number;
     made : boolean;
-    
-    
 
     constructor(shootingPlayer:Player, region: region, made:boolean) {
         super();
@@ -106,6 +104,6 @@ class ShotPublisher extends Publisher {
 
 }
 
-export { Shot, ShotPublisher }
-export type { ShotInMessage, ShotOutMessage, region }
+export { Shot, ShotPublisher };
+export type { ShotInMessage, ShotOutMessage, region };
 

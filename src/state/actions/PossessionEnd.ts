@@ -1,5 +1,4 @@
-import { observable, action, computed, reaction, makeObservable } from "mobx"
-
+import { computed, makeObservable } from "mobx";
 import { Action } from "./Action";
 
 class PossessionEnd extends Action {    
@@ -28,4 +27,5 @@ class PossessionEnd extends Action {
     
 }
 
-export {PossessionEnd}
+export { PossessionEnd };
+

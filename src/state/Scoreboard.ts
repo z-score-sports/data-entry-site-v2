@@ -1,4 +1,4 @@
-import { makeAutoObservable, flow} from "mobx";
+import { makeAutoObservable } from "mobx";
 import { Team } from "./Player";
 import { Subscriber } from "./Subscriber";
 
@@ -12,7 +12,6 @@ class Scoreboard implements Subscriber {
     totalTimeouts : number;
     homeFouls : number = 0;
     awayFouls : number = 0;
-
 
     public constructor(startPosArrow:Team, timeouts:number) {
 
@@ -52,4 +51,4 @@ class Scoreboard implements Subscriber {
     
 }
 
-export {Scoreboard}
+export { Scoreboard };
