@@ -7,16 +7,9 @@ Rebounds can't happen on made shots
 
 The shooting player cannot assist their own shot
 
-Statistics to keep track of for each player: 
-- Points
-- Rebounds
-- Assists
-- +/-
-- number of 3 pointers
-- FGM / FGA
-- FTM / FTA
-- Steals
-- Blocks
-- Turnovers
-- Minutes
-- Fouls
+
+
+Minutes Planning
+
+Idea: In order to be able to undo, we need to keep track of all substitution times
+- If each player has a list of substitution times, we can calculate minutes

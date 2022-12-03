@@ -8,7 +8,7 @@ function MainPanel() {
     const context = useContext(GameStateContext);
 
     const addShot = () => {
-        context.actionStack.addShot(0, 3, true);
+        context.actionStack.addShot(0, 6, true);
     };
     const addMissedShot = () => {
         context.actionStack.addShot(0, 3, false);
