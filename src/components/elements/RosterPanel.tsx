@@ -1,5 +1,6 @@
 import { observer } from "mobx-react-lite";
 import "../../App.css";
+import { GameTime } from "../../state/GameTime";
 import { Roster } from "../../state/Roster";
 
 type propsType = {
@@ -46,7 +47,9 @@ function RosterPanel({ team }: propsType) {
                             <th>{p.steals}</th>
                             <th>{p.blocks}</th>
                             <th>{p.turnovers}</th>
-                            <th>m</th>
+                            <th>
+                                {p.getTotalMinutes(new GameTime(1, 6, 0)) || 0}
+                            </th>
                             <th>{p.fouls}</th>
                         </tr>
                     );

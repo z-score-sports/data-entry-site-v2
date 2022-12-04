@@ -7,8 +7,10 @@ import { FreeThrow } from "./actions/FreeThrow";
 import { PossessionEnd } from "./actions/PossessionEnd";
 import { Rebound } from "./actions/Rebound";
 import { region, Shot } from "./actions/Shot";
+import { Substitution } from "./actions/Substitution";
 import { Steal, Turnover } from "./actions/Turnover";
 import { GameContext } from "./GameState";
+import { GameTime } from "./GameTime";
 import { Team } from "./Player";
 
 class ActionStack {
@@ -203,10 +205,27 @@ class ActionStack {
         this.undoStack = [];
     }
 
-    addSubstitution() {
+    addSubstitution(
+        team: Team,
+        playerNumGoingIn: number,
+        playerNumGoingOut: number,
+        gameTime: GameTime
+    ) {
+        // may update to take inputs of quarter, minute, second
         /*
         Conditions: None
         */
+
+        let pGI = GameContext.gameRoster
+            .getRoster(team)
+            .getPlayer(playerNumGoingIn);
+        let pGO = GameContext.gameRoster
+            .getRoster(team)
+            .getPlayer(playerNumGoingOut);
+
+        let newSubstitution = new Substitution(pGI, pGO, gameTime);
+        newSubstitution.createNotify();
+        this.mainStack.push(newSubstitution);
         this.undoStack = [];
     }
 

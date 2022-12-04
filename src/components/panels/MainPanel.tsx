@@ -2,6 +2,7 @@ import { observer } from "mobx-react-lite";
 import { useContext } from "react";
 import { GameStateContext } from "../../App";
 import "../../App.css";
+import { GameTime } from "../../state/GameTime";
 import { Team } from "../../state/Player";
 
 function MainPanel() {
@@ -33,6 +34,11 @@ function MainPanel() {
         context.actionStack.addAssist(1);
     };
 
+    const addSubstitution = () => {
+        let gameTime = new GameTime(1, 6, 0);
+        context.actionStack.addSubstitution(Team.home, 5, 1, gameTime);
+    };
+
     return (
         <div className="mPanel">
             <p>{context.actionStack.curPos}</p>
@@ -57,6 +63,11 @@ function MainPanel() {
             <div>
                 {context.gameRoster.getRoster(Team.home).getPlayer(0).fga}
                 {context.gameRoster.getRoster(Team.home).getPlayer(0).fgm}
+            </div>
+            <div>
+                <button onClick={addSubstitution}>
+                    Sub in player 5 for player 1
+                </button>
             </div>
         </div>
     );

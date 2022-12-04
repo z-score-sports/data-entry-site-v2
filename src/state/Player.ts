@@ -8,13 +8,17 @@ import { ShotOutMessage } from "./actions/Shot";
 import { SubstitutionOutMessage } from "./actions/Substitution";
 import { Steal, Turnover, TurnoverOutMessage } from "./actions/Turnover";
 import { GameTime } from "./GameTime";
-import { MinutesManager } from "./MinutesManager";
 import { Subscriber } from "./Subscriber";
 
 enum Team {
     home,
     away,
 }
+
+type GameInterval = {
+    timeIn: GameTime;
+    timeOut: GameTime;
+};
 
 type playerUpdateMessage =
     | ShotOutMessage
@@ -23,7 +27,8 @@ type playerUpdateMessage =
     | FoulOutMessage
     | FreeThrowOutMessage
     | ReboundOutMessage
-    | TurnoverOutMessage;
+    | TurnoverOutMessage
+    | SubstitutionOutMessage;
 
 class Player implements Subscriber {
     playerId: string;
@@ -31,7 +36,6 @@ class Player implements Subscriber {
     firstName: string;
     lastName: string;
     team: Team;
-    inGame: boolean = false;
     points: number = 0;
     rebounds: number = 0;
     assists: number = 0;
@@ -45,7 +49,9 @@ class Player implements Subscriber {
     fta: number = 0;
     steals: number = 0;
     turnovers: number = 0;
-    minutesManager: MinutesManager = new MinutesManager();
+    prefSum: number[] = [];
+    intervals: GameInterval[] = [];
+    lastTimeIn: GameTime = null;
 
     public constructor(
         playerId: string,
@@ -77,17 +83,75 @@ class Player implements Subscriber {
             this.handleShotUpdate(context as ShotOutMessage);
         } else if (context.publisher === "turnover") {
             this.handleTurnoverUpdate(context as TurnoverOutMessage);
+        } else if (context.publisher === "substitution") {
+            this.handleSubstitutionUpdate(context as SubstitutionOutMessage);
         }
     }
 
-    subIn(gameTime: GameTime) {
-        this.inGame = true;
-        this.minutesManager.addTimeGoingIn(gameTime);
+    get inGame(): boolean {
+        return this.lastTimeIn !== null;
     }
 
-    subOut(gameTime: GameTime) {
-        this.inGame = false;
-        this.minutesManager.addTimeGoingOut(gameTime);
+    addTimeGoingIn(gameTime: GameTime) {
+        if (this.lastTimeIn !== null) {
+            return;
+        }
+        this.lastTimeIn = gameTime;
+    }
+
+    addTimeGoingOut(gameTime: GameTime) {
+        if (this.lastTimeIn === null) {
+            return;
+        }
+
+        let newInterval: GameInterval = {
+            timeIn: this.lastTimeIn,
+            timeOut: gameTime,
+        };
+        this.intervals.push(newInterval);
+        this.prefSum.push(
+            newInterval.timeIn.minutesBetween(newInterval.timeOut)
+        );
+        this.lastTimeIn = null;
+    }
+
+    getTotalMinutes(curTime: GameTime): number {
+        if (this.lastTimeIn && this.lastTimeIn.lte(curTime)) {
+            return (
+                this.prefSum[this.prefSum.length - 1] +
+                this.lastTimeIn.minutesBetween(curTime)
+            );
+        }
+
+        for (let i = this.intervals.length - 1; i >= 0; i -= 1) {
+            // three cases -> either greater than the time out, between, or less than
+            if (this.intervals[i].timeOut.lte(curTime)) {
+                return this.prefSum[i];
+            } else if (
+                this.intervals[i].timeIn.lte(curTime) &&
+                curTime.lte(this.intervals[i].timeOut)
+            ) {
+                let prevSum = i > 0 ? this.prefSum[i - 1] : 0;
+                return (
+                    prevSum + this.intervals[i].timeIn.minutesBetween(curTime)
+                );
+            }
+        }
+        return 0;
+    }
+
+    undoSub() {
+        // if last time in exists, then just remove it
+        // if it doesn't exist, need to remove one from the intervals and update last time in
+        if (this.lastTimeIn !== null) {
+            console.log("existing time");
+            this.lastTimeIn = null;
+        } else {
+            this.prefSum.pop();
+            let oldInterval = this.intervals.pop();
+            console.log(this.num);
+            this.lastTimeIn = oldInterval.timeIn;
+        }
     }
 
     private handleAssistUpdate(context: AssistOutMessage) {
@@ -238,7 +302,27 @@ class Player implements Subscriber {
         }
     }
 
-    private handleSubstitutionUpdate(context: SubstitutionOutMessage) {}
+    private handleSubstitutionUpdate(context: SubstitutionOutMessage) {
+        let gameTime: GameTime = context.action.gameTime;
+        let pGI = context.action.playerGoingIn;
+        let pGO = context.action.playerGoingOut;
+        if (context.type === "CREATE") {
+            if (pGI === this) {
+                pGI.addTimeGoingIn(gameTime);
+                console.log(pGI.inGame);
+            } else if (pGO === this) {
+                pGO.addTimeGoingOut(gameTime);
+                console.log(pGO.inGame);
+            }
+        } else {
+            if (pGI && pGI === this) {
+                pGI.undoSub();
+            }
+            if (pGO && pGO === this) {
+                pGO.undoSub();
+            }
+        }
+    }
 }
 
 export { Player, Team };

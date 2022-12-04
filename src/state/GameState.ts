@@ -5,6 +5,7 @@ import { FoulPublisher } from "./actions/Foul";
 import { FreeThrowPublisher } from "./actions/FreeThrow";
 import { ReboundPublisher } from "./actions/Rebound";
 import { ShotPublisher } from "./actions/Shot";
+import { SubstitutionPublisher } from "./actions/Substitution";
 import { TurnoverPublisher } from "./actions/Turnover";
 import { ActionStack } from "./ActionStack";
 import { GameTime } from "./GameTime";
@@ -30,16 +31,16 @@ const homePlayers = new Array<Player>(p1_h, p2_h, p3_h, p4_h, p5_h, p6_h);
 const awayPlayers = new Array<Player>(p1_a, p2_a, p3_a, p4_a, p5_a, p6_a);
 
 const initialGameTime = new GameTime(1, 12, 0);
-p1_h.subIn(initialGameTime);
-p2_h.subIn(initialGameTime);
-p3_h.subIn(initialGameTime);
-p4_h.subIn(initialGameTime);
-p5_h.subIn(initialGameTime);
-p1_a.subIn(initialGameTime);
-p2_a.subIn(initialGameTime);
-p3_a.subIn(initialGameTime);
-p4_a.subIn(initialGameTime);
-p5_a.subIn(initialGameTime);
+p1_h.addTimeGoingIn(initialGameTime);
+p2_h.addTimeGoingIn(initialGameTime);
+p3_h.addTimeGoingIn(initialGameTime);
+p4_h.addTimeGoingIn(initialGameTime);
+p5_h.addTimeGoingIn(initialGameTime);
+p1_a.addTimeGoingIn(initialGameTime);
+p2_a.addTimeGoingIn(initialGameTime);
+p3_a.addTimeGoingIn(initialGameTime);
+p4_a.addTimeGoingIn(initialGameTime);
+p5_a.addTimeGoingIn(initialGameTime);
 
 interface game {
     gameRoster: GameRoster;
@@ -65,6 +66,7 @@ const createGameContext = (): game => {
         ReboundPublisher.getInstance().subscribe(player);
         ShotPublisher.getInstance().subscribe(player);
         TurnoverPublisher.getInstance().subscribe(player);
+        SubstitutionPublisher.getInstance().subscribe(player);
     });
     gameRoster.homeRoster.players.forEach((player) => {
         AssistPublisher.getInstance().subscribe(player);
@@ -74,6 +76,7 @@ const createGameContext = (): game => {
         ReboundPublisher.getInstance().subscribe(player);
         ShotPublisher.getInstance().subscribe(player);
         TurnoverPublisher.getInstance().subscribe(player);
+        SubstitutionPublisher.getInstance().subscribe(player);
     });
 
     return {
