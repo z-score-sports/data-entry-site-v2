@@ -5,57 +5,12 @@ import { FoulOutMessage } from "./actions/Foul";
 import { FreeThrowOutMessage } from "./actions/FreeThrow";
 import { ReboundOutMessage } from "./actions/Rebound";
 import { ShotOutMessage } from "./actions/Shot";
-import { TurnoverOutMessage } from "./actions/Turnover";
+import { Steal, Turnover, TurnoverOutMessage } from "./actions/Turnover";
 import { Subscriber } from "./Subscriber";
 
 enum Team {
     home,
     away,
-}
-
-class GameTime {
-    quarter: number;
-    minute: number;
-    second: number;
-
-    quarterMinuteStart: number = 12;
-
-    constructor(
-        quarter: number,
-        minute: number,
-        second: number,
-        quarterMinuteStart: number = 12
-    ) {
-        this.quarter = quarter;
-        this.minute = minute;
-        this.second = second;
-        this.quarterMinuteStart = quarterMinuteStart;
-    }
-
-    get quarterTimeLeft(): number {
-        let fraction = this.second / 60;
-        return this.minute + fraction;
-    }
-
-    get quarterTimePassed() {
-        return this.quarterMinuteStart - this.quarterTimeLeft;
-    }
-
-    public static timeDiff(startTime: GameTime, endTime: GameTime) {
-        if (startTime.quarter === endTime.quarter) {
-            return startTime.quarterTimeLeft - endTime.quarterTimeLeft;
-        } else {
-            let total = 0;
-            if (endTime.quarter > startTime.quarter + 1) {
-                total +=
-                    (endTime.quarter - startTime.quarter - 1) *
-                    startTime.quarterMinuteStart;
-            }
-            total += startTime.quarterTimeLeft;
-            total += endTime.quarterTimePassed;
-            return total;
-        }
-    }
 }
 
 type playerUpdateMessage =
@@ -252,10 +207,23 @@ class Player implements Subscriber {
     }
 
     private handleTurnoverUpdate(context: TurnoverOutMessage) {
+        let action: Turnover = context.action;
         if (context.type === "CREATE") {
+            if (action.offensivePlayer === this) {
+                this.turnovers += 1;
+            }
+            if (action instanceof Steal && action.stealingPlayer === this) {
+                this.steals += 1;
+            }
         } else {
+            if (context.action.offensivePlayer === this) {
+                this.turnovers -= 1;
+            }
+            if (action instanceof Steal && action.stealingPlayer === this) {
+                this.steals -= 1;
+            }
         }
     }
 }
 
-export { Player, Team, GameTime };
+export { Player, Team };
