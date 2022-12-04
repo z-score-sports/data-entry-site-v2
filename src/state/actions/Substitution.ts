@@ -1,6 +1,8 @@
 import { computed, makeObservable, observable } from "mobx";
 
-import { GameTime, Player } from "../Player";
+import { GameTime } from "../GameTime";
+import { Player } from "../Player";
+import { createDelete, Publisher } from "../Publisher";
 import { Action } from "./Action";
 
 class Substitution extends Action {
@@ -25,8 +27,19 @@ class Substitution extends Action {
         this.gameTime = gameTime;
     }
 
-    createNotify(): void {}
-    deleteNotify() {}
+    createNotify(): void {
+        SubstitutionPublisher.getInstance().notify({
+            type: "CREATE",
+            action: this,
+        });
+    }
+
+    deleteNotify() {
+        SubstitutionPublisher.getInstance().notify({
+            type: "DELETE",
+            action: this,
+        });
+    }
 
     get actionJSON(): Object {
         return {
@@ -39,4 +52,47 @@ class Substitution extends Action {
     }
 }
 
-export { Substitution };
+interface SubstitutionInMessage {
+    type: createDelete;
+    action: Substitution;
+}
+
+interface SubstitutionOutMessage {
+    publisher: "substitution";
+    type: createDelete;
+    action: Substitution;
+}
+
+class SubstitutionPublisher extends Publisher {
+    private static instance: SubstitutionPublisher;
+    private constructor() {
+        super();
+    }
+
+    public static getInstance(): SubstitutionPublisher {
+        if (!SubstitutionPublisher.instance) {
+            this.instance = new SubstitutionPublisher();
+        }
+        return this.instance;
+    }
+
+    notify(message: SubstitutionInMessage) {
+        if (!message.action) {
+            return;
+        }
+
+        const outMessage: SubstitutionOutMessage = {
+            publisher: "substitution",
+            type: message.type,
+            action: message.action,
+        };
+
+        this.subscribers.forEach((sub) => {
+            sub.update(outMessage);
+        });
+    }
+}
+
+export { Substitution, SubstitutionPublisher };
+export type { SubstitutionOutMessage };
+

@@ -5,6 +5,7 @@ import { FoulOutMessage } from "./actions/Foul";
 import { FreeThrowOutMessage } from "./actions/FreeThrow";
 import { ReboundOutMessage } from "./actions/Rebound";
 import { ShotOutMessage } from "./actions/Shot";
+import { SubstitutionOutMessage } from "./actions/Substitution";
 import { Steal, Turnover, TurnoverOutMessage } from "./actions/Turnover";
 import { Subscriber } from "./Subscriber";
 
@@ -224,6 +225,8 @@ class Player implements Subscriber {
             }
         }
     }
+
+    private handleSubstitutionUpdate(context: SubstitutionOutMessage) {}
 }
 
 export { Player, Team };

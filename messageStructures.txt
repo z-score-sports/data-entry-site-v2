@@ -11,5 +11,7 @@ The shooting player cannot assist their own shot
 
 Minutes Planning
 
-Idea: In order to be able to undo, we need to keep track of all substitution times
-- If each player has a list of substitution times, we can calculate minutes
+Player:
+- minutes: 0
+
+
