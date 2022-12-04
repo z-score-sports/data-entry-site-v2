@@ -46,7 +46,7 @@ function RosterPanel({ team }: propsType) {
                             <th>{p.steals}</th>
                             <th>{p.blocks}</th>
                             <th>{p.turnovers}</th>
-                            <th>{p.minutes}</th>
+                            <th>m</th>
                             <th>{p.fouls}</th>
                         </tr>
                     );

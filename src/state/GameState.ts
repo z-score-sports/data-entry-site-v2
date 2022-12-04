@@ -7,6 +7,7 @@ import { ReboundPublisher } from "./actions/Rebound";
 import { ShotPublisher } from "./actions/Shot";
 import { TurnoverPublisher } from "./actions/Turnover";
 import { ActionStack } from "./ActionStack";
+import { GameTime } from "./GameTime";
 import { Player, Team } from "./Player";
 import { GameRoster, Roster } from "./Roster";
 import { Scoreboard } from "./Scoreboard";
@@ -28,16 +29,17 @@ const p6_a = new Player("000015", 15, "L", "Lopez", Team.away);
 const homePlayers = new Array<Player>(p1_h, p2_h, p3_h, p4_h, p5_h, p6_h);
 const awayPlayers = new Array<Player>(p1_a, p2_a, p3_a, p4_a, p5_a, p6_a);
 
-p1_h.inGame = true;
-p2_h.inGame = true;
-p3_h.inGame = true;
-p4_h.inGame = true;
-p5_h.inGame = true;
-p1_a.inGame = true;
-p2_a.inGame = true;
-p3_a.inGame = true;
-p4_a.inGame = true;
-p5_a.inGame = true;
+const initialGameTime = new GameTime(1, 12, 0);
+p1_h.subIn(initialGameTime);
+p2_h.subIn(initialGameTime);
+p3_h.subIn(initialGameTime);
+p4_h.subIn(initialGameTime);
+p5_h.subIn(initialGameTime);
+p1_a.subIn(initialGameTime);
+p2_a.subIn(initialGameTime);
+p3_a.subIn(initialGameTime);
+p4_a.subIn(initialGameTime);
+p5_a.subIn(initialGameTime);
 
 interface game {
     gameRoster: GameRoster;

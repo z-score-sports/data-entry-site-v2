@@ -25,7 +25,7 @@ class GameTime {
         }
     }
 
-    public minutesBetween(other: GameTime) {
+    public minutesBetween(other: GameTime): number {
         let totalSelf: number = this.totalTime();
         let totalOther: number = other.totalTime();
 

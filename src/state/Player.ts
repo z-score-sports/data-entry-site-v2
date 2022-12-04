@@ -7,6 +7,8 @@ import { ReboundOutMessage } from "./actions/Rebound";
 import { ShotOutMessage } from "./actions/Shot";
 import { SubstitutionOutMessage } from "./actions/Substitution";
 import { Steal, Turnover, TurnoverOutMessage } from "./actions/Turnover";
+import { GameTime } from "./GameTime";
+import { MinutesManager } from "./MinutesManager";
 import { Subscriber } from "./Subscriber";
 
 enum Team {
@@ -34,7 +36,6 @@ class Player implements Subscriber {
     rebounds: number = 0;
     assists: number = 0;
     plusminus: number = 0;
-    minutes: number = 0;
     fouls: number = 0;
     blocks: number = 0;
     threePointers: number = 0;
@@ -44,6 +45,7 @@ class Player implements Subscriber {
     fta: number = 0;
     steals: number = 0;
     turnovers: number = 0;
+    minutesManager: MinutesManager = new MinutesManager();
 
     public constructor(
         playerId: string,
@@ -76,6 +78,16 @@ class Player implements Subscriber {
         } else if (context.publisher === "turnover") {
             this.handleTurnoverUpdate(context as TurnoverOutMessage);
         }
+    }
+
+    subIn(gameTime: GameTime) {
+        this.inGame = true;
+        this.minutesManager.addTimeGoingIn(gameTime);
+    }
+
+    subOut(gameTime: GameTime) {
+        this.inGame = false;
+        this.minutesManager.addTimeGoingOut(gameTime);
     }
 
     private handleAssistUpdate(context: AssistOutMessage) {

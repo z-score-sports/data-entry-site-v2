@@ -11,7 +11,13 @@ The shooting player cannot assist their own shot
 
 Minutes Planning
 
-Player:
-- minutes: 0
+SubstitutionKeeper
+- prefSum -> list
+- intervals -> gameTime list
+- lastTimeIn -> gameTime
 
-
+it will have a method that gets the amount of minutes played given a gameTime
+subIn
+subOut
+undo 
+    - 
