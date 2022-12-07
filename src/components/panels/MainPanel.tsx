@@ -39,6 +39,10 @@ function MainPanel() {
         context.actionStack.addSubstitution(Team.home, 5, 1, gameTime);
     };
 
+    const addQuarterEnd = () => {
+        context.actionStack.addQuarterEnd();
+    };
+
     return (
         <div className="mPanel">
             <p>{context.actionStack.curPos}</p>
@@ -68,6 +72,9 @@ function MainPanel() {
                 <button onClick={addSubstitution}>
                     Sub in player 5 for player 1
                 </button>
+            </div>
+            <div>
+                <button onClick={addQuarterEnd}>Increase Quarter</button>
             </div>
         </div>
     );

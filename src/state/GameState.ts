@@ -3,6 +3,7 @@ import { AssistPublisher } from "./actions/Assist";
 import { BlockPublisher } from "./actions/Block";
 import { FoulPublisher } from "./actions/Foul";
 import { FreeThrowPublisher } from "./actions/FreeThrow";
+import { QuarterEndPublisher } from "./actions/QuarterEnd";
 import { ReboundPublisher } from "./actions/Rebound";
 import { ShotPublisher } from "./actions/Shot";
 import { SubstitutionPublisher } from "./actions/Substitution";
@@ -31,7 +32,6 @@ const homePlayers = new Array<Player>(p1_h, p2_h, p3_h, p4_h, p5_h, p6_h);
 const awayPlayers = new Array<Player>(p1_a, p2_a, p3_a, p4_a, p5_a, p6_a);
 
 const initialGameTime = new GameTime(1, 12, 0);
-
 
 interface game {
     gameRoster: GameRoster;
@@ -73,6 +73,7 @@ const createGameContext = (): game => {
     ShotPublisher.getInstance().subscribe(scoreboard);
     FoulPublisher.getInstance().subscribe(scoreboard);
     FreeThrowPublisher.getInstance().subscribe(scoreboard);
+    QuarterEndPublisher.getInstance().subscribe(scoreboard);
 
     return {
         gameRoster: gameRoster,

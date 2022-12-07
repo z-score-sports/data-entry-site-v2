@@ -5,6 +5,7 @@ import { Block } from "./actions/Block";
 import { Foul } from "./actions/Foul";
 import { FreeThrow } from "./actions/FreeThrow";
 import { PossessionEnd } from "./actions/PossessionEnd";
+import { QuarterEnd } from "./actions/QuarterEnd";
 import { Rebound } from "./actions/Rebound";
 import { region, Shot } from "./actions/Shot";
 import { Substitution } from "./actions/Substitution";
@@ -12,7 +13,6 @@ import { Steal, Turnover } from "./actions/Turnover";
 import { GameContext } from "./GameState";
 import { GameTime } from "./GameTime";
 import { Team } from "./Player";
-
 
 // TODO: Need to test and validate each action
 
@@ -267,6 +267,22 @@ class ActionStack {
         let newSteal = new Steal(offensivePlayer, defensivePlayer);
         newSteal.createNotify();
         this.mainStack.push(newSteal);
+        this.undoStack = [];
+    }
+
+    addQuarterEnd() {
+        // Can't undo past a quarter end
+        if (
+            !(
+                this.mainStack[this.mainStack.length - 1] instanceof
+                PossessionEnd
+            )
+        ) {
+            this.addPossessionEnd();
+        }
+        let newQuarterEnd = new QuarterEnd();
+        newQuarterEnd.createNotify();
+        this.mainStack.push(newQuarterEnd);
         this.undoStack = [];
     }
 

@@ -1,6 +1,7 @@
 import { makeAutoObservable } from "mobx";
 import { FoulOutMessage } from "./actions/Foul";
 import { FreeThrowOutMessage } from "./actions/FreeThrow";
+import { QuarterEndOutMessage } from "./actions/QuarterEnd";
 import { ShotOutMessage } from "./actions/Shot";
 import { Team } from "./Player";
 import { Subscriber } from "./Subscriber";
@@ -8,7 +9,13 @@ import { Subscriber } from "./Subscriber";
 type scoreboardUpdateMessage =
     | ShotOutMessage
     | FoulOutMessage
-    | FreeThrowOutMessage;
+    | FreeThrowOutMessage
+    | QuarterEndOutMessage;
+
+type FoulTracker = {
+    firstHalfFouls: number;
+    secondHalfFouls: number;
+};
 
 class Scoreboard implements Subscriber {
     private quarter: number = 1;
@@ -18,8 +25,8 @@ class Scoreboard implements Subscriber {
     awayTimeouts: number;
     homeTimeouts: number;
     totalTimeouts: number;
-    homeFouls: number = 0;
-    awayFouls: number = 0;
+    homeFouls: FoulTracker = { firstHalfFouls: 0, secondHalfFouls: 0 };
+    awayFouls: FoulTracker = { firstHalfFouls: 0, secondHalfFouls: 0 };
 
     public constructor(startPosArrow: Team, timeouts: number) {
         makeAutoObservable(this);
@@ -36,6 +43,8 @@ class Scoreboard implements Subscriber {
             this.handleFreeThrowUpdate(context as FreeThrowOutMessage);
         } else if (context.publisher === "foul") {
             this.handleFoulUpdate(context as FoulOutMessage);
+        } else if (context.publisher === "quarterend") {
+            this.handleQuarterEndUpdate(context as QuarterEndOutMessage);
         }
     }
 
@@ -73,19 +82,67 @@ class Scoreboard implements Subscriber {
         }
     }
 
+    getHalf(): 1 | 2 {
+        if (this.quarter <= 2) {
+            return 1;
+        } else {
+            return 2;
+        }
+    }
+
+    increaseFouls(team: Team) {
+        if (this.getHalf() === 1) {
+            if (team === Team.home) {
+                this.homeFouls.firstHalfFouls += 1;
+            } else {
+                this.awayFouls.firstHalfFouls += 1;
+            }
+        } else {
+            if (team === Team.home) {
+                this.homeFouls.secondHalfFouls += 1;
+            } else {
+                this.awayFouls.secondHalfFouls += 1;
+            }
+        }
+    }
+
+    decreaseFouls(team: Team) {
+        if (this.getHalf() === 1) {
+            if (team === Team.home) {
+                this.homeFouls.firstHalfFouls -= 1;
+            } else {
+                this.awayFouls.firstHalfFouls -= 1;
+            }
+        } else {
+            if (team === Team.home) {
+                this.homeFouls.secondHalfFouls -= 1;
+            } else {
+                this.awayFouls.secondHalfFouls -= 1;
+            }
+        }
+    }
+
     handleFoulUpdate(context: FoulOutMessage) {
         if (context.type === "CREATE") {
             if (context.action.foulingPlayer.team === Team.home) {
-                this.homeFouls += 1;
+                this.increaseFouls(Team.home);
             } else {
-                this.awayFouls += 1;
+                this.increaseFouls(Team.away);
             }
         } else {
             if (context.action.foulingPlayer.team === Team.home) {
-                this.homeFouls -= 1;
+                this.decreaseFouls(Team.home);
             } else {
-                this.awayFouls -= 1;
+                this.decreaseFouls(Team.away);
             }
+        }
+    }
+
+    handleQuarterEndUpdate(context: QuarterEndOutMessage) {
+        if (context.type === "CREATE") {
+            this.increaseQuarter();
+        } else {
+            this.decreaseQuarter();
         }
     }
 
@@ -101,31 +158,17 @@ class Scoreboard implements Subscriber {
         return this.quarter;
     }
 
-    public increaseQuarter() {
+    private increaseQuarter() {
         this.quarter += 1;
+    }
 
-        if (this.quarter === 3) {
-            this.homeFouls = 0;
-            this.awayFouls = 0;
-        }
+    private decreaseQuarter() {
+        this.quarter -= 1;
     }
 
     public getBonusString(team: Team): string {
-        if (team === Team.home && this.awayFouls >= 7) {
-            if (this.awayFouls >= 10) {
-                return "Bonus+";
-            } else {
-                return "Bonus";
-            }
-        } else if (team === Team.away && this.homeFouls >= 7) {
-            if (this.homeFouls >= 10) {
-                return "Bonus+";
-            } else {
-                return "Bonus";
-            }
-        } else {
-            return "";
-        }
+        //TODO: need to implement
+        return "";
     }
 }
 
