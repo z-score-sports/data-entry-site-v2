@@ -37,6 +37,10 @@ class Assist extends Action {
             assistingPlayerId: this.assistingPlayer.playerId,
         };
     }
+
+    get actionString(): string {
+        return `ASSIST by player #${this.assistingPlayer.num}`;
+    }
 }
 
 interface AssistInMessage {
@@ -82,3 +86,4 @@ class AssistPublisher extends Publisher {
 
 export { Assist, AssistPublisher };
 export type { AssistInMessage, AssistOutMessage };
+

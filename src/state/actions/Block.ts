@@ -37,6 +37,10 @@ class Block extends Action {
             blockingPlayerId: this.blockingPlayer.playerId,
         };
     }
+
+    get actionString(): string {
+        return `BLOCK by player #${this.blockingPlayer.num}`;
+    }
 }
 
 interface BlockInMessage {

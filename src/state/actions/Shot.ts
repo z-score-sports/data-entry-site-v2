@@ -58,6 +58,12 @@ class Shot extends Action {
             make: this.made,
         };
     }
+
+    get actionString(): string {
+        return `SHOT ${this.made ? "made" : "missed"} by player #${
+            this.shootingPlayer.num
+        } in region ${this.region}`;
+    }
 }
 
 interface ShotInMessage {

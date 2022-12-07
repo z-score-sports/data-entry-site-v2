@@ -1,7 +1,7 @@
 import { computed, makeObservable, observable } from "mobx";
 
 import { GameTime } from "../GameTime";
-import { Player } from "../Player";
+import { Player, Team } from "../Player";
 import { createDelete, Publisher } from "../Publisher";
 import { Action } from "./Action";
 
@@ -49,6 +49,14 @@ class Substitution extends Action {
             playerIdGoingOut: this.playerGoingOut.playerId,
             // need to put GameTime string
         };
+    }
+
+    get actionString(): string {
+        return `${
+            this.playerGoingIn.team === Team.home ? "HOME" : "AWAY"
+        } SUBSTITUTION ${this.playerGoingIn.num} for ${
+            this.playerGoingOut.num
+        }`;
     }
 }
 

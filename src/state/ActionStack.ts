@@ -311,6 +311,15 @@ class ActionStack {
         action.createNotify();
         this.mainStack.push(action);
     }
+
+    convertStackToStringList() {
+        let ret: string[] = [];
+
+        this.mainStack.forEach((action) => {
+            ret.push(action.actionString);
+        });
+        return ret;
+    }
 }
 
 export { ActionStack };

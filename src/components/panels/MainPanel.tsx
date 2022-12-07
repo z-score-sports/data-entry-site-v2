@@ -76,6 +76,15 @@ function MainPanel() {
             <div>
                 <button onClick={addQuarterEnd}>Increase Quarter</button>
             </div>
+            <div>
+                <ul>
+                    {context.actionStack
+                        .convertStackToStringList()
+                        .map((value, i) => {
+                            return <li key={i}>{value}</li>;
+                        })}
+                </ul>
+            </div>
         </div>
     );
 }

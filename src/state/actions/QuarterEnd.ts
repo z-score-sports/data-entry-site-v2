@@ -31,6 +31,10 @@ class QuarterEnd extends Action {
             actionId: this.actionId,
         };
     }
+
+    get actionString(): string {
+        return `QUARTER END`;
+    }
 }
 
 interface QuarterEndInMessage {

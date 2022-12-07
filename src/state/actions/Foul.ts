@@ -37,49 +37,51 @@ class Foul extends Action {
             foulingPlayerId: this.foulingPlayer.playerId,
         };
     }
+
+    get actionString(): string {
+        return `FOUL by player #${this.foulingPlayer.num}`;
+    }
 }
 
-
 interface FoulInMessage {
-    type: createDelete
-    action: Foul
+    type: createDelete;
+    action: Foul;
 }
 
 interface FoulOutMessage {
-    publisher: "foul"
-    type: createDelete
-    action: Foul
+    publisher: "foul";
+    type: createDelete;
+    action: Foul;
 }
 
 class FoulPublisher extends Publisher {
-    private static instance: FoulPublisher
+    private static instance: FoulPublisher;
     private constructor() {
-        super()
+        super();
     }
 
     public static getInstance(): FoulPublisher {
         if (!FoulPublisher.instance) {
             this.instance = new FoulPublisher();
         }
-        return this.instance
+        return this.instance;
     }
 
     public notify(message: FoulInMessage) {
-        if (!message.action) { return; }
-
+        if (!message.action) {
+            return;
+        }
 
         const outMessage: FoulOutMessage = {
             publisher: "foul",
             type: message.type,
-            action: message.action
-        }
+            action: message.action,
+        };
 
         this.subscribers.forEach((sub) => {
-            sub.update(outMessage)
-        })
-
+            sub.update(outMessage);
+        });
     }
-
 }
 
 export { Foul, FoulPublisher };

@@ -185,6 +185,15 @@ class Scoreboard implements Subscriber {
 
     public getBonusString(team: Team): string {
         //TODO: need to implement
+        let fouls = this.getFouls(team);
+        if (fouls >= 10) {
+            return "Bonus+";
+        } else if (fouls >= 7) {
+            return "Bonus";
+        } else {
+            return "";
+        }
+        
         return "";
     }
 }

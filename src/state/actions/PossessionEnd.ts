@@ -19,6 +19,10 @@ class PossessionEnd extends Action {
             actionId: this.actionId,
         };
     }
+
+    get actionString(): string {
+        return `POSSESSION END`;
+    }
 }
 
 export { PossessionEnd };

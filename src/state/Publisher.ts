@@ -1,7 +1,7 @@
 import { Subscriber } from "./Subscriber";
 
 abstract class Publisher {
-    public subscribers: Array<Subscriber> = new Array<Subscriber>();
+    protected subscribers: Array<Subscriber> = new Array<Subscriber>();
 
     public subscribe(newSubscriber: Subscriber) {
         this.subscribers.push(newSubscriber);
@@ -13,6 +13,10 @@ abstract class Publisher {
             return;
         }
         this.subscribers.splice(index, 1);
+    }
+
+    public clearSubscribers() {
+        this.subscribers = [];
     }
 
     abstract notify(oldImage: Object, newImage: Object): void;
