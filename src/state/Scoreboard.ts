@@ -154,6 +154,23 @@ class Scoreboard implements Subscriber {
         }
     }
 
+    public getFouls(team: Team) {
+        // gets the fouls based on the half
+        if (this.getHalf() === 1) {
+            if (team === Team.home) {
+                return this.homeFouls.firstHalfFouls;
+            } else {
+                return this.awayFouls.firstHalfFouls;
+            }
+        } else {
+            if (team === Team.home) {
+                return this.homeFouls.secondHalfFouls;
+            } else {
+                return this.awayFouls.secondHalfFouls;
+            }
+        }
+    }
+
     public getQuarter() {
         return this.quarter;
     }
