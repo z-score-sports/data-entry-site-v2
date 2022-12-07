@@ -8,16 +8,12 @@ Rebounds can't happen on made shots
 The shooting player cannot assist their own shot
 
 
+Planning: 
+1) Make a button to do everything on the main page
+2) Do testing for each action add, handle and validate everything
+
 
 Minutes Planning
 
-SubstitutionKeeper
-- prefSum -> list
-- intervals -> gameTime list
-- lastTimeIn -> gameTime
-
-it will have a method that gets the amount of minutes played given a gameTime
-subIn
-subOut
-undo 
-    - 
+Constraints
+- Once a quarter change action happens, you are unable to undo 

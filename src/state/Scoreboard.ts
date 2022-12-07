@@ -11,7 +11,7 @@ type scoreboardUpdateMessage =
     | FreeThrowOutMessage;
 
 class Scoreboard implements Subscriber {
-    quarter: number = 1;
+    private quarter: number = 1;
     awayPoints: number = 0;
     homePoints: number = 0;
     possessionArrow: Team;
@@ -97,12 +97,35 @@ class Scoreboard implements Subscriber {
         }
     }
 
-    public increaseQuarter() {
-        this.quarter += 1;
+    public getQuarter() {
+        return this.quarter;
     }
 
-    public decreaseQuarter() {
-        this.quarter = Math.max(this.quarter - 1, 1);
+    public increaseQuarter() {
+        this.quarter += 1;
+
+        if (this.quarter === 3) {
+            this.homeFouls = 0;
+            this.awayFouls = 0;
+        }
+    }
+
+    public getBonusString(team: Team): string {
+        if (team === Team.home && this.awayFouls >= 7) {
+            if (this.awayFouls >= 10) {
+                return "Bonus+";
+            } else {
+                return "Bonus";
+            }
+        } else if (team === Team.away && this.homeFouls >= 7) {
+            if (this.homeFouls >= 10) {
+                return "Bonus+";
+            } else {
+                return "Bonus";
+            }
+        } else {
+            return "";
+        }
     }
 }
 

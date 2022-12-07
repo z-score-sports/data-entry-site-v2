@@ -70,6 +70,10 @@ const createGameContext = (): game => {
         SubstitutionPublisher.getInstance().subscribe(player);
     });
 
+    ShotPublisher.getInstance().subscribe(scoreboard);
+    FoulPublisher.getInstance().subscribe(scoreboard);
+    FreeThrowPublisher.getInstance().subscribe(scoreboard);
+
     return {
         gameRoster: gameRoster,
         scoreboard: scoreboard,
