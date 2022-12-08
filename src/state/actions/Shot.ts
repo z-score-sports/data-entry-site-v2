@@ -78,32 +78,32 @@ interface ShotOutMessage {
 }
 
 class ShotPublisher extends Publisher {
-    private static instance: ShotPublisher
+    private static instance: ShotPublisher;
     private constructor() {
-        super()
+        super();
     }
 
     public static getInstance(): ShotPublisher {
         if (!ShotPublisher.instance) {
             this.instance = new ShotPublisher();
         }
-        return this.instance
+        return this.instance;
     }
 
     public notify(message: ShotInMessage) {
-        if (!message.action) { return; }
+        if (!message.action) {
+            return;
+        }
         const outMessage: ShotOutMessage = {
             publisher: "shot",
             type: message.type,
-            action: message.action
-        }
+            action: message.action,
+        };
 
         this.subscribers.forEach((sub) => {
-            sub.update(outMessage)
-        })
-
+            sub.update(outMessage);
+        });
     }
-
 }
 
 export { Shot, ShotPublisher };

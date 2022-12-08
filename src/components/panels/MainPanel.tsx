@@ -43,6 +43,10 @@ function MainPanel() {
         context.actionStack.addQuarterEnd();
     };
 
+    const endPossession = () => {
+        context.actionStack.addPossessionEnd();
+    };
+
     return (
         <div className="mPanel">
             <p>{context.actionStack.curPos}</p>
@@ -75,6 +79,9 @@ function MainPanel() {
             </div>
             <div>
                 <button onClick={addQuarterEnd}>Increase Quarter</button>
+            </div>
+            <div>
+                <button onClick={endPossession}>End Possession</button>
             </div>
             <div>
                 <ul>

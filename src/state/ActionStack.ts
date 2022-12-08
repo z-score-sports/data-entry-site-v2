@@ -34,7 +34,8 @@ class ActionStack {
         /*
         Conditions: 
             1) Shot is found before last end possession
-            2) The latest shot was made
+            2) Assist is not found before the shot
+            3) The latest shot was made
         */
         let player = GameContext.gameRoster
             .getRoster(this.curPos)
@@ -44,28 +45,21 @@ class ActionStack {
             return;
         }
 
-        let validShotFound: boolean = false;
         for (let index = this.mainStack.length - 1; index >= 0; index--) {
             let action = this.mainStack[index];
-            if (action instanceof PossessionEnd) {
+            if (action instanceof PossessionEnd || action instanceof Assist) {
                 return;
             } else if (action instanceof Shot) {
                 if (!action.made) {
                     return;
                 } else {
-                    validShotFound = true;
-                    break;
+                    let newAssist = new Assist(player);
+                    newAssist.createNotify();
+                    this.mainStack.push(newAssist);
+                    this.undoStack = [];
                 }
             }
         }
-        if (!validShotFound) {
-            return;
-        } // handles case where it reaches the end
-
-        let newAssist = new Assist(player);
-        newAssist.createNotify();
-        this.mainStack.push(newAssist);
-        this.undoStack = [];
     }
 
     addBlock(blockingPlayerNumber: number) {
@@ -194,12 +188,22 @@ class ActionStack {
     }
 
     addShot(shootingPlayerNumber: number, region: region, made: boolean) {
+        // Can't add shot if there exists a made shot on the current possession
         let player = GameContext.gameRoster
             .getRoster(this.curPos)
             .getPlayer(shootingPlayerNumber);
         //conditions: shooter exists and is in the game
         if (!player || !player.inGame) {
             return;
+        }
+
+        for (let index = this.mainStack.length - 1; index >= 0; index--) {
+            let action = this.mainStack[index];
+            if (action instanceof Shot && action.made) {
+                return;
+            } else if (action instanceof PossessionEnd) {
+                break;
+            }
         }
 
         let newShot = new Shot(player, region, made);
