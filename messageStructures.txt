@@ -15,22 +15,22 @@ Planning:
 
 Minutes Planning
 
-Shot Conditions: 
+Shot Conditions: - done
 - Player shooting is in game
 - player shooting is on the team that has the ball
 - There isn't a made shot in the last possession
 
-Assist conditions
+Assist conditions - done 
 - player assisting is in the game
 - player assisting is on the team that has the ball
 - There exists a made shot on the current possession
 
-Block conditions
+Block conditions - done 
 - player blocking is in the game
 - player blocking is on the team that doesn't have the ball
 - There exists a missed shot on the current possession
 
-Foul conditions
+Foul conditions - done
 - player committing the foul is in the game
 
 Free Throw conditions
@@ -50,10 +50,19 @@ Rebound conditions
 - there exists a missed shot found before:
     - made shot, another rebound, the last possession end
 
-Shot 
-- player is in the game
-- player is on the team with the ball
-- Can't add a made shot to a possession that already has a made shot
+Substitution
+- player going in is not in the game
+- player going out is in the game
+- Gametime is gte the previous gametime
+
+Turnover
+- offensive player exists and is in the game
+- offensive player is on the team with the ball
+
+Steal
+- same as turnover, just defensive player also exists, in the game, and on the other team
+
+
 
 
 

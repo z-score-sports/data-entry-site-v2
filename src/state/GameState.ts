@@ -47,7 +47,7 @@ const createGameContext = (): game => {
 
     const scoreboard = new Scoreboard(Team.home, 4);
 
-    const actionStack = new ActionStack(Team.home);
+    const actionStack = new ActionStack(Team.home, initialGameTime);
 
     gameRoster.awayRoster.players.forEach((player) => {
         AssistPublisher.getInstance().subscribe(player);

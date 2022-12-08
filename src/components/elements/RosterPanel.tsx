@@ -1,6 +1,7 @@
 import { observer } from "mobx-react-lite";
+import { useContext } from "react";
+import { GameStateContext } from "../../App";
 import "../../App.css";
-import { GameTime } from "../../state/GameTime";
 import { Roster } from "../../state/Roster";
 
 type propsType = {
@@ -8,6 +9,8 @@ type propsType = {
 };
 
 function RosterPanel({ team }: propsType) {
+    const context = useContext(GameStateContext);
+
     return (
         <div>
             <h2>{team.teamName}</h2>
@@ -49,7 +52,7 @@ function RosterPanel({ team }: propsType) {
                             <th>{p.turnovers}</th>
                             <th>
                                 {p.minutesKeeper.getMinutes(
-                                    new GameTime(1, 6, 0)
+                                    context.actionStack.getLastGameTime()
                                 ) || 0}
                             </th>
                             <th>{p.fouls}</th>
