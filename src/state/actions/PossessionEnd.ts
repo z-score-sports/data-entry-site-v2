@@ -1,31 +1,29 @@
-import { observable, action, computed, reaction, makeObservable } from "mobx"
-
+import { computed, makeObservable } from "mobx";
 import { Action } from "./Action";
 
-class PossessionEnd extends Action {    
-
+class PossessionEnd extends Action {
     public constructor() {
         super();
         makeObservable(this, {
-            actionJSON : computed,
-        })
+            actionJSON: computed,
+        });
     }
 
-    createNotify (): void {
-        
-    }
+    createNotify(): void {}
 
-    deleteNotify (): void {
-        
-    }
+    deleteNotify(): void {}
 
-    get actionJSON (): Object {
+    get actionJSON(): Object {
         return {
-            "action": "possessionend",
-            "actionId": this.actionId,
-        }
+            action: "possessionend",
+            actionId: this.actionId,
+        };
     }
-    
+
+    get actionString(): string {
+        return `POSSESSION END`;
+    }
 }
 
-export {PossessionEnd}
+export { PossessionEnd };
+

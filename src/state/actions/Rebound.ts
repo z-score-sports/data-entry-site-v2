@@ -1,48 +1,92 @@
-import { observable, action, computed, reaction, makeObservable } from "mobx"
+import { computed, makeObservable, observable } from "mobx";
 
-import { Player } from "../Player";
-import { ReboundPublisher } from "../publishers/ReboundPublisher";
+import { Player, Team } from "../Player";
+import { createDelete, Publisher } from "../Publisher";
 import { Action } from "./Action";
 
-
 class Rebound extends Action {
-    reboundingPlayer : Player;
-    
+    reboundingPlayer: Player;
 
-    public constructor(reboundingPlayer : Player) {
+    public constructor(reboundingPlayer: Player) {
         super();
         makeObservable(this, {
             reboundingPlayer: observable,
-            actionJSON: computed
-
-        })
+            actionJSON: computed,
+        });
         this.reboundingPlayer = reboundingPlayer;
-
     }
 
-
-    createNotify (): void {
+    createNotify(): void {
         ReboundPublisher.getInstance().notify({
             type: "CREATE",
-            action: this
-        })
+            action: this,
+        });
     }
 
-    deleteNotify (): void {
+    deleteNotify(): void {
         ReboundPublisher.getInstance().notify({
             type: "DELETE",
-            action: this
-        })
+            action: this,
+        });
     }
 
-    get actionJSON (): Object {
+    get actionJSON(): Object {
         return {
-            "action": "rebound",
-            "actionId": this.actionId,
-            "reboundingPlayerId": this.reboundingPlayer.playerId,
-        }
+            action: "rebound",
+            actionId: this.actionId,
+            reboundingPlayerId: this.reboundingPlayer.playerId,
+        };
     }
-    
+
+    get actionString(): string {
+        return `REBOUND by player #${this.reboundingPlayer.num} team ${
+            this.reboundingPlayer.team === Team.home ? "HOME" : "AWAY"
+        }`;
+    }
 }
 
-export {Rebound}
+interface ReboundInMessage {
+    type: createDelete
+    action: Rebound
+}
+
+interface ReboundOutMessage {
+    publisher: "rebound"
+    type: createDelete
+    action: Rebound
+}
+
+class ReboundPublisher extends Publisher {
+    private static instance: ReboundPublisher
+    private constructor() {
+        super()
+    }
+
+    public static getInstance(): ReboundPublisher {
+        if (!ReboundPublisher.instance) {
+            this.instance = new ReboundPublisher();
+        }
+        return this.instance
+    }
+
+    public notify(message: ReboundInMessage) {
+        if (!message.action) { return; }
+
+        const outMessage: ReboundOutMessage = {
+            publisher: "rebound",
+            type: message.type,
+            action: message.action
+        }
+
+
+        this.subscribers.forEach((sub) => {
+            sub.update(outMessage)
+        })
+
+    }
+
+}
+
+export { Rebound, ReboundPublisher };
+export type { ReboundInMessage, ReboundOutMessage };
+

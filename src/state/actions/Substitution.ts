@@ -1,51 +1,106 @@
-import { observable, action, computed, reaction, makeObservable } from "mobx"
+import { computed, makeObservable, observable } from "mobx";
 
-import { GameTime, Player } from "../Player";
-import { SubstitutionPublisher } from "../publishers/SubstitutionPublisher";
+import { GameTime } from "../GameTime";
+import { Player, Team } from "../Player";
+import { createDelete, Publisher } from "../Publisher";
 import { Action } from "./Action";
 
 class Substitution extends Action {
-    playerGoingIn : Player;
-    playerGoingOut : Player;
-    gameTime : GameTime
+    playerGoingIn: Player;
+    playerGoingOut: Player;
+    gameTime: GameTime;
 
-    public constructor(playerGoingIn : Player, playerGoingOut : Player, gameTime : GameTime) {
+    public constructor(
+        playerGoingIn: Player,
+        playerGoingOut: Player,
+        gameTime: GameTime
+    ) {
         super();
         makeObservable(this, {
             playerGoingIn: observable,
             playerGoingOut: observable,
             gameTime: observable,
-            actionJSON : computed,
-        })
-        this.playerGoingIn = playerGoingIn
-        this.playerGoingOut = playerGoingOut
-        this.gameTime = gameTime
-
+            actionJSON: computed,
+        });
+        this.playerGoingIn = playerGoingIn;
+        this.playerGoingOut = playerGoingOut;
+        this.gameTime = gameTime;
     }
 
-    createNotify (): void {
+    createNotify(): void {
         SubstitutionPublisher.getInstance().notify({
             type: "CREATE",
-            action: this
-        })
+            action: this,
+        });
     }
-    deleteNotify () {
+
+    deleteNotify() {
         SubstitutionPublisher.getInstance().notify({
             type: "DELETE",
-            action: this
-        })
+            action: this,
+        });
     }
 
-    get actionJSON (): Object {
+    get actionJSON(): Object {
         return {
-            "action": "substitution",
-            "actionId": this.actionId,
-            "playerIdGoingIn": this.playerGoingIn.playerId,
-            "playerIdGoingOut": this.playerGoingOut.playerId,
+            action: "substitution",
+            actionId: this.actionId,
+            playerIdGoingIn: this.playerGoingIn.playerId,
+            playerIdGoingOut: this.playerGoingOut.playerId,
             // need to put GameTime string
-        }
+        };
     }
-    
+
+    get actionString(): string {
+        return `${
+            this.playerGoingIn.team === Team.home ? "HOME" : "AWAY"
+        } SUBSTITUTION ${this.playerGoingIn.num} for ${
+            this.playerGoingOut.num
+        }`;
+    }
 }
 
-export {Substitution}
+interface SubstitutionInMessage {
+    type: createDelete;
+    action: Substitution;
+}
+
+interface SubstitutionOutMessage {
+    publisher: "substitution";
+    type: createDelete;
+    action: Substitution;
+}
+
+class SubstitutionPublisher extends Publisher {
+    private static instance: SubstitutionPublisher;
+    private constructor() {
+        super();
+    }
+
+    public static getInstance(): SubstitutionPublisher {
+        if (!SubstitutionPublisher.instance) {
+            this.instance = new SubstitutionPublisher();
+        }
+        return this.instance;
+    }
+
+    notify(message: SubstitutionInMessage) {
+        if (!message.action) {
+            return;
+        }
+
+        const outMessage: SubstitutionOutMessage = {
+            publisher: "substitution",
+            type: message.type,
+            action: message.action,
+        };
+
+        this.subscribers.forEach((sub) => {
+            sub.update(outMessage);
+        });
+    }
+}
+
+export { Substitution, SubstitutionPublisher };
+export type { SubstitutionOutMessage };
+

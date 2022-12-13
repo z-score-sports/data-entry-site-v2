@@ -1,48 +1,89 @@
-import { observable, action, computed, reaction, makeObservable } from "mobx"
+import { computed, makeObservable, observable } from "mobx";
 
 import { Player } from "../Player";
-import { FoulPublisher } from "../publishers/FoulPublisher";
+import { createDelete, Publisher } from "../Publisher";
 import { Action } from "./Action";
 
 class Foul extends Action {
-    foulingPlayer : Player;    
+    foulingPlayer: Player;
 
-    constructor(foulingPlayer:Player) {
+    constructor(foulingPlayer: Player) {
         super();
         makeObservable(this, {
             foulingPlayer: observable,
             actionJSON: computed,
-            
-        })
+        });
         this.foulingPlayer = foulingPlayer;
-
     }
 
-    createNotify (): void {
-        
+    createNotify(): void {
         FoulPublisher.getInstance().notify({
             type: "CREATE",
-            action: this
-        })
+            action: this,
+        });
     }
 
-    deleteNotify () {
+    deleteNotify() {
         FoulPublisher.getInstance().notify({
             type: "DELETE",
-            action: this
-        })
-        
+            action: this,
+        });
     }
 
-    get actionJSON (): Object {
+    get actionJSON(): Object {
         return {
-            "action": "foul",
-            "actionId": this.actionId,
-            "foulingPlayerId": this.foulingPlayer.playerId,            
-        }
+            action: "foul",
+            actionId: this.actionId,
+            foulingPlayerId: this.foulingPlayer.playerId,
+        };
     }
-    
+
+    get actionString(): string {
+        return `FOUL by player #${this.foulingPlayer.num}`;
+    }
 }
 
+interface FoulInMessage {
+    type: createDelete;
+    action: Foul;
+}
 
-export {Foul}
+interface FoulOutMessage {
+    publisher: "foul";
+    type: createDelete;
+    action: Foul;
+}
+
+class FoulPublisher extends Publisher {
+    private static instance: FoulPublisher;
+    private constructor() {
+        super();
+    }
+
+    public static getInstance(): FoulPublisher {
+        if (!FoulPublisher.instance) {
+            this.instance = new FoulPublisher();
+        }
+        return this.instance;
+    }
+
+    public notify(message: FoulInMessage) {
+        if (!message.action) {
+            return;
+        }
+
+        const outMessage: FoulOutMessage = {
+            publisher: "foul",
+            type: message.type,
+            action: message.action,
+        };
+
+        this.subscribers.forEach((sub) => {
+            sub.update(outMessage);
+        });
+    }
+}
+
+export { Foul, FoulPublisher };
+export type { FoulInMessage, FoulOutMessage };
+

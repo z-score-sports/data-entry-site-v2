@@ -6,3 +6,67 @@ Max of 1 rebound, block, and assist -> if a rebound/block/assist is found when a
 Rebounds can't happen on made shots
 
 The shooting player cannot assist their own shot
+
+
+Planning: 
+1) Make a button to do everything on the main page
+2) Do testing for each action add, handle and validate everything
+
+
+Minutes Planning
+
+Shot Conditions: - done
+- Player shooting is in game
+- player shooting is on the team that has the ball
+- There isn't a made shot in the last possession
+
+Assist conditions - done 
+- player assisting is in the game
+- player assisting is on the team that has the ball
+- There exists a made shot on the current possession
+
+Block conditions - done 
+- player blocking is in the game
+- player blocking is on the team that doesn't have the ball
+- There exists a missed shot on the current possession
+
+Foul conditions - done
+- player committing the foul is in the game
+
+Free Throw conditions
+- shooting player is in the game
+- shooting player is on the team that has the ball
+- Foul action on the other team is the last play that happened other than Sub, quarterend, and possession end
+
+Possession end conditions: 
+- none
+
+Quarter end conditions
+- none
+
+Rebound conditions
+- player rebounding is in the game
+- player rebounding can be on either team
+- there exists a missed shot found before:
+    - made shot, another rebound, the last possession end
+
+Substitution
+- player going in is not in the game
+- player going out is in the game
+- Gametime is gte the previous gametime
+
+Turnover
+- offensive player exists and is in the game
+- offensive player is on the team with the ball
+
+Steal
+- same as turnover, just defensive player also exists, in the game, and on the other team
+
+
+
+
+
+
+
+
+

@@ -1,23 +1,24 @@
-import React, { useContext } from 'react';
-import { observer } from "mobx-react-lite"
-import '../../App.css';
-import { GameStateContext } from '../../App';
-
+import { observer } from "mobx-react-lite";
+import { useContext } from "react";
+import { GameStateContext } from "../../App";
+import "../../App.css";
 
 function TopBar() {
+    const context = useContext(GameStateContext);
 
-  const gameState = useContext(GameStateContext)
-  
-
-  return (
-    <div className = 'tBar'>
-      {gameState.scoreboard.quarter}
-      <br/>
-      {gameState.scoreboard.awayPoints} - {gameState.scoreboard.homePoints}
-      <button >Click please</button>
-      
-    </div>
-  );
+    return (
+        <div className="tBar">
+            {context.scoreboard.getQuarter()}
+            <br />
+            {context.scoreboard.homeFouls.firstHalfFouls} -
+            {context.scoreboard.homeFouls.secondHalfFouls}
+            <br />
+            {context.scoreboard.awayFouls.firstHalfFouls} -
+            {context.scoreboard.awayFouls.secondHalfFouls}
+            <br />
+            {context.scoreboard.awayPoints} - {context.scoreboard.homePoints}
+        </div>
+    );
 }
 
 export default observer(TopBar);

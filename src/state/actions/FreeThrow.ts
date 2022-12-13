@@ -1,52 +1,96 @@
-import { observable, action, computed, reaction, makeObservable } from "mobx"
+import { computed, makeObservable, observable } from "mobx";
 
 import { Player } from "../Player";
-import { PointsPublisher } from "../publishers/PointsPublisher";
+import { createDelete, Publisher } from "../Publisher";
 import { Action } from "./Action";
-import { Rebound } from "./Rebound";
 
 class FreeThrow extends Action {
+    shootingPlayer: Player;
+    made: boolean;
 
-    shootingPlayer:Player;
-    made : boolean;
-
-    public constructor(shootingPlayer:Player, made:boolean) {
+    public constructor(shootingPlayer: Player, made: boolean) {
         super();
         makeObservable(this, {
             shootingPlayer: observable,
             made: observable,
             actionJSON: computed,
-        })
+        });
         this.shootingPlayer = shootingPlayer;
         this.made = made;
-        //always add a free throw attempt
-
-        
     }
 
-    createNotify (): void {
-        PointsPublisher.getInstance().notify({
+    createNotify(): void {
+        FreeThrowPublisher.getInstance().notify({
             type: "CREATE",
-            action: this
-        })
+            action: this,
+        });
     }
 
-    deleteNotify () {
-        PointsPublisher.getInstance().notify({
+    deleteNotify() {
+        FreeThrowPublisher.getInstance().notify({
             type: "DELETE",
-            action: this
-        })
+            action: this,
+        });
     }
 
-    public get actionJSON (): Object {
+    public get actionJSON(): Object {
         return {
-            "action": "freethrow",
-            "actionId": this.actionId,
-            "shootingPlayerId": this.shootingPlayer.playerId,
-            "made": this.made,
-        }
+            action: "freethrow",
+            actionId: this.actionId,
+            shootingPlayerId: this.shootingPlayer.playerId,
+            made: this.made,
+        };
     }
-    
+
+    get actionString(): string {
+        return `FREETHROW ${this.made ? "made" : "missed"} by player #${
+            this.shootingPlayer.num
+        }`;
+    }
 }
 
-export {FreeThrow}
+
+
+interface FreeThrowInMessage {
+    type: createDelete
+    action: FreeThrow
+}
+
+interface FreeThrowOutMessage {
+    publisher: "freethrow"
+    type: createDelete
+    action: FreeThrow
+}
+
+class FreeThrowPublisher extends Publisher {
+    private static instance: FreeThrowPublisher
+    private constructor() {
+        super()
+    }
+
+    public static getInstance(): FreeThrowPublisher {
+        if (!FreeThrowPublisher.instance) {
+            this.instance = new FreeThrowPublisher();
+        }
+        return this.instance
+    }
+
+    public notify(message: FreeThrowInMessage) {
+        if (!message.action) { return; }
+        const outMessage: FreeThrowOutMessage = {
+            publisher: "freethrow",
+            type: message.type,
+            action: message.action
+        }
+
+        this.subscribers.forEach((sub) => {
+            sub.update(outMessage)
+        })
+
+    }
+
+}
+
+export { FreeThrow, FreeThrowPublisher };
+export type { FreeThrowInMessage, FreeThrowOutMessage };
+

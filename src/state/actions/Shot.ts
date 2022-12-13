@@ -1,71 +1,111 @@
-import { observable, action, computed, reaction, makeAutoObservable, makeObservable } from "mobx"
+import { computed, makeObservable, observable } from "mobx";
 
 import { Player } from "../Player";
-import { PointsPublisher } from "../publishers/PointsPublisher";
+import { createDelete, Publisher } from "../Publisher";
 
 import { Action } from "./Action";
 
 type region = 1|2|3|4|5|6|7|8|9;
  
 class Shot extends Action {
+    shootingPlayer: Player;
+    region: number;
+    made: boolean;
 
-    shootingPlayer : Player;
-    region : number;
-    made : boolean;
-    
-    
-
-    constructor(shootingPlayer:Player, region: region, made:boolean) {
+    constructor(shootingPlayer: Player, region: region, made: boolean) {
         super();
         makeObservable(this, {
             shootingPlayer: observable,
             region: observable,
             made: observable,
             actionJSON: computed,
-        })
+        });
         this.shootingPlayer = shootingPlayer;
         this.region = region;
         this.made = made;
-        
     }
 
-    get shotPoints() : number {
-        if(!this.made){
+    get shotPoints(): number {
+        if (!this.made) {
             return 0;
-        } else if (this.region <= 4){
+        } else if (this.region <= 4) {
             return 2;
         } else {
             return 3;
         }
     }
 
-    createNotify (): void {
-        PointsPublisher.getInstance().notify({
+    createNotify(): void {
+        ShotPublisher.getInstance().notify({
             type: "CREATE",
-            action: this
-        }) 
+            action: this,
+        });
     }
 
-    deleteNotify () {
-        PointsPublisher.getInstance().notify({
+    deleteNotify() {
+        ShotPublisher.getInstance().notify({
             type: "DELETE",
-            action: this
-        })
+            action: this,
+        });
     }
 
-    get actionJSON (): Object {
+    get actionJSON(): Object {
         return {
-            "action": "shot",
-            "actionId": this.actionId,
-            "shootingPlayerId": this.shootingPlayer.playerId,
-            "region": this.region,
-            "make": this.made,
-
-        }
+            action: "shot",
+            actionId: this.actionId,
+            shootingPlayerId: this.shootingPlayer.playerId,
+            region: this.region,
+            make: this.made,
+        };
     }
-    
+
+    get actionString(): string {
+        return `SHOT ${this.made ? "made" : "missed"} by player #${
+            this.shootingPlayer.num
+        } in region ${this.region}`;
+    }
 }
 
-export {Shot}
+interface ShotInMessage {
+    type: createDelete
+    action: Shot
+}
 
-export type {region}
+interface ShotOutMessage {
+    publisher: "shot"
+    type: createDelete
+    action: Shot
+}
+
+class ShotPublisher extends Publisher {
+    private static instance: ShotPublisher;
+    private constructor() {
+        super();
+    }
+
+    public static getInstance(): ShotPublisher {
+        if (!ShotPublisher.instance) {
+            this.instance = new ShotPublisher();
+        }
+        return this.instance;
+    }
+
+    public notify(message: ShotInMessage) {
+        if (!message.action) {
+            return;
+        }
+        const outMessage: ShotOutMessage = {
+            publisher: "shot",
+            type: message.type,
+            action: message.action,
+        };
+
+        this.subscribers.forEach((sub) => {
+            sub.update(outMessage);
+        });
+    }
+}
+
+export { Shot, ShotPublisher };
+export type { ShotInMessage, ShotOutMessage, region };
+
