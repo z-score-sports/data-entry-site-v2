@@ -51,9 +51,11 @@ function RosterPanel({ team }: propsType) {
                             <th>{p.blocks}</th>
                             <th>{p.turnovers}</th>
                             <th>
-                                {p.minutesKeeper.getMinutes(
-                                    context.actionStack.getLastGameTime()
-                                ) || 0}
+                                {(
+                                    p.minutesKeeper.getMinutes(
+                                        context.actionStack.getLastGameTime()
+                                    ) || 0
+                                ).toFixed(0)}
                             </th>
                             <th>{p.fouls}</th>
                         </tr>

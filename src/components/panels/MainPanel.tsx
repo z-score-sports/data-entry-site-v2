@@ -35,7 +35,7 @@ function MainPanel() {
     };
 
     const addSubstitution = () => {
-        let gameTime = new GameTime(1, 6, 0);
+        let gameTime = new GameTime(1, 8, 48);
         context.actionStack.addSubstitution(Team.home, 5, 1, gameTime);
     };
 
