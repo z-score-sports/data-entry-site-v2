@@ -5,18 +5,16 @@ export abstract class Action {
 
     constructor() {
         makeObservable(this, {
-            actionId: false,
             actionString: computed,
         });
-        this.actionId = crypto.randomUUID();
     }
 
     abstract createNotify(): void;
     abstract deleteNotify(): void;
 
     get actionString() {
-        return this.actionId;
+        return "action";
     }
 
-    abstract get actionJSON(): Object;
+    abstract get actionJSON(): any;
 }

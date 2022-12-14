@@ -16,6 +16,14 @@ import { Team } from "./Player";
 
 // TODO: Need to test and validate each action
 
+type PrimaryAction =
+    | Shot
+    | PossessionEnd
+    | QuarterEnd
+    | Substitution
+    | Turnover
+    | Foul;
+
 class ActionStack {
     // validation is done here
     curPos: Team;
@@ -338,6 +346,18 @@ class ActionStack {
             ret.push(action.actionString);
         });
         return ret;
+    }
+
+    toJSON(): Object {
+        let retJSON: object[] = [];
+        this.mainStack.forEach((action, i) => {
+            let newJSON = {
+                i: i,
+                ...action.actionJSON,
+            };
+            retJSON.push(newJSON);
+        });
+        return retJSON;
     }
 }
 
