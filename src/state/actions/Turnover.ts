@@ -33,7 +33,6 @@ class Turnover extends Action {
     get actionJSON(): Object {
         return {
             action: "turnover",
-            actionId: this.actionId,
             offensivePlayer: this.offensivePlayer.playerId,
         };
     }

@@ -33,7 +33,6 @@ class Rebound extends Action {
     get actionJSON(): Object {
         return {
             action: "rebound",
-            actionId: this.actionId,
             reboundingPlayerId: this.reboundingPlayer.playerId,
         };
     }

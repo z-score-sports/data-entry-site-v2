@@ -16,7 +16,6 @@ class PossessionEnd extends Action {
     get actionJSON(): Object {
         return {
             action: "possessionend",
-            actionId: this.actionId,
         };
     }
 

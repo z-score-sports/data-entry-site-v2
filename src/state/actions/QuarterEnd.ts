@@ -28,7 +28,6 @@ class QuarterEnd extends Action {
     get actionJSON(): Object {
         return {
             action: "quarterend",
-            actionId: this.actionId,
         };
     }
 

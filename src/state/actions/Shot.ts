@@ -52,7 +52,6 @@ class Shot extends Action {
     get actionJSON(): Object {
         return {
             action: "shot",
-            actionId: this.actionId,
             shootingPlayerId: this.shootingPlayer.playerId,
             region: this.region,
             make: this.made,

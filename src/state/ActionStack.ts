@@ -349,14 +349,10 @@ class ActionStack {
     }
 
     toJSON(): Object {
-        let retJSON: object[] = [];
-        this.mainStack.forEach((action, i) => {
-            let newJSON = {
-                i: i,
-                ...action.actionJSON,
-            };
-            retJSON.push(newJSON);
-        });
+        let retJSON: object[] = this.mainStack.map((action, i) => ({
+            id: i,
+            ...action.actionJSON,
+        }));
         return retJSON;
     }
 }

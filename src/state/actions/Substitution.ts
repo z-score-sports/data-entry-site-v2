@@ -44,7 +44,6 @@ class Substitution extends Action {
     get actionJSON(): Object {
         return {
             action: "substitution",
-            actionId: this.actionId,
             playerIdGoingIn: this.playerGoingIn.playerId,
             playerIdGoingOut: this.playerGoingOut.playerId,
             // need to put GameTime string
