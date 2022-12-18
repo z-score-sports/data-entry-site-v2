@@ -4,7 +4,7 @@ import { GameStateContext } from "../../App";
 import "../../App.css";
 import { GameTime } from "../../state/GameTime";
 import { Team } from "../../state/Player";
-
+import InputPanel from "../elements/InputPanel"
 function MainPanel() {
     const context = useContext(GameStateContext);
 
@@ -92,6 +92,7 @@ function MainPanel() {
                         })}
                 </ul>
             </div>
+            <InputPanel/>
         </div>
     );
 }
