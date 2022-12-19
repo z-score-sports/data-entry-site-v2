@@ -33,6 +33,28 @@ abstract class NumberNode {
     }
 }
 
+class BaseNode implements NodeInterface {
+    constructor() {}
+
+    get nodeDescription() {
+        return "Base Node";
+    }
+
+    inputHandler(monkey: MonkeyState, key: string, context: any): void {
+        if (key === "T") {
+            monkey.currNode = 1;
+        } else if (key === "S") {
+            monkey.currNode = 2; // placeholder
+        }
+    }
+
+    promptUI(): FC {
+        return () => {
+            return <div>Base Node</div>;
+        };
+    }
+}
+
 class AssistingPlayerNode extends NumberNode implements NodeInterface {
     constructor() {
         super();
@@ -45,6 +67,12 @@ class AssistingPlayerNode extends NumberNode implements NodeInterface {
     inputHandler(monkey: MonkeyState, key: string, context: any) {
         if (!isNaN(+key)) {
             this.handleNumberInput(parseInt(key));
+        } else if (key === "enter") {
+            monkey.currNode = 4; // placeholder, this will go to a different node
+        } else if (key === "backspace") {
+            this.handleBackspace();
+        } else {
+            return; // don't do anything on an invalid input
         }
     }
 
@@ -61,6 +89,7 @@ class AssistingPlayerNode extends NumberNode implements NodeInterface {
 
 class InputGraph {
     inputGraph: Node[];
+    // newGraph: NodeInterface[];
 
     public constructor() {
         this.inputGraph = [
@@ -157,3 +186,4 @@ class InputGraph {
 
 export { InputGraph };
 export type { MonkeyState };
+
