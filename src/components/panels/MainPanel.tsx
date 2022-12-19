@@ -4,7 +4,7 @@ import { GameStateContext } from "../../App";
 import "../../App.css";
 import { GameTime } from "../../state/GameTime";
 import { Team } from "../../state/Player";
-
+import InputPanel from "../elements/InputPanel"
 function MainPanel() {
     const context = useContext(GameStateContext);
 
@@ -86,6 +86,7 @@ function MainPanel() {
             <div>
                 <ul>{JSON.stringify(context.actionStack.toJSON())}</ul>
             </div>
+            <InputPanel/>
         </div>
     );
 }
