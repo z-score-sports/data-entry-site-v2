@@ -6,40 +6,46 @@ import "../../App.css";
 
 
 function InputPanel() {
-    const context = useContext(GameStateContext);
-    const [currentPrompt, changePrompt] = useState(() => <p>Hi</p>)
-    const [mState, setmState] = useState({currNode: -5, primaryPlayNum: -500})
-    const [iGraph, setiGraph] = useState(new InputGraph())
 
+    const context = useContext(GameStateContext);
+
+    const [currentPrompt, changePrompt] = useState(() => <p>Hi</p>) // Current UI to show
+    const [mState, setmState] = useState({currNode: -5, primaryPlayNum: -500}) // Current Monkey State
+    const [iGraph, setiGraph] = useState(new InputGraph()) // Input Graph Object
+
+    // Set initial values
     useEffect(() => {
-      console.log("Main Use Effect Triggered")
       let initialMonkey = {currNode: 0, primaryPlayNum: -100}
       setmState(mState => ({...initialMonkey}))
       changePrompt(iGraph.getNodePrompt(initialMonkey))
-      document.addEventListener("keydown", handleKeyPress)
     }, []) 
 
+
+    /*
+    The KeyEventListener needs to be reset each time the monkey state changes. 
+    This is because when the eventlistener is set, it copies the handleKeyPress() 
+    function based on the monkey state at the time
+    */
     useEffect(() => {
-      document.addEventListener("keyup", handleKeyPress);
-      return () => {
-        document.removeEventListener("keyup", handleKeyPress);
+      document.addEventListener("keypress", handleKeyPress);
+      return () => { // On Cleanup
+        document.removeEventListener("keypress", handleKeyPress);
       };
     }, [mState])    
 
+    
+
     function handleKeyPress(e: KeyboardEvent) {
-      console.log("Key press event")
-      console.log(mState)
+      // Traverse the input graph and update the MonkeyState
       let newMState = iGraph.traverseGraph(mState, e.key.toUpperCase(), context)
       setmState(mState => ({...mState, ...newMState}))
+      // Update the UI
       changePrompt(iGraph.getNodePrompt(newMState))
     }
-
-
 
     return (
         <div>
           {currentPrompt}
-          <pre>{JSON.stringify(mState, null, 2)}</pre>
         </div>
       );
 }

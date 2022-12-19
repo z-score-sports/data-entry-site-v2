@@ -1,12 +1,12 @@
 import React, { FC, useContext } from 'react';
-import {GameContext} from './GameState';
-import { GameStateContext } from "../App";
+
 
 // The information about the current action that is being added
 type MonkeyState = {
     currNode: number, // Index of node where user is currently on graph
     primaryPlayNum: number //-100 by default in order to track if the first digit has been inputted yet
 }
+
 
 type Node = {
     nodeDescription: string;
@@ -18,7 +18,6 @@ class InputGraph {
     inputGraph: Node[];
 
      
-
     public constructor() {
         this.inputGraph = [
             {
@@ -44,13 +43,14 @@ class InputGraph {
                 inputHandler: new Map([
                     ['dig', (monkey: MonkeyState, key: string, context: any) => {
                         let numInp = parseInt(key)
-                        if(monkey.primaryPlayNum === -100){
+                        if(monkey.primaryPlayNum === -100){ // Enter first digit
                             monkey.primaryPlayNum = 10 * numInp
                         } else {
                             monkey.primaryPlayNum = monkey.primaryPlayNum + numInp
-
                             // Second Number pressed -- Add Turnover
                             context.actionStack.addTurnover(monkey.primaryPlayNum)
+
+                            //Reset MonkeyState
                             monkey.currNode = 0
                             monkey.primaryPlayNum = -100
                         }
@@ -67,26 +67,23 @@ class InputGraph {
     getNodePrompt(monkey: MonkeyState) {
         return this.inputGraph[monkey.currNode].promptUI(monkey)
     }
-    resetMonkey(monkey: MonkeyState) {
-        console.log('Resetting monkey')
-        monkey = {
-            currNode: 0,
-            primaryPlayNum: -100
-        }
-        return monkey
-    }
+    
+
 
     traverseGraph(monkey: MonkeyState, pressedKey: string, context: any) {
-        
+        // Deep clone of MonkeyState
         let monkeyClone: MonkeyState = {currNode: monkey.currNode, primaryPlayNum: monkey.primaryPlayNum}
+
+        // Find and execute the correct response to the input
         let traverseAction: Function
         if(this.isDigit(pressedKey)) {
             traverseAction = this.inputGraph[monkey.currNode].inputHandler.get('dig')
-        } else {
+            traverseAction(monkeyClone, pressedKey, context)
+        } else if(this.inputGraph[0].inputHandler.has(pressedKey)){
             traverseAction = this.inputGraph[monkey.currNode].inputHandler.get(pressedKey)
+            traverseAction(monkeyClone, pressedKey, context)
         }
-
-        traverseAction(monkeyClone, pressedKey, context)
+        // Pass the new Monkey State back to the InputPanel
         return monkeyClone
     }
 
