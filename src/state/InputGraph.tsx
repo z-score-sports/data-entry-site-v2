@@ -44,7 +44,7 @@ class InputGraph {
                 inputHandler: new Map([
                     ['dig', (monkey: MonkeyState, key: string, context: any) => {
                         let numInp = parseInt(key)
-                        if(monkey.primaryPlayNum == -100){
+                        if(monkey.primaryPlayNum === -100){
                             monkey.primaryPlayNum = 10 * numInp
                         } else {
                             monkey.primaryPlayNum = monkey.primaryPlayNum + numInp
@@ -80,7 +80,6 @@ class InputGraph {
         
         let monkeyClone: MonkeyState = {currNode: monkey.currNode, primaryPlayNum: monkey.primaryPlayNum}
         let traverseAction: Function
-        console.log(monkeyClone)
         if(this.isDigit(pressedKey)) {
             traverseAction = this.inputGraph[monkey.currNode].inputHandler.get('dig')
         } else {
@@ -88,7 +87,6 @@ class InputGraph {
         }
 
         traverseAction(monkeyClone, pressedKey, context)
-        console.log(monkeyClone)
         return monkeyClone
     }
 
