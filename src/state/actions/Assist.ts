@@ -33,7 +33,6 @@ class Assist extends Action {
     get actionJSON(): Object {
         return {
             action: "assist",
-            actionId: this.actionId,
             assistingPlayerId: this.assistingPlayer.playerId,
         };
     }

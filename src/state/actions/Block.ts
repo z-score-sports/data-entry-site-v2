@@ -33,7 +33,6 @@ class Block extends Action {
     get actionJSON(): Object {
         return {
             action: "block",
-            actionId: this.actionId,
             blockingPlayerId: this.blockingPlayer.playerId,
         };
     }

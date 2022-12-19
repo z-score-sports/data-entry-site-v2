@@ -36,7 +36,6 @@ class FreeThrow extends Action {
     public get actionJSON(): Object {
         return {
             action: "freethrow",
-            actionId: this.actionId,
             shootingPlayerId: this.shootingPlayer.playerId,
             made: this.made,
         };

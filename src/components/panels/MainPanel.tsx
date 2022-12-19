@@ -84,13 +84,7 @@ function MainPanel() {
                 <button onClick={endPossession}>End Possession</button>
             </div>
             <div>
-                <ul>
-                    {context.actionStack
-                        .convertStackToStringList()
-                        .map((value, i) => {
-                            return <li key={i}>{value}</li>;
-                        })}
-                </ul>
+                <ul>{JSON.stringify(context.actionStack.toJSON())}</ul>
             </div>
         </div>
     );

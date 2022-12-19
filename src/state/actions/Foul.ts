@@ -33,7 +33,6 @@ class Foul extends Action {
     get actionJSON(): Object {
         return {
             action: "foul",
-            actionId: this.actionId,
             foulingPlayerId: this.foulingPlayer.playerId,
         };
     }
