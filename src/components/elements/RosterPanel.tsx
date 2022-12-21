@@ -5,15 +5,17 @@ import "../../App.css";
 import { Roster } from "../../state/Roster";
 
 type propsType = {
-    team: Roster;
+    teamRoster: Roster;
+    team: number
 };
 
-function RosterPanel({ team }: propsType) {
+function RosterPanel({ teamRoster, team }: propsType) {
     const context = useContext(GameStateContext);
 
     return (
         <div>
-            <h2>{team.teamName}</h2>
+            <h2>{teamRoster.teamName}</h2>
+            {context.actionStack.curPos == team && <p>Possesing</p>}
             <table className="rosterPanel">
                 <tr className="headerRow">
                     <th>Player</th>
@@ -30,7 +32,7 @@ function RosterPanel({ team }: propsType) {
                     <th>Min</th>
                     <th>F</th>
                 </tr>
-                {team.getPlayerArr().map((p) => {
+                {teamRoster.getPlayerArr().map((p) => {
                     return (
                         <tr className={"pRow" + p.inGame}>
                             <th>

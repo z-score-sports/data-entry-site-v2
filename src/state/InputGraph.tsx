@@ -17,6 +17,7 @@ type Node = {
 class InputGraph {
     inputGraph: Node[];
 
+ 
      
     public constructor() {
         this.inputGraph = [
@@ -26,8 +27,15 @@ class InputGraph {
                     <div><h1>Currently at base node</h1></div>
                 )},
                 inputHandler: new Map([
-                    ['T', (monkey: MonkeyState, key: string, context: any) => {
+                    ['T', (monkey: MonkeyState, key: string, context: any) => { // Turnover
                         monkey.currNode = 1
+                    }],
+                    ['Q', (monkey: MonkeyState, key: string, context: any) => { // Defensive Foul
+                        monkey.currNode = 2
+                        console.log(monkey)
+                    }],
+                    ['W', (monkey: MonkeyState, key: string, context: any) => { // Offensive Foul
+                        monkey.currNode = 3
                     }],
                 ])
             },
@@ -35,29 +43,72 @@ class InputGraph {
                 nodeDescription: "Turnover Node",
                 promptUI: (monkey: MonkeyState) => { return (
                     <div>
-                        <h1>Turnover</h1>
+                        <h1>Turnover Node</h1>
                         <h3>Input player #</h3>
                         <p>{monkey.primaryPlayNum == -100 ? "__" : monkey.primaryPlayNum}</p>
                     </div>
                 )},
                 inputHandler: new Map([
                     ['dig', (monkey: MonkeyState, key: string, context: any) => {
-                        let numInp = parseInt(key)
-                        if(monkey.primaryPlayNum === -100){ // Enter first digit
-                            monkey.primaryPlayNum = 10 * numInp
-                        } else {
-                            monkey.primaryPlayNum = monkey.primaryPlayNum + numInp
-                            // Second Number pressed -- Add Turnover
+                        this.handleDigInput(monkey, key, true, () => {
                             context.actionStack.addTurnover(monkey.primaryPlayNum)
-
-                            //Reset MonkeyState
-                            monkey.currNode = 0
-                            monkey.primaryPlayNum = -100
-                        }
+                        })
                     }],
                 ])
-            }
+            },
+            {
+                nodeDescription: "Defensive Foul Node",
+                promptUI: (monkey: MonkeyState) => { return (
+                    <div>
+                        <h1>Defensive Foul</h1>
+                        <h3>Input player #</h3>
+                        <p>{monkey.primaryPlayNum == -100 ? "__" : monkey.primaryPlayNum}</p>
+                    </div>
+                )},
+                inputHandler: new Map([
+                    ['dig', (monkey: MonkeyState, key: string, context: any) => {
+                        this.handleDigInput(monkey, key, true, () => {
+                            let defTeam = (context.actionStack.curPos + 1) % 2 // Sets 0 -> 1, 1 -> 0
+                            context.actionStack.addFoul(monkey.primaryPlayNum, defTeam)
+                        })
+                    }],
+                ])
+            },
+            {
+                nodeDescription: "Offensive Foul Node",
+                promptUI: (monkey: MonkeyState) => { return (
+                    <div>
+                        <h1>Offensive Foul</h1>
+                        <h3>Input player #</h3>
+                        <p>{monkey.primaryPlayNum == -100 ? "__" : monkey.primaryPlayNum}</p>
+                    </div>
+                )},
+                inputHandler: new Map([
+                    ['dig', (monkey: MonkeyState, key: string, context: any) => {
+                        this.handleDigInput(monkey, key, true, () => {
+                            let offTeam = context.actionStack.curPos
+                            context.actionStack.addFoul(monkey.primaryPlayNum, offTeam)
+                        })
+                    }],
+                ])
+            },
         ]
+    }
+
+    handleDigInput(monkey: MonkeyState, key: string, terminal: boolean, completionFunc: Function) {
+        let numInp = parseInt(key)
+        if(monkey.primaryPlayNum === -100){ // Enter first digit
+            monkey.primaryPlayNum = 10 * numInp
+        } else {
+            monkey.primaryPlayNum = monkey.primaryPlayNum + numInp
+            // Second Number pressed -- Add Turnover
+            completionFunc()
+            if(terminal) {
+                //Reset MonkeyState
+                monkey.currNode = 0
+                monkey.primaryPlayNum = -100
+            }
+        }
     }
 
     isDigit(k: string) {
@@ -80,6 +131,7 @@ class InputGraph {
             traverseAction = this.inputGraph[monkey.currNode].inputHandler.get('dig')
             traverseAction(monkeyClone, pressedKey, context)
         } else if(this.inputGraph[0].inputHandler.has(pressedKey)){
+            console.log(this.inputGraph[monkey.currNode])
             traverseAction = this.inputGraph[monkey.currNode].inputHandler.get(pressedKey)
             traverseAction(monkeyClone, pressedKey, context)
         }
