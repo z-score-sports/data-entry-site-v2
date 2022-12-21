@@ -37,6 +37,18 @@ class InputGraph {
                     ['W', (monkey: MonkeyState, key: string, context: any) => { // Offensive Foul
                         monkey.currNode = 3
                     }],
+                    ['A', (monkey: MonkeyState, key: string, context: any) => { // Assist
+                        monkey.currNode = 4
+                    }],
+                    ['E', (monkey: MonkeyState, key: string, context: any) => { // Defensive Rebound
+                        monkey.currNode = 5
+                    }],
+                    ['R', (monkey: MonkeyState, key: string, context: any) => { // Offensive Rebound
+                        monkey.currNode = 6
+                    }],
+                    ['B', (monkey: MonkeyState, key: string, context: any) => { // Offensive Rebound
+                        monkey.currNode = 7
+                    }],
                 ])
             },
             {
@@ -88,6 +100,76 @@ class InputGraph {
                         this.handleDigInput(monkey, key, true, () => {
                             let offTeam = context.actionStack.curPos
                             context.actionStack.addFoul(monkey.primaryPlayNum, offTeam)
+                        })
+                    }],
+                ])
+            },
+            {
+                nodeDescription: "Assist Node",
+                promptUI: (monkey: MonkeyState) => { return (
+                    <div>
+                        <h1>Assist</h1>
+                        <h3>Input player #</h3>
+                        <p>{monkey.primaryPlayNum == -100 ? "__" : monkey.primaryPlayNum}</p>
+                    </div>
+                )},
+                inputHandler: new Map([
+                    ['dig', (monkey: MonkeyState, key: string, context: any) => {
+                        this.handleDigInput(monkey, key, true, () => {
+                            context.actionStack.addAssist(monkey.primaryPlayNum)
+                        })
+                    }],
+                ])
+            },
+            {
+                nodeDescription: "Defensive Rebound Node",
+                promptUI: (monkey: MonkeyState) => { return (
+                    <div>
+                        <h1>Defensive Rebound</h1>
+                        <h3>Input player #</h3>
+                        <p>{monkey.primaryPlayNum == -100 ? "__" : monkey.primaryPlayNum}</p>
+                    </div>
+                )},
+                inputHandler: new Map([
+                    ['dig', (monkey: MonkeyState, key: string, context: any) => {
+                        this.handleDigInput(monkey, key, true, () => {
+                            let defTeam = (context.actionStack.curPos + 1) % 2 // Sets 0 -> 1, 1 -> 0
+                            context.actionStack.addRebound(monkey.primaryPlayNum, defTeam)
+                        })
+                    }],
+                ])
+            },
+            {
+                nodeDescription: "Offensive Rebound Node",
+                promptUI: (monkey: MonkeyState) => { return (
+                    <div>
+                        <h1>Offensive Rebound</h1>
+                        <h3>Input player #</h3>
+                        <p>{monkey.primaryPlayNum == -100 ? "__" : monkey.primaryPlayNum}</p>
+                    </div>
+                )},
+                inputHandler: new Map([
+                    ['dig', (monkey: MonkeyState, key: string, context: any) => {
+                        this.handleDigInput(monkey, key, true, () => {
+                            let offTeam = context.actionStack.curPos
+                            context.actionStack.addRebound(monkey.primaryPlayNum, offTeam)
+                        })
+                    }],
+                ])
+            },
+            {
+                nodeDescription: "Block Node",
+                promptUI: (monkey: MonkeyState) => { return (
+                    <div>
+                        <h1>Block</h1>
+                        <h3>Input player #</h3>
+                        <p>{monkey.primaryPlayNum == -100 ? "__" : monkey.primaryPlayNum}</p>
+                    </div>
+                )},
+                inputHandler: new Map([
+                    ['dig', (monkey: MonkeyState, key: string, context: any) => {
+                        this.handleDigInput(monkey, key, true, () => {
+                            context.actionStack.addBlock(monkey.primaryPlayNum)
                         })
                     }],
                 ])
