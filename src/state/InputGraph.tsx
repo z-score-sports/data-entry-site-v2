@@ -5,6 +5,7 @@ import React, { FC, useContext } from 'react';
 type MonkeyState = {
     currNode: number, // Index of node where user is currently on graph
     primaryPlayNum: number //-100 by default in order to track if the first digit has been inputted yet
+    secondaryPlayNum: number
 }
 
 
@@ -49,6 +50,9 @@ class InputGraph {
                     ['B', (monkey: MonkeyState, key: string, context: any) => { // Offensive Rebound
                         monkey.currNode = 7
                     }],
+                    ['J', (monkey: MonkeyState, key: string, context: any) => { // Steal
+                        monkey.currNode = 8
+                    }],
                 ])
             },
             {
@@ -62,7 +66,7 @@ class InputGraph {
                 )},
                 inputHandler: new Map([
                     ['dig', (monkey: MonkeyState, key: string, context: any) => {
-                        this.handleDigInput(monkey, key, true, () => {
+                        this.handleDigInput(monkey, key, true, true, () => {
                             context.actionStack.addTurnover(monkey.primaryPlayNum)
                         })
                     }],
@@ -79,7 +83,7 @@ class InputGraph {
                 )},
                 inputHandler: new Map([
                     ['dig', (monkey: MonkeyState, key: string, context: any) => {
-                        this.handleDigInput(monkey, key, true, () => {
+                        this.handleDigInput(monkey, key, true, true, () => {
                             let defTeam = (context.actionStack.curPos + 1) % 2 // Sets 0 -> 1, 1 -> 0
                             context.actionStack.addFoul(monkey.primaryPlayNum, defTeam)
                         })
@@ -97,7 +101,7 @@ class InputGraph {
                 )},
                 inputHandler: new Map([
                     ['dig', (monkey: MonkeyState, key: string, context: any) => {
-                        this.handleDigInput(monkey, key, true, () => {
+                        this.handleDigInput(monkey, key, true, true, () => {
                             let offTeam = context.actionStack.curPos
                             context.actionStack.addFoul(monkey.primaryPlayNum, offTeam)
                         })
@@ -115,7 +119,7 @@ class InputGraph {
                 )},
                 inputHandler: new Map([
                     ['dig', (monkey: MonkeyState, key: string, context: any) => {
-                        this.handleDigInput(monkey, key, true, () => {
+                        this.handleDigInput(monkey, key, true, true, () => {
                             context.actionStack.addAssist(monkey.primaryPlayNum)
                         })
                     }],
@@ -132,7 +136,7 @@ class InputGraph {
                 )},
                 inputHandler: new Map([
                     ['dig', (monkey: MonkeyState, key: string, context: any) => {
-                        this.handleDigInput(monkey, key, true, () => {
+                        this.handleDigInput(monkey, key, true, true, () => {
                             let defTeam = (context.actionStack.curPos + 1) % 2 // Sets 0 -> 1, 1 -> 0
                             context.actionStack.addRebound(monkey.primaryPlayNum, defTeam)
                         })
@@ -150,7 +154,7 @@ class InputGraph {
                 )},
                 inputHandler: new Map([
                     ['dig', (monkey: MonkeyState, key: string, context: any) => {
-                        this.handleDigInput(monkey, key, true, () => {
+                        this.handleDigInput(monkey, key, true, true, () => {
                             let offTeam = context.actionStack.curPos
                             context.actionStack.addRebound(monkey.primaryPlayNum, offTeam)
                         })
@@ -168,8 +172,42 @@ class InputGraph {
                 )},
                 inputHandler: new Map([
                     ['dig', (monkey: MonkeyState, key: string, context: any) => {
-                        this.handleDigInput(monkey, key, true, () => {
+                        this.handleDigInput(monkey, key, true, true, () => {
                             context.actionStack.addBlock(monkey.primaryPlayNum)
+                        })
+                    }],
+                ])
+            },
+            {
+                nodeDescription: "Steal Node-Input Stealing #",
+                promptUI: (monkey: MonkeyState) => { return (
+                    <div>
+                        <h1>Steal</h1>
+                        <h3>Input Stealing Player #</h3>
+                        <p>{monkey.primaryPlayNum == -100 ? "__" : monkey.primaryPlayNum}</p>
+                    </div>
+                )},
+                inputHandler: new Map([
+                    ['dig', (monkey: MonkeyState, key: string, context: any) => {
+                        this.handleDigInput(monkey, key, false, true, () => {
+                            monkey.currNode = 9
+                        })
+                    }],
+                ])
+            },
+            {
+                nodeDescription: "Steal Node-Input Stolen #",
+                promptUI: (monkey: MonkeyState) => { return (
+                    <div>
+                        <h1>Steal</h1>
+                        <h3>Input Player # who Turned Over</h3>
+                        <p>{monkey.secondaryPlayNum == -100 ? "__" : monkey.secondaryPlayNum}</p>
+                    </div>
+                )},
+                inputHandler: new Map([
+                    ['dig', (monkey: MonkeyState, key: string, context: any) => {
+                        this.handleDigInput(monkey, key, true, false, () => {
+                            context.actionStack.addSteal(monkey.secondaryPlayNum, monkey.primaryPlayNum)
                         })
                     }],
                 ])
@@ -177,18 +215,35 @@ class InputGraph {
         ]
     }
 
-    handleDigInput(monkey: MonkeyState, key: string, terminal: boolean, completionFunc: Function) {
+    handleDigInput(monkey: MonkeyState, key: string, terminal: boolean, primaryNum: boolean, completionFunc: Function) {
         let numInp = parseInt(key)
-        if(monkey.primaryPlayNum === -100){ // Enter first digit
-            monkey.primaryPlayNum = 10 * numInp
+        if(primaryNum) {
+            if(monkey.primaryPlayNum === -100){ // Enter first digit
+                monkey.primaryPlayNum = 10 * numInp
+            } else {
+                monkey.primaryPlayNum = monkey.primaryPlayNum + numInp
+                // Second Number pressed -- Add Turnover
+                completionFunc()
+                if(terminal) {
+                    //Reset MonkeyState
+                    monkey.currNode = 0
+                    monkey.primaryPlayNum = -100
+                    monkey.secondaryPlayNum = -100
+                }
+            }
         } else {
-            monkey.primaryPlayNum = monkey.primaryPlayNum + numInp
-            // Second Number pressed -- Add Turnover
-            completionFunc()
-            if(terminal) {
-                //Reset MonkeyState
-                monkey.currNode = 0
-                monkey.primaryPlayNum = -100
+            if(monkey.secondaryPlayNum === -100){ // Enter first digit
+                monkey.secondaryPlayNum = 10 * numInp
+            } else {
+                monkey.secondaryPlayNum = monkey.secondaryPlayNum + numInp
+                // Second Number pressed -- Add Turnover
+                completionFunc()
+                if(terminal) {
+                    //Reset MonkeyState
+                    monkey.currNode = 0
+                    monkey.primaryPlayNum = -100
+                    monkey.secondaryPlayNum = -100
+                }
             }
         }
     }
@@ -205,7 +260,7 @@ class InputGraph {
 
     traverseGraph(monkey: MonkeyState, pressedKey: string, context: any) {
         // Deep clone of MonkeyState
-        let monkeyClone: MonkeyState = {currNode: monkey.currNode, primaryPlayNum: monkey.primaryPlayNum}
+        let monkeyClone: MonkeyState = {currNode: monkey.currNode, primaryPlayNum: monkey.primaryPlayNum, secondaryPlayNum: monkey.secondaryPlayNum}
 
         // Find and execute the correct response to the input
         let traverseAction: Function
