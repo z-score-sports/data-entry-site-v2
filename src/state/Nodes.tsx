@@ -2,6 +2,9 @@ import { ReactElement } from "react";
 import { ActionStack } from "./ActionStack";
 
 
+
+/* Abstract Nodes */
+
 abstract class GenericNode {
     abstract inputHandler(key: string, actionStack: ActionStack): GenericNode;
     abstract promptUI(): ReactElement;
@@ -40,6 +43,8 @@ abstract class NumberNode extends GenericNode {
         this.num = Math.floor(this.num / 10);
     }
 }
+
+/* Concrete Nodes */
 
 class BaseNode extends GenericNode {
     inputHandler(key: string, actionStack: ActionStack): GenericNode {
