@@ -118,9 +118,11 @@ class ActionStack {
             return;
         }
 
+        console.log("Adding foul in action stack");
         let newFoul = new Foul(player);
         newFoul.createNotify();
         this.mainStack.push(newFoul);
+        console.log(this.mainStack);
         this.undoStack = [];
     }
 
