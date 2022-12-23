@@ -1,4 +1,5 @@
 import { JSXElementConstructor, ReactElement } from "react";
+import { region } from "./actions/Shot";
 import { ActionStack } from "./ActionStack";
 
 /* Abstract Nodes */
@@ -64,6 +65,10 @@ class BaseNode extends GenericNode {
             return new ReboundNode("offensive");
         } else if (key === "P") {
             actionStack.addShot(0, 2, false);
+        } else if (key === "Q") {
+            return new ShotNumberNode(false);
+        } else if (key === "W") {
+            return new ShotNumberNode(true);
         }
         return this.defaultHandler(key, actionStack);
     }
@@ -206,5 +211,49 @@ class ReboundNode extends NumberNode {
 }
 
 // Shot
+
+class ShotNumberNode extends NumberNode {
+    made: boolean;
+    constructor(made: boolean) {
+        super();
+        this.made = made;
+    }
+    inputHandler(key: string, actionStack: ActionStack): GenericNode {
+        if (key === "ENTER") {
+            return new ShotRegionNode(this.made, this.num);
+        }
+        this.numHandler(key);
+        return this.defaultHandler(key, actionStack);
+    }
+
+    promptUI(): ReactElement<any, string | JSXElementConstructor<any>> {
+        return <div>Shot by player #{this.num} </div>;
+    }
+}
+
+class ShotRegionNode extends GenericNode {
+    made: boolean;
+    shootingPlayerNumber: number;
+
+    constructor(made: boolean, shootingPlayerNumber: number) {
+        super();
+        this.made = made;
+        this.shootingPlayerNumber = shootingPlayerNumber;
+    }
+
+    inputHandler(key: string, actionStack: ActionStack): GenericNode {
+        let digit: region = parseInt(key) as region;
+        if (digit >= 1 && digit <= 9) {
+            //return new TurnoverNode(this.num);
+            actionStack.addShot(this.shootingPlayerNumber, digit, this.made);
+            return new BaseNode();
+        }
+        return this.defaultHandler(key, actionStack);
+    }
+
+    promptUI(): ReactElement<any, string | JSXElementConstructor<any>> {
+        return <div>What was the region?</div>;
+    }
+}
 
 export { GenericNode, BaseNode };
