@@ -184,7 +184,7 @@ class ActionStack {
             let action = this.mainStack[index];
             if (action instanceof PossessionEnd || action instanceof Rebound) {
                 return;
-            } else if (action instanceof Shot) {
+            } else if (action instanceof Shot || action instanceof FreeThrow) {
                 if (action.made) {
                     return;
                 } else {
