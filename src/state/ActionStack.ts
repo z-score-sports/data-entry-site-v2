@@ -118,11 +118,9 @@ class ActionStack {
             return;
         }
 
-        console.log("Adding foul in action stack");
         let newFoul = new Foul(player);
         newFoul.createNotify();
         this.mainStack.push(newFoul);
-        console.log(this.mainStack);
         this.undoStack = [];
     }
 
@@ -144,8 +142,10 @@ class ActionStack {
             ) {
                 continue;
             } else if (
-                action instanceof Foul &&
-                action.foulingPlayer.team === this.getDefense()
+                (action instanceof Foul &&
+                    action.foulingPlayer.team === this.getDefense()) ||
+                (action instanceof FreeThrow &&
+                    action.shootingPlayer === player)
             ) {
                 let newFreeThrow = new FreeThrow(player, made);
                 newFreeThrow.createNotify();

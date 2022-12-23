@@ -63,12 +63,16 @@ class BaseNode extends GenericNode {
             return new ReboundNode("defensive");
         } else if (key === "E") {
             return new ReboundNode("offensive");
-        } else if (key === "P") {
-            actionStack.addShot(0, 2, false);
         } else if (key === "Q") {
             return new ShotNumberNode(false);
         } else if (key === "W") {
             return new ShotNumberNode(true);
+        } else if (key === "P") {
+            return new FreeThrowNode(true);
+        } else if (key === "O") {
+            return new FreeThrowNode(false);
+        } else if (key === " ") {
+            actionStack.addPossessionEnd();
         }
         return this.defaultHandler(key, actionStack);
     }
@@ -255,5 +259,33 @@ class ShotRegionNode extends GenericNode {
         return <div>What was the region?</div>;
     }
 }
+
+class FreeThrowNode extends NumberNode {
+    made: boolean;
+
+    constructor(made: boolean) {
+        super();
+        this.made = made;
+    }
+
+    inputHandler(key: string, actionStack: ActionStack): GenericNode {
+        if (key === "ENTER") {
+            actionStack.addFreeThrow(this.num, this.made);
+            return new BaseNode();
+        }
+        this.numHandler(key);
+        return this.defaultHandler(key, actionStack);
+    }
+
+    promptUI(): ReactElement<any, string | JSXElementConstructor<any>> {
+        return (
+            <div>
+                Free throw {this.made} by player #{this.num}
+            </div>
+        );
+    }
+}
+
+
 
 export { GenericNode, BaseNode };
