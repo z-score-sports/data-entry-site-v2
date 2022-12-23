@@ -13,7 +13,7 @@ function InputPanel() {
         return () => {
             document.removeEventListener("keydown", handleKeyPress);
         };
-    }, [ui]);
+    }, []);
 
     const handleKeyPress = (e: KeyboardEvent) => {
         console.log(e.key.toUpperCase());

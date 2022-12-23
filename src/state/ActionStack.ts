@@ -207,7 +207,7 @@ class ActionStack {
         if (!player || !player.inGame) {
             return;
         }
-
+        console.log("Shot being added");
         for (let index = this.mainStack.length - 1; index >= 0; index--) {
             let action = this.mainStack[index];
             if (action instanceof Shot && action.made) {
