@@ -15,7 +15,7 @@ function InputPanel() {
 
     // Set initial values
     useEffect(() => {
-      let initialMonkey = {currNode: 'base', primaryPlayNum: 0, secondaryPlayNum: -100}
+      let initialMonkey = {currNode: 'base', primaryPlayNum: 0, secondaryPlayNum: 0}
       setmState(mState => ({...initialMonkey}))
       changePrompt(iGraph.getNodePrompt(initialMonkey))
     }, []) 

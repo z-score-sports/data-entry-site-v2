@@ -86,6 +86,13 @@ class InputGraph {
                 monkey.currNode = 'steal-inpStealing#';
               },
             ],
+            [
+                "S",
+                (monkey: MonkeyState, key: string, context: any) => {
+                  // Steal
+                  monkey.currNode = 'shot';
+                },
+              ]
           ]),
         },
       ],
@@ -269,7 +276,7 @@ class InputGraph {
               <h1>Steal</h1>
               <h3>Input Stealing Player #</h3>
               <p>
-                {monkey.primaryPlayNum == -100 ? "__" : monkey.primaryPlayNum}
+                { monkey.primaryPlayNum}
               </p>
             </div>
           );
@@ -320,7 +327,7 @@ class InputGraph {
               <h1>Shot</h1>
               <h3>Input Shooting Player #</h3>
               <p>
-                {monkey.primaryPlayNum == -100 ? "__" : monkey.primaryPlayNum}
+               {monkey.primaryPlayNum}
               </p>
             </div>
           );
@@ -330,10 +337,63 @@ class InputGraph {
             "dig",
             (monkey: MonkeyState, key: string, context: any) => {
               this.handleDigInput(monkey, key, false, true, () => {
-                monkey.currNode = 'steal-inpStolen#';
+                monkey.currNode = 'shot-region';
               });
             },
           ],
+        ]),
+      }], ['shot-region',  {
+        nodeDescription: "Shot-Region",
+        promptUI: (monkey: MonkeyState) => {
+          return (
+            <div>
+              <h1>Shot</h1>
+              <h3>Enter Region of Shot</h3>
+              <p>
+               {monkey.secondaryPlayNum}
+              </p>
+            </div>
+          );
+        },
+        inputHandler: new Map([
+          [
+            "dig",
+            (monkey: MonkeyState, key: string, context: any) => {
+              this.handleDigInput(monkey, key, false, false, () => {
+                monkey.currNode = 'shot-make';
+              });
+            },
+          ],
+        ]),
+      }], ['shot-make',  {
+        nodeDescription: "Shot-Make",
+        promptUI: (monkey: MonkeyState) => {
+          return (
+            <div>
+              <h1>Shot</h1>
+              <h3>Make(N) or Miss(M)</h3>
+            </div>
+          );
+        },
+        inputHandler: new Map([
+          [
+            "N",
+            (monkey: MonkeyState, key: string, context: any) => {
+                context.actionStack.addShot(monkey.primaryPlayNum, monkey.secondaryPlayNum, true)
+                monkey.currNode = "base";
+                monkey.primaryPlayNum = 0;
+                monkey.secondaryPlayNum = 0;
+            },
+          ],
+          [
+            "M",
+            (monkey: MonkeyState, key: string, context: any) => {
+                context.actionStack.addShot(monkey.primaryPlayNum, monkey.secondaryPlayNum, false)
+                monkey.currNode = "base";
+                monkey.primaryPlayNum = 0;
+                monkey.secondaryPlayNum = 0;
+            },
+          ]
         ]),
       }]
     ]);
