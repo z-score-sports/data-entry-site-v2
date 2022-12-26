@@ -92,6 +92,13 @@ class InputGraph {
                   // Steal
                   monkey.currNode = 'shot';
                 },
+              ],
+              [
+                "F",
+                (monkey: MonkeyState, key: string, context: any) => {
+                  // Steal
+                  monkey.currNode = 'FT';
+                },
               ]
           ]),
         },
@@ -389,6 +396,83 @@ class InputGraph {
             "M",
             (monkey: MonkeyState, key: string, context: any) => {
                 context.actionStack.addShot(monkey.primaryPlayNum, monkey.secondaryPlayNum, false)
+                monkey.currNode = "base";
+                monkey.primaryPlayNum = 0;
+                monkey.secondaryPlayNum = 0;
+            },
+          ]
+        ]),
+      }], ['FT',  {
+        nodeDescription: "Free throw number",
+        promptUI: (monkey: MonkeyState) => {
+          return (
+            <div>
+              <h1>Free Throw</h1>
+              <h3>Input Shooting Player #</h3>
+              <p>
+               {monkey.primaryPlayNum}
+              </p>
+            </div>
+          );
+        },
+        inputHandler: new Map([
+          [
+            "dig",
+            (monkey: MonkeyState, key: string, context: any) => {
+              this.handleDigInput(monkey, key, false, true, () => {
+                monkey.currNode = 'FT-makemiss';
+              });
+            },
+          ],
+        ]),
+      }], ['FT-makemiss',  {
+        nodeDescription: "Free throw make/miss",
+        promptUI: (monkey: MonkeyState) => {
+          return (
+            <div>
+              <h1>Free Throw</h1>
+              <h3>Make(N) or Miss(M)</h3>
+            </div>
+          );
+        },
+        inputHandler: new Map([
+          [
+            "N",
+            (monkey: MonkeyState, key: string, context: any) => {
+                context.actionStack.addFreeThrow(monkey.primaryPlayNum, true)
+                monkey.currNode = "FT-cont";
+            },
+          ],
+          [
+            "M",
+            (monkey: MonkeyState, key: string, context: any) => {
+                context.actionStack.addFreeThrow(monkey.primaryPlayNum, false)
+                monkey.currNode = "base";
+                monkey.primaryPlayNum = 0;
+                monkey.secondaryPlayNum = 0;
+            },
+          ]
+        ]),
+      }], ['FT-cont',  {
+        nodeDescription: "Free throw continue prompt",
+        promptUI: (monkey: MonkeyState) => {
+          return (
+            <div>
+              <h1>Additional Free Throw?</h1>
+              <h3>Yes(Y) or No(N)</h3>
+            </div>
+          );
+        },
+        inputHandler: new Map([
+          [
+            "Y",
+            (monkey: MonkeyState, key: string, context: any) => {
+                monkey.currNode = "FT-makemiss";
+            },
+          ],
+          [
+            "N",
+            (monkey: MonkeyState, key: string, context: any) => {
                 monkey.currNode = "base";
                 monkey.primaryPlayNum = 0;
                 monkey.secondaryPlayNum = 0;
