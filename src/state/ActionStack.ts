@@ -67,7 +67,7 @@ class ActionStack {
             if (action instanceof PossessionEnd || action instanceof Assist) {
                 return;
             } else if (action instanceof Shot) {
-                if (!action.made) {
+                if (!action.made || action.shootingPlayer === player) {
                     return;
                 } else {
                     let newAssist = new Assist(player);
@@ -142,8 +142,10 @@ class ActionStack {
             ) {
                 continue;
             } else if (
-                action instanceof Foul &&
-                action.foulingPlayer.team === this.getDefense()
+                (action instanceof Foul &&
+                    action.foulingPlayer.team === this.getDefense()) ||
+                (action instanceof FreeThrow &&
+                    action.shootingPlayer === player)
             ) {
                 let newFreeThrow = new FreeThrow(player, made);
                 newFreeThrow.createNotify();
