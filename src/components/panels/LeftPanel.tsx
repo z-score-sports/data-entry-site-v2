@@ -11,8 +11,8 @@ function LeftPanel() {
 
   return (
     <div className = "lPanel">
-      <RosterPanel team={context.gameRoster.getRoster(Team.home)}/>
-      <RosterPanel team={context.gameRoster.getRoster(Team.away)} />
+      <RosterPanel teamRoster={context.gameRoster.getRoster(Team.home)} team = {0}/>
+      <RosterPanel teamRoster={context.gameRoster.getRoster(Team.away)} team = {1}/>
     </div>
   );
 }

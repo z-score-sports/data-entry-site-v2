@@ -10,12 +10,12 @@ function InputPanel() {
     const context = useContext(GameStateContext);
 
     const [currentPrompt, changePrompt] = useState(() => <p>Hi</p>) // Current UI to show
-    const [mState, setmState] = useState({currNode: -5, primaryPlayNum: -500}) // Current Monkey State
+    const [mState, setmState] = useState({currNode: 'base', primaryPlayNum: -500, secondaryPlayNum: -500}) // Current Monkey State
     const [iGraph, setiGraph] = useState(new InputGraph()) // Input Graph Object
 
     // Set initial values
     useEffect(() => {
-      let initialMonkey = {currNode: 0, primaryPlayNum: -100}
+      let initialMonkey = {currNode: 'base', primaryPlayNum: 0, secondaryPlayNum: 0}
       setmState(mState => ({...initialMonkey}))
       changePrompt(iGraph.getNodePrompt(initialMonkey))
     }, []) 
@@ -27,9 +27,9 @@ function InputPanel() {
     function based on the monkey state at the time
     */
     useEffect(() => {
-      document.addEventListener("keypress", handleKeyPress);
+      document.addEventListener("keyup", handleKeyPress);
       return () => { // On Cleanup
-        document.removeEventListener("keypress", handleKeyPress);
+        document.removeEventListener("keyup", handleKeyPress);
       };
     }, [mState])    
 
