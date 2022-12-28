@@ -550,7 +550,19 @@ class InputGraph {
       primaryPlayNum: monkey.primaryPlayNum,
       secondaryPlayNum: monkey.secondaryPlayNum,
     };
-    
+    //Universal Keys
+    if(pressedKey == ',') { // Cancel
+      monkeyClone.currNode = "base"
+      monkeyClone.primaryPlayNum = 0
+      monkeyClone.secondaryPlayNum = 0
+      return monkeyClone
+    } else if(pressedKey == ".") { // Undo
+      context.actionStack.undo()
+    } else if(pressedKey == "/") { // Redo
+      context.actionStack.redo()
+    }
+
+
 
         // Find and execute the correct response to the input
         let traverseAction: Function
