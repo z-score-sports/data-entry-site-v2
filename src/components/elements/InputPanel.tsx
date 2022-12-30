@@ -12,42 +12,6 @@ import {
 } from "../../state/Prompt";
 import "./InputPanel.css";
 
-const settings = {
-    shot: {
-        getInputs: () => [
-            new NumberPromptInput("Shooting Player"),
-            new RegionPromptInput("Region"),
-        ],
-    },
-    assist: {
-        getInputs: () => [new NumberPromptInput("Assisting Player")],
-    },
-    block: {
-        getInputs: () => [new NumberPromptInput("Blocking Player")],
-    },
-    rebound: {
-        getInputs: () => [new NumberPromptInput("Rebounding Player")],
-    },
-    foul: {
-        getInputs: () => [new NumberPromptInput("Fouling Player")],
-    },
-    freethrow: {
-        getInputs: () => [
-            new NumberPromptInput("Shooting Player"),
-            new MakeMissPromptInput("Made"),
-        ],
-    },
-    turnover: {
-        getInputs: () => [new NumberPromptInput("Offensive Player")],
-    },
-    steal: {
-        getInputs: () => [
-            new NumberPromptInput("Offensive Player"),
-            new NumberPromptInput("Stealing Player"),
-        ],
-    },
-};
-
 function InputPanel() {
     const context = useContext(GameStateContext);
     const [promptTitle, setPromptTitle] = useState<string>("Blank Prompt");
@@ -86,34 +50,49 @@ function InputPanel() {
             context.actionStack.addPossessionEnd();
             newPrompt = null;
         } else if (key === "W") {
-            const inputs = settings.shot.getInputs();
+            const inputs = [
+                new NumberPromptInput("Shooting Player"),
+                new RegionPromptInput("Region"),
+            ];
             newPrompt = new Prompt(key, "Made Shot", inputs);
         } else if (key === "Q") {
-            const inputs = settings.shot.getInputs();
+            const inputs = [
+                new NumberPromptInput("Shooting Player"),
+                new RegionPromptInput("Region"),
+            ];
             newPrompt = new Prompt(key, "Missed Shot", inputs);
         } else if (key === "A") {
-            const inputs = settings.assist.getInputs();
+            const inputs = [new NumberPromptInput("Assisting Player")];
             newPrompt = new Prompt(key, "Assist", inputs);
         } else if (key === "B") {
-            const inputs = settings.block.getInputs();
+            const inputs = [new NumberPromptInput("Blocking Player")];
             newPrompt = new Prompt(key, "Block", inputs);
         } else if (key === "Z") {
-            const inputs = settings.rebound.getInputs();
+            const inputs = [new NumberPromptInput("Rebounding Player")];
             newPrompt = new Prompt(key, "Defensive Rebound", inputs);
         } else if (key === "X") {
-            const inputs = settings.rebound.getInputs();
+            const inputs = [new NumberPromptInput("Rebounding Player")];
             newPrompt = new Prompt(key, "Offensive Rebound", inputs);
         } else if (key === "S") {
-            const inputs = settings.steal.getInputs();
+            const inputs = [
+                new NumberPromptInput("Offensive Player"),
+                new NumberPromptInput("Stealing Player"),
+            ];
             newPrompt = new Prompt(key, "Steal", inputs);
+        } else if (key === "T") {
+            const inputs = [new NumberPromptInput("Offensive Player")];
+            newPrompt = new Prompt(key, "Turnover", inputs);
         } else if (key === "F") {
-            const inputs = settings.foul.getInputs();
+            const inputs = [new NumberPromptInput("Fouling Player")];
             newPrompt = new Prompt(key, "Defensive Foul", inputs);
         } else if (key === "D") {
-            const inputs = settings.foul.getInputs();
+            const inputs = [new NumberPromptInput("Fouling Player")];
             newPrompt = new Prompt(key, "Offensive Foul", inputs);
         } else if (key === "E") {
-            const inputs = settings.freethrow.getInputs();
+            const inputs = [
+                new NumberPromptInput("Shooting Player"),
+                new MakeMissPromptInput("Made"),
+            ];
             newPrompt = new Prompt(key, "Free Throw", inputs);
         }
         context.currentPrompt = newPrompt;
@@ -122,42 +101,30 @@ function InputPanel() {
 
     const addToActionStack = () => {
         let curPrompt = context.currentPrompt;
-        let inputs = curPrompt.inputs;
+        let inputValues = curPrompt.inputs.map((input) => input.getValue());
         let actionStack = context.actionStack;
         if (curPrompt.promptingKey === "W") {
-            let number = inputs[0].getValue();
-            let region = inputs[1].getValue();
-            actionStack.addShot(number, region, true);
+            actionStack.addShot(inputValues[0], inputValues[1], true);
         } else if (curPrompt.promptingKey === "Q") {
-            let number = curPrompt.inputs[0].getValue();
-            let region = curPrompt.inputs[1].getValue();
-            actionStack.addShot(number, region, false);
+            actionStack.addShot(inputValues[0], inputValues[1], false);
         } else if (curPrompt.promptingKey === "A") {
-            let number = inputs[0].getValue();
-            actionStack.addAssist(number);
+            actionStack.addAssist(inputValues[0]);
         } else if (curPrompt.promptingKey === "B") {
-            let number = inputs[0].getValue();
-            actionStack.addBlock(number);
+            actionStack.addBlock(inputValues[0]);
         } else if (curPrompt.promptingKey === "Z") {
-            let number = inputs[0].getValue();
-            actionStack.addRebound(number, actionStack.getDefense());
+            actionStack.addRebound(inputValues[0], actionStack.getDefense());
         } else if (curPrompt.promptingKey === "X") {
-            let number = inputs[0].getValue();
-            actionStack.addRebound(number, context.actionStack.curPos);
+            actionStack.addRebound(inputValues[0], context.actionStack.curPos);
         } else if (curPrompt.promptingKey === "S") {
-            let stealee = inputs[0].getValue();
-            let stealer = inputs[1].getValue();
-            actionStack.addSteal(stealee, stealer);
+            actionStack.addSteal(inputValues[0], inputValues[1]);
         } else if (curPrompt.promptingKey === "F") {
-            let foulingPlayer = inputs[0].getValue();
-            actionStack.addFoul(foulingPlayer, actionStack.getDefense());
+            actionStack.addFoul(inputValues[0], actionStack.getDefense());
         } else if (curPrompt.promptingKey === "D") {
-            let foulingPlayer = inputs[0].getValue();
-            actionStack.addFoul(foulingPlayer, actionStack.curPos);
+            actionStack.addFoul(inputValues[0], actionStack.curPos);
         } else if (curPrompt.promptingKey === "E") {
-            let shootingPlayer = inputs[0].getValue();
-            let made = inputs[1].getValue();
-            actionStack.addFreeThrow(shootingPlayer, made);
+            actionStack.addFreeThrow(inputValues[0], inputValues[1]);
+        } else if (curPrompt.promptingKey === "T") {
+            actionStack.addTurnover(inputValues[0]);
         }
     };
 
