@@ -8,14 +8,9 @@ import {
     MakeMissPromptInput,
     NumberPromptInput,
     Prompt,
-    PromptInput,
     RegionPromptInput,
 } from "../../state/Prompt";
-
-const defaultPrompt = {
-    promptTitle: "Enter a key",
-    inputs: new Array<PromptInput>(),
-};
+import "./InputPanel.css";
 
 const settings = {
     shot: {
@@ -47,8 +42,8 @@ const settings = {
     },
     steal: {
         getInputs: () => [
-            new NumberPromptInput("Stealing Player"),
             new NumberPromptInput("Offensive Player"),
+            new NumberPromptInput("Stealing Player"),
         ],
     },
 };
@@ -87,6 +82,9 @@ function InputPanel() {
                 addToActionStack();
                 newPrompt = null;
             }
+        } else if (key === "SHIFT") {
+            context.actionStack.addPossessionEnd();
+            newPrompt = null;
         } else if (key === "W") {
             const inputs = settings.shot.getInputs();
             newPrompt = new Prompt(key, "Made Shot", inputs);
@@ -105,52 +103,82 @@ function InputPanel() {
         } else if (key === "X") {
             const inputs = settings.rebound.getInputs();
             newPrompt = new Prompt(key, "Offensive Rebound", inputs);
+        } else if (key === "S") {
+            const inputs = settings.steal.getInputs();
+            newPrompt = new Prompt(key, "Steal", inputs);
+        } else if (key === "F") {
+            const inputs = settings.foul.getInputs();
+            newPrompt = new Prompt(key, "Defensive Foul", inputs);
+        } else if (key === "D") {
+            const inputs = settings.foul.getInputs();
+            newPrompt = new Prompt(key, "Offensive Foul", inputs);
+        } else if (key === "E") {
+            const inputs = settings.freethrow.getInputs();
+            newPrompt = new Prompt(key, "Free Throw", inputs);
         }
         context.currentPrompt = newPrompt;
         setUI(context.currentPrompt);
     };
 
-    function addToActionStack() {
+    const addToActionStack = () => {
         let curPrompt = context.currentPrompt;
         let inputs = curPrompt.inputs;
+        let actionStack = context.actionStack;
         if (curPrompt.promptingKey === "W") {
             let number = inputs[0].getValue();
             let region = inputs[1].getValue();
-            context.actionStack.addShot(number, region, true);
+            actionStack.addShot(number, region, true);
         } else if (curPrompt.promptingKey === "Q") {
             let number = curPrompt.inputs[0].getValue();
             let region = curPrompt.inputs[1].getValue();
-            context.actionStack.addShot(number, region, false);
+            actionStack.addShot(number, region, false);
         } else if (curPrompt.promptingKey === "A") {
             let number = inputs[0].getValue();
-            context.actionStack.addAssist(number);
+            actionStack.addAssist(number);
         } else if (curPrompt.promptingKey === "B") {
             let number = inputs[0].getValue();
-            context.actionStack.addBlock(number);
+            actionStack.addBlock(number);
         } else if (curPrompt.promptingKey === "Z") {
             let number = inputs[0].getValue();
-            context.actionStack.addRebound(
-                number,
-                context.actionStack.getDefense()
-            );
+            actionStack.addRebound(number, actionStack.getDefense());
         } else if (curPrompt.promptingKey === "X") {
             let number = inputs[0].getValue();
-            context.actionStack.addRebound(number, context.actionStack.curPos);
+            actionStack.addRebound(number, context.actionStack.curPos);
+        } else if (curPrompt.promptingKey === "S") {
+            let stealee = inputs[0].getValue();
+            let stealer = inputs[1].getValue();
+            actionStack.addSteal(stealee, stealer);
+        } else if (curPrompt.promptingKey === "F") {
+            let foulingPlayer = inputs[0].getValue();
+            actionStack.addFoul(foulingPlayer, actionStack.getDefense());
+        } else if (curPrompt.promptingKey === "D") {
+            let foulingPlayer = inputs[0].getValue();
+            actionStack.addFoul(foulingPlayer, actionStack.curPos);
+        } else if (curPrompt.promptingKey === "E") {
+            let shootingPlayer = inputs[0].getValue();
+            let made = inputs[1].getValue();
+            actionStack.addFreeThrow(shootingPlayer, made);
         }
-    }
+    };
 
     return (
-        <div>
-            <h1>{promptTitle}</h1>
-            <div>
+        <div className="inputpanel">
+            <div className="prompttitle">
+                <h2>{promptTitle}</h2>
+            </div>
+            <div className="inputprompts">
                 {context.currentPrompt &&
                     context.currentPrompt.inputs &&
                     context.currentPrompt.inputs.map((input, i) => (
-                        <div key={i}>
-                            {i === context.currentPrompt.index
-                                ? "*Current* "
-                                : ""}
-                            {input.inputTitle}: {input.getValue()}
+                        <div
+                            className={`promptinput ${
+                                context.currentPrompt.index === i
+                                    ? "current"
+                                    : ""
+                            }`}
+                            key={i}
+                        >
+                            {input.inputTitle}: {input.toString()}
                         </div>
                     ))}
             </div>

@@ -5,6 +5,7 @@ interface PromptInput {
     inputTitle: string;
     handleInput(key: string): void;
     getValue(): any;
+    toString(): string;
     setNull(): void;
 }
 
@@ -31,6 +32,10 @@ class NumberPromptInput implements PromptInput {
 
     getValue(): number {
         return this.curNum;
+    }
+
+    toString(): string {
+        return this.curNum.toString();
     }
 
     setNull() {
@@ -60,6 +65,13 @@ class RegionPromptInput implements PromptInput {
         return this.curRegion;
     }
 
+    toString(): string {
+        if (this.curRegion) {
+            return this.curRegion.toString(); //regAsNum.toString();
+        }
+        return "";
+    }
+
     setNull(): void {
         this.curRegion = null;
     }
@@ -74,6 +86,7 @@ class MakeMissPromptInput implements PromptInput {
     }
 
     handleInput(key: string) {
+        console.log(key);
         if (key === "BACKSPACE") {
             this.made = null;
         } else if (key === "M") {
@@ -85,6 +98,10 @@ class MakeMissPromptInput implements PromptInput {
 
     getValue(): boolean {
         return this.made;
+    }
+
+    toString(): string {
+        return this.made ? "true" : "false";
     }
 
     setNull() {
@@ -137,3 +154,4 @@ class Prompt {
 
 export type { PromptInput };
 export { Prompt, NumberPromptInput, RegionPromptInput, MakeMissPromptInput };
+

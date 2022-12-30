@@ -67,7 +67,7 @@ class ActionStack {
             if (action instanceof PossessionEnd || action instanceof Assist) {
                 return;
             } else if (action instanceof Shot) {
-                if (!action.made) {
+                if (!action.made || action.shootingPlayer === player) {
                     return;
                 } else {
                     let newAssist = new Assist(player);
