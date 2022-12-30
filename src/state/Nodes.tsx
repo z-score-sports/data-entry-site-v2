@@ -286,6 +286,4 @@ class FreeThrowNode extends NumberNode {
     }
 }
 
-
-
 export { GenericNode, BaseNode };

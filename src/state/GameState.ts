@@ -10,8 +10,8 @@ import { SubstitutionPublisher } from "./actions/Substitution";
 import { TurnoverPublisher } from "./actions/Turnover";
 import { ActionStack } from "./ActionStack";
 import { GameTime } from "./GameTime";
-import { BaseNode, GenericNode } from "./Nodes";
 import { Player, Team } from "./Player";
+import { Prompt } from "./Prompt";
 import { GameRoster, Roster } from "./Roster";
 import { Scoreboard } from "./Scoreboard";
 
@@ -38,7 +38,7 @@ interface game {
     gameRoster: GameRoster;
     scoreboard: Scoreboard;
     actionStack: ActionStack;
-    currentInputNode: GenericNode;
+    currentPrompt: Prompt;
 }
 
 const createGameContext = (): game => {
@@ -77,13 +77,11 @@ const createGameContext = (): game => {
     FreeThrowPublisher.getInstance().subscribe(scoreboard);
     QuarterEndPublisher.getInstance().subscribe(scoreboard);
 
-    let currentInputNode = new BaseNode();
-
     return {
         gameRoster: gameRoster,
         scoreboard: scoreboard,
         actionStack: actionStack,
-        currentInputNode: currentInputNode,
+        currentPrompt: null,
     };
 };
 
