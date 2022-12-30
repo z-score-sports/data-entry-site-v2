@@ -5,10 +5,10 @@ import { useContext } from "react";
 import { GameStateContext } from "../../App";
 import "../../App.css";
 import {
-    MakeMissPromptInput,
-    NumberPromptInput,
-    Prompt,
-    RegionPromptInput,
+  MakeMissPromptInput,
+  NumberPromptInput,
+  Prompt,
+  RegionPromptInput
 } from "../../state/Prompt";
 import "./InputPanel.css";
 
