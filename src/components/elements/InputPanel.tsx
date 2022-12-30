@@ -46,7 +46,7 @@ function InputPanel() {
                 addToActionStack();
                 newPrompt = null;
             }
-        } else if (key === "SHIFT") {
+        } else if (key === "/") {
             context.actionStack.addPossessionEnd();
             newPrompt = null;
         } else if (key === "W") {
