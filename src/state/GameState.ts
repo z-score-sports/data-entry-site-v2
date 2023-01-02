@@ -11,6 +11,7 @@ import { TurnoverPublisher } from "./actions/Turnover";
 import { ActionStack } from "./ActionStack";
 import { GameTime } from "./GameTime";
 import { Player, Team } from "./Player";
+import { Prompt } from "./Prompt";
 import { GameRoster, Roster } from "./Roster";
 import { Scoreboard } from "./Scoreboard";
 
@@ -37,6 +38,7 @@ interface game {
     gameRoster: GameRoster;
     scoreboard: Scoreboard;
     actionStack: ActionStack;
+    currentPrompt: Prompt;
 }
 
 const createGameContext = (): game => {
@@ -79,6 +81,7 @@ const createGameContext = (): game => {
         gameRoster: gameRoster,
         scoreboard: scoreboard,
         actionStack: actionStack,
+        currentPrompt: null,
     };
 };
 

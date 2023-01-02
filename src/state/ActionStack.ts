@@ -67,7 +67,7 @@ class ActionStack {
             if (action instanceof PossessionEnd || action instanceof Assist) {
                 return;
             } else if (action instanceof Shot) {
-                if (!action.made) {
+                if (!action.made || action.shootingPlayer === player) {
                     return;
                 } else {
                     let newAssist = new Assist(player);
@@ -142,8 +142,10 @@ class ActionStack {
             ) {
                 continue;
             } else if (
-                action instanceof Foul &&
-                action.foulingPlayer.team === this.getDefense()
+                (action instanceof Foul &&
+                    action.foulingPlayer.team === this.getDefense()) ||
+                (action instanceof FreeThrow &&
+                    action.shootingPlayer === player)
             ) {
                 let newFreeThrow = new FreeThrow(player, made);
                 newFreeThrow.createNotify();
@@ -182,7 +184,7 @@ class ActionStack {
             let action = this.mainStack[index];
             if (action instanceof PossessionEnd || action instanceof Rebound) {
                 return;
-            } else if (action instanceof Shot) {
+            } else if (action instanceof Shot || action instanceof FreeThrow) {
                 if (action.made) {
                     return;
                 } else {
@@ -205,7 +207,7 @@ class ActionStack {
         if (!player || !player.inGame) {
             return;
         }
-
+        console.log("Shot being added");
         for (let index = this.mainStack.length - 1; index >= 0; index--) {
             let action = this.mainStack[index];
             if (action instanceof Shot && action.made) {
