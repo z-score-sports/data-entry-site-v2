@@ -39,6 +39,7 @@ interface game {
     scoreboard: Scoreboard;
     actionStack: ActionStack;
     currentPrompt: Prompt;
+    currentTab : string;
 }
 
 const createGameContext = (): game => {
@@ -77,11 +78,13 @@ const createGameContext = (): game => {
     FreeThrowPublisher.getInstance().subscribe(scoreboard);
     QuarterEndPublisher.getInstance().subscribe(scoreboard);
 
+    
     return {
         gameRoster: gameRoster,
         scoreboard: scoreboard,
         actionStack: actionStack,
         currentPrompt: null,
+        currentTab: "dashboard"
     };
 };
 

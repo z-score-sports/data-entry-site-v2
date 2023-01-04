@@ -16,16 +16,17 @@ const GameStateContext = createContext(context);
 
 
 function App() {
+  const gContext = useContext(GameStateContext);
 
   return (
     <GameStateContext.Provider value={context}>
       <div className="App">
         <TopBar/>
-        <div className='MainSection'>
+        {gContext.currentTab == "dashboard" && <div className='MainSection'>
           <LeftPanel/>
           <MainPanel/>
           <RightPanel/>
-        </div>
+        </div>}
       </div>
     </GameStateContext.Provider>
   );
