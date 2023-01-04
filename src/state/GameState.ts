@@ -87,6 +87,7 @@ const createGameContext = (): game => {
     FreeThrowPublisher.getInstance().subscribe(scoreboard);
     QuarterEndPublisher.getInstance().subscribe(scoreboard);
 
+    
     return {
         gameRoster: gameRoster,
         scoreboard: scoreboard,
