@@ -11,7 +11,13 @@ function MainPanel() {
             <p>{context.actionStack.curPos}</p>
             This is the main panel
             <div>
-                <ul>{JSON.stringify(context.actionStack.toJSON())}</ul>
+                <ul>
+                    {context.actionStack
+                        .getCurPossessionActions()
+                        .map((action) => (
+                            <li>{action.actionString}</li>
+                        ))}
+                </ul>
             </div>
             <InputPanel />
         </div>

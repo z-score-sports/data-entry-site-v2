@@ -4,13 +4,14 @@ import { Assist } from "./actions/Assist";
 import { Block } from "./actions/Block";
 import { Foul } from "./actions/Foul";
 import { FreeThrow } from "./actions/FreeThrow";
+import { Marking } from "./actions/Marking";
 import { PossessionEnd } from "./actions/PossessionEnd";
 import { QuarterEnd } from "./actions/QuarterEnd";
 import { Rebound } from "./actions/Rebound";
 import { region, Shot } from "./actions/Shot";
 import { Substitution } from "./actions/Substitution";
 import { Steal, Turnover } from "./actions/Turnover";
-import { GameContext } from "./GameState";
+import { GameContext, markingMappings } from "./GameState";
 import { GameTime } from "./GameTime";
 import { Team } from "./Player";
 
@@ -45,6 +46,17 @@ class ActionStack {
 
     getDefense(): Team {
         return this.curPos === Team.home ? Team.away : Team.home;
+    }
+
+    addMarking(markingNumber: number) {
+        if (markingNumber < 0 || markingNumber >= markingMappings.length) {
+            return;
+        }
+
+        let newMarking = new Marking(markingNumber);
+        newMarking.createNotify();
+        this.mainStack.push(newMarking);
+        this.undoStack = [];
     }
 
     addAssist(assistingPlayerNumber: number) {
@@ -339,6 +351,18 @@ class ActionStack {
         }
         action.createNotify();
         this.mainStack.push(action);
+    }
+
+    getCurPossessionActions() {
+        let ret: Action[] = [];
+        for (let i = this.mainStack.length - 1; i >= 0; i--) {
+            if (this.mainStack[i] instanceof PossessionEnd) {
+                break;
+            }
+            ret.push(this.mainStack[i]);
+        }
+        ret.reverse();
+        return ret;
     }
 
     convertStackToStringList() {
