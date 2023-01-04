@@ -34,12 +34,21 @@ const awayPlayers = new Array<Player>(p1_a, p2_a, p3_a, p4_a, p5_a, p6_a);
 
 const initialGameTime = new GameTime(1, 12, 0);
 
+const markingMappings: Array<string> = [
+    "Pick & Roll",
+    "Pick & Pop",
+    "Drive & Kick",
+    "Isolation",
+    "Play 1",
+    "Play 2",
+];
+
 interface game {
     gameRoster: GameRoster;
     scoreboard: Scoreboard;
     actionStack: ActionStack;
     currentPrompt: Prompt;
-    currentTab : string;
+    markingMappings: Array<string>;
 }
 
 const createGameContext = (): game => {
@@ -84,12 +93,12 @@ const createGameContext = (): game => {
         scoreboard: scoreboard,
         actionStack: actionStack,
         currentPrompt: null,
-        currentTab: "dashboard"
+        markingMappings: markingMappings,
     };
 };
 
 const GameContext = createGameContext();
 
-export { GameContext };
+export { GameContext, markingMappings };
 
 export default createContext(GameContext)

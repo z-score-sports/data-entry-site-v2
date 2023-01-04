@@ -15,7 +15,13 @@ function MainPanel() {
             <p>{context.actionStack.curPos}</p>
             <ScoreView/>
             <div>
-                <ul>{JSON.stringify(context.actionStack.toJSON())}</ul>
+                <ul>
+                    {context.actionStack
+                        .getCurPossessionActions()
+                        .map((action) => (
+                            <li>{action.actionString}</li>
+                        ))}
+                </ul>
             </div>
             <ActionStackView/>
             <InputPanel />
