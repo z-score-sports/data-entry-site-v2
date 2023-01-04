@@ -22,11 +22,11 @@ function App() {
     <GameStateContext.Provider value={context}>
       <div className="App">
         <TopBar/>
-        {gContext.currentTab == "dashboard" && <div className='MainSection'>
+        <div className='MainSection'>
           <LeftPanel/>
           <MainPanel/>
           <RightPanel/>
-        </div>}
+        </div>
       </div>
     </GameStateContext.Provider>
   );
