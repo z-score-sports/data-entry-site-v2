@@ -1,22 +1,17 @@
-import React, { useContext } from 'react';
-import { observer } from "mobx-react-lite"
-import '../../App.css';
-import { GameStateContext } from '../../App';
-
+import { observer } from "mobx-react-lite";
+import "../../App.css";
 
 function LeftPanel() {
-
-  
-
-  return (
-    <div className = "lPanel">
-      <div className = "regionTooltip"></div>
-      <div className = "keyTooltip">
-        <div className = "playToolTip"></div>
-        <div className = "actionToolTip"></div>
-      </div>
-    </div>
-  );
+    return (
+        <div className="lPanel">
+            <img className="regionTooltip" src="halfcourt.jpg"></img>
+            <div className="keytooltip">
+                <div className="container playtooltip"></div>
+                <div className="container actiontooltip"></div>
+            </div>
+            <div className="container actionlog"></div>
+        </div>
+    );
 }
 
 export default observer(LeftPanel);
