@@ -356,8 +356,14 @@ class ActionStack {
     getCurPossessionActions() {
         let ret: Action[] = [];
         for (let i = this.mainStack.length - 1; i >= 0; i--) {
-            if (this.mainStack[i] instanceof PossessionEnd) {
+            let curAction = this.mainStack[i];
+            if (curAction instanceof PossessionEnd) {
                 break;
+            } else if (
+                curAction instanceof Substitution ||
+                curAction instanceof QuarterEnd
+            ) {
+                continue;
             }
             ret.push(this.mainStack[i]);
         }
