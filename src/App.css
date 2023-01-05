@@ -86,8 +86,12 @@
 
 .scoreboard {
   width: 60%;
-  height: 15%;
+  height: 20%;
   margin-top: 2em;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  font-family: 'Quantico';
 }
 .currentpossession {
   width: 90%;
@@ -130,3 +134,4 @@
   width: 90%;
   height: 25%;
 }
+
