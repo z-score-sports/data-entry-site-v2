@@ -65,23 +65,38 @@
   gap: 2em;
 }
 
-.pRowtrue th{
-  background-color: lime;
-  font-weight: normal;
-}
-.pRowfalse th{
+
+.pRow th{
   font-weight: normal;
 }
 
+.inGameTri {
+  width: 0; 
+  height: 0; 
+  border-top: 5px solid transparent;
+  border-bottom: 5px solid transparent;
+  border-left: 5px solid green;
+  margin-right: 15px;
+  display: inline-block;
+}
+.outGameTri {
+  width: 0; 
+  height: 0; 
+  border-top: 5px solid transparent;
+  border-bottom: 5px solid transparent;
+  border-left: 5px solid transparent;
+  margin-right: 15px;
+  display: inline-block;
+}
 .rosterPanel {
-  margin-top: 2em;
+  margin-top: 1em;
   width: 90%;
   margin-bottom: 30px;
 }
 
 .headerRow th {
   font-weight: bold;
-  border-bottom: 3px solid black;
+  padding-bottom: 10px;
 }
 
 .scoreboard {
@@ -106,6 +121,7 @@
 .rostercontainer {
   width: 90%;
   margin-top: 2em;
+  height: 38%
 }
 
 .keytooltip {
