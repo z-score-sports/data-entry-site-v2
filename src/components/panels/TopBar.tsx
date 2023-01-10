@@ -10,15 +10,7 @@ function TopBar() {
 
     return (
         <div className="tBar">
-            {context.scoreboard.getQuarter()}
-            <br />
-            {context.scoreboard.homeFouls.firstHalfFouls} -
-            {context.scoreboard.homeFouls.secondHalfFouls}
-            <br />
-            {context.scoreboard.awayFouls.firstHalfFouls} -
-            {context.scoreboard.awayFouls.secondHalfFouls}
-            <br />
-            {context.scoreboard.awayPoints} - {context.scoreboard.homePoints}
+
         </div>
     );
 }
