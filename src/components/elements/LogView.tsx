@@ -11,7 +11,7 @@ function LogView() {
             <ul>
                 {context.actionStack &&
                     context.actionStack
-                        .lastNActions(6)
+                        .lastNActions(5)
                         .map((action) => <li>{action.actionString}</li>)}
             </ul>
         </div>
