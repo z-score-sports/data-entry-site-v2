@@ -1,0 +1,42 @@
+.sideLblSect {
+    width: 25%;
+}
+.midSect {
+    width: 50%
+}
+
+.foulCombinedSect{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+}
+
+.foulSect {
+    padding: 5px;
+    font-size: 14px;
+}
+
+.scoreLbl {
+    margin-bottom: 0px;
+    font-size: 28px;
+    margin-top: 0px;
+}
+
+.qrtLbl {
+    margin-bottom: 0px;
+    font-size: 22px;
+    margin-top: 5px;
+}
+
+.foulLbl {
+    margin: 0;
+}
+.posCirc {
+    background: #FF3434;
+    width: 10px;
+    height: 10px;
+    border-radius: 100%;
+    margin-left: 2px;
+    padding: 1px;
+    display: inline-block;
+}
