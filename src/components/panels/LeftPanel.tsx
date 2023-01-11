@@ -1,5 +1,6 @@
 import { observer } from "mobx-react-lite";
 import "../../App.css";
+import LogView from "../elements/LogView";
 
 function LeftPanel() {
     return (
@@ -9,7 +10,9 @@ function LeftPanel() {
                 <div className="container playtooltip"></div>
                 <div className="container actiontooltip"></div>
             </div>
-            <div className="container actionlog"></div>
+            <div className="container actionlog">
+                <LogView />
+            </div>
         </div>
     );
 }

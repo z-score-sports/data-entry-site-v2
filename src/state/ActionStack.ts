@@ -371,6 +371,19 @@ class ActionStack {
         return ret;
     }
 
+    lastNActions(n: number) {
+        let ret: Action[] = [];
+
+        for (let i = this.mainStack.length - 1; i >= 0; i--) {
+            let curAction = this.mainStack[i];
+            if (ret.length >= n) {
+                break;
+            }
+            ret.push(curAction);
+        }
+        return ret;
+    }
+
     convertStackToStringList() {
         let ret: string[] = [];
 
