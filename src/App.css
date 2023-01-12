@@ -120,7 +120,6 @@
 .rostercontainer {
   width: 90%;
   margin-top: 2em;
-  height: 38%
 }
 
 .keytooltip {
@@ -138,6 +137,7 @@
 .playtooltip {
   width: 40%;
   height: 100%;
+  padding-top: 0.15em;
 }
 
 .actiontooltip {
@@ -154,8 +154,11 @@
 
 .toolTipLbl {
   margin: 2px;
+  display: flex;
+  justify-content: left;
+  align-items: center;
+  gap: .5em;
 }
-
 .navbar {
   display: flex;
   width: 80%;
@@ -170,6 +173,11 @@
   text-decoration: none;
   height: 50%;
 }
+
+/* .rptitle {
+  text-align: left;
+  padding-left: 2em;
+} */
 
 .active{
   border-bottom: 3px solid #FF7134

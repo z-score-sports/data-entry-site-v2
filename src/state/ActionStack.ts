@@ -49,8 +49,23 @@ class ActionStack {
     }
 
     addMarking(markingNumber: number) {
+        // validate a valid marking number
         if (markingNumber < 0 || markingNumber >= markingMappings.length) {
             return;
+        }
+
+        // remove any markings that came before
+        for (let index = this.mainStack.length - 1; index >= 0; index--) {
+            let action = this.mainStack[index];
+            if (
+                action instanceof PossessionEnd ||
+                action instanceof QuarterEnd
+            ) {
+                break;
+            } else if (action instanceof Marking) {
+                this.mainStack.splice(index, 1);
+                break;
+            }
         }
 
         let newMarking = new Marking(markingNumber);
