@@ -6,6 +6,12 @@ import MainPanel from "./components/panels/MainPanel";
 import RightPanel from "./components/panels/RightPanel";
 import TopBar from "./components/panels/TopBar";
 import { GameContext } from "./state/GameState";
+import {
+    BrowserRouter as Router,
+    Routes,
+    Route,
+  } from "react-router-dom";
+
 
 const context = GameContext;
 
@@ -16,9 +22,11 @@ function App() {
 
     return (
         <GameStateContext.Provider value={context}>
+           <Router>
             <div className="App">
                 <TopBar />
-                <div className="MainSection">
+                <Routes>
+                    <Route path = "/" element = {                <div className="MainSection">
                     <div className="panel leftwrapper">
                         <LeftPanel />
                     </div>
@@ -28,8 +36,11 @@ function App() {
                     <div className="panel rightwrapper">
                         <RightPanel />
                     </div>
-                </div>
+                </div>}/>
+
+                </Routes>
             </div>
+            </Router>
         </GameStateContext.Provider>
     );
 }
