@@ -137,6 +137,7 @@
 .playtooltip {
   width: 40%;
   height: 100%;
+  padding-top: 0.15em;
 }
 
 .actiontooltip {
@@ -153,6 +154,10 @@
 
 .toolTipLbl {
   margin: 2px;
+  display: flex;
+  justify-content: left;
+  align-items: center;
+  gap: .5em;
 }
 
 /* .rptitle {
