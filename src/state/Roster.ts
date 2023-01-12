@@ -48,6 +48,10 @@ class Roster {
         this.players.set(newPlayer.num, newPlayer);
     }
 
+    removePlayer(num: number) {
+        this.players.delete(num);
+    }
+
     getPlayer(num: number) {
         let playerGet: Player | undefined = this.players.get(num);
         if (typeof playerGet === undefined) {
