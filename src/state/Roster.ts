@@ -35,6 +35,19 @@ class Roster {
         this.teamName = tName;
     }
 
+    addPlayer(num: number, firstName: string, lastName: string) {
+        let randomId: string = (Math.random() + 1).toString(36).substring(6);
+        let newPlayer: Player = new Player(
+            randomId,
+            num,
+            firstName,
+            lastName,
+            this.team,
+            false
+        );
+        this.players.set(newPlayer.num, newPlayer);
+    }
+
     getPlayer(num: number) {
         let playerGet: Player | undefined = this.players.get(num);
         if (typeof playerGet === undefined) {
