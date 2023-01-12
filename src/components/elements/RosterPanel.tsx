@@ -6,7 +6,7 @@ import { Roster } from "../../state/Roster";
 
 type propsType = {
     teamRoster: Roster;
-    team: number
+    team: number;
 };
 
 function RosterPanel({ teamRoster, team }: propsType) {
@@ -14,6 +14,7 @@ function RosterPanel({ teamRoster, team }: propsType) {
 
     return (
         <div>
+            {/* <h2 className="rptitle">{team === Team.home ? "Home" : "Away"}</h2> */}
             <table className="rosterPanel">
                 <tr className="headerRow">
                     <th></th>
@@ -26,11 +27,14 @@ function RosterPanel({ teamRoster, team }: propsType) {
                     return (
                         <tr className={"pRow"}>
                             <th>
-                               {p.inGame ? <span className="inGameTri"></span> : <span className="outGameTri"></span>}{p.num}
+                                {p.inGame ? (
+                                    <span className="inGameTri"></span>
+                                ) : (
+                                    <span className="outGameTri"></span>
+                                )}
+                                {p.num}
                             </th>
-                            <th>
-                                {p.lastName}
-                            </th>
+                            <th>{p.lastName}</th>
                             <th>{p.points}</th>
                             <th>
                                 {(
