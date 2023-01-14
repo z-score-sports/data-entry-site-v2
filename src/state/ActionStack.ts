@@ -25,6 +25,11 @@ type PrimaryAction =
     | Turnover
     | Foul;
 
+type ActionRecord = {
+    index: number;
+    action: Action;
+};
+
 class ActionStack {
     // validation is done here
     curPos: Team;
@@ -387,14 +392,17 @@ class ActionStack {
     }
 
     lastNActions(n: number) {
-        let ret: Action[] = [];
+        let ret: ActionRecord[] = [];
 
         for (let i = this.mainStack.length - 1; i >= 0; i--) {
             let curAction = this.mainStack[i];
             if (ret.length >= n) {
                 break;
             }
-            ret.push(curAction);
+            ret.push({
+                index: i + 1,
+                action: curAction,
+            });
         }
         return ret;
     }
