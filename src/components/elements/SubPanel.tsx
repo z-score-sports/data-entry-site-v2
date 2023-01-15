@@ -52,13 +52,11 @@ function SubPanel({handleClose, teamRoster}: propsType) {
         <TextField onChange = {(e) => {setMinutes(e.target.value)}} id="standard-basic" label="Minute" variant="standard" autoComplete="off"/>
         <TextField onChange = {(e) => {setSeconds(e.target.value)}} id="standard-basic" label="Second" variant="standard" autoComplete="off"/>
         </div>
-        <p>{subIn}</p>
-        <p>{subOut}</p>
         <div className = "subPlayerSelectorWrapper">
             <div>
                 <h3>Sub Out</h3>
             {teamRoster.getPlayerArr().map((p) => {
-                return <>{p.inGame && <div className = "playerCell" onClick ={() => {handleOutSelect(p)}}>
+                return <>{p.inGame && <div className = {subOut == p.num ? "playerCell selPlayer": "playerCell"} onClick ={() => {handleOutSelect(p)}}>
                     {p.num} {p.firstName + " "} {p.lastName}
                     </div>}</>
            })}  
@@ -66,7 +64,7 @@ function SubPanel({handleClose, teamRoster}: propsType) {
            <div>
            <h3>Sub In</h3>
            {teamRoster.getPlayerArr().map((p) => {
-                return <>{!p.inGame && <div className = "playerCell" onClick={() => {handleInSelect(p)}}>
+                return <>{!p.inGame && <div className = {subIn == p.num ? "playerCell selPlayer": "playerCell"} onClick={() => {handleInSelect(p)}}>
                     {p.num} {p.firstName} {p.lastName}
                     </div>}</>
            })} 
