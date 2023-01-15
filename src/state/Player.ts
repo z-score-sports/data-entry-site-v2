@@ -243,6 +243,7 @@ class Player implements Subscriber {
     }
 
     private handleSubstitutionUpdate(context: SubstitutionOutMessage) {
+       
         let gameTime: GameTime = context.action.gameTime;
         let pGI = context.action.playerGoingIn;
         let pGO = context.action.playerGoingOut;
