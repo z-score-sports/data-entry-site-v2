@@ -209,7 +209,36 @@
 
 .AddPlayerPanel {
   background-color: white;
-  width: 40vw;
-  height: 40vw;
+  width: 500px;
+  height: 350px;
   color: black;
+}
+
+.SubPlayerPanel {
+  background-color: white;
+  width: 800px;
+  height: 500px;
+  color: black;
+}
+
+.AddPlayerRowWrapper{
+  margin-top: 50px;
+}
+
+.popupPanel {
+  border: 3px solid black;
+  border-radius: 5%;
+}
+
+.subPlayerSelectorWrapper {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+}
+
+.playerCell {
+  border: 1px solid black;
+  padding: 5px;
+  border-radius: 10%;
+  margin: 10px;
 }

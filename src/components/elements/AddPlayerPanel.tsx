@@ -25,14 +25,23 @@ function AddPlayerPanel({handleClose, teamRoster}: propsType) {
         handleClose()
     }
 
-    return (<div className = "AddPlayerPanel">
+    return (<div className = "popupPanel AddPlayerPanel">
         <h1>Add Player</h1>
-        <TextField onChange = {(e) => {setNum(e.target.value)}} id="standard-basic" label="Number" variant="standard" autoComplete="off"/>
-        <TextField onChange = {(e) => {setFName(e.target.value)}} id="standard-basic" label="First Name" variant="standard" autoComplete="off"/>
-        <TextField onChange = {(e) => {setLName(e.target.value)}} id="standard-basic" label="Last Name" variant="standard" autoComplete="off"/>
 
-        <Button onClick = {addPlayer} variant="contained">Add</Button>
-        <Button onClick = {handleClose} variant="outlined" color="error">Cancel</Button>
+        <TextField onChange = {(e) => {setNum(e.target.value)}} id="standard-basic" label="Number" variant="standard" autoComplete="off"/>
+
+        <div>
+        <TextField onChange = {(e) => {setFName(e.target.value)}} id="standard-basic" label="First Name" variant="standard" autoComplete="off"/>
+        <TextField onChange = {(e) => {setLName(e.target.value)}} style = {{marginLeft: 30}} id="standard-basic" label="Last Name" variant="standard" autoComplete="off"/>
+        </div>
+        <div>
+            
+        </div>
+
+        <div className = "AddPlayerRowWrapper">
+        <Button onClick = {addPlayer} variant="contained">Add +</Button>
+        <Button onClick = {handleClose} style = {{marginLeft: 30}} variant="outlined" color="error">Cancel</Button>
+        </div>
     </div>)
 } 
 export default observer(AddPlayerPanel);
