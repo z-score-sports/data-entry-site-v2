@@ -6,7 +6,8 @@ import { Roster } from "../../state/Roster";
 import Button from '@mui/material/Button';
 import Backdrop from '@mui/material/Backdrop';
 import AddPlayerPanel from "./AddPlayerPanel";
-import {useState} from 'react'
+import SubPanel from "./SubPanel";
+import { useState } from 'react'
 import DeleteIcon from '@mui/icons-material/Delete';
 import IconButton from '@mui/material/IconButton';
 import { Player } from "../../state/Player";
@@ -20,6 +21,7 @@ function TeamMgmtPanel({ teamRoster, team }: propsType) {
     const context = useContext(GameStateContext);
 
     const [adding, setAdding] = useState(false);
+    const [subbing, setSubbing] = useState(false);
 
 
     const deletePlayer = (player: Player) => {
@@ -28,9 +30,14 @@ function TeamMgmtPanel({ teamRoster, team }: propsType) {
 
     const handleClose = () => {
         setAdding(false);
+        setSubbing(false)
     };
     const handleAdd = () => {
-        setAdding(!adding);
+        setAdding(true);
+    };
+
+    const handleSub = () => {
+        setSubbing(true);
     };
 
 
@@ -78,16 +85,23 @@ function TeamMgmtPanel({ teamRoster, team }: propsType) {
                                 ).toFixed(0)}
                             </th>
                             <th>{p.fouls}</th>
-                            <th><IconButton onClick = {() => {deletePlayer(p)}}style = {{padding: 0}} aria-label="delete"><DeleteIcon /></IconButton></th>
+                            <th><IconButton onClick={() => { deletePlayer(p) }} style={{ padding: 0 }} aria-label="delete"><DeleteIcon /></IconButton></th>
                         </tr>
                     );
                 })}
             </table>
-            <Button variant="contained"  onClick={handleAdd} style = {{backgroundColor: '#F1F1F1', color: 'black'}}>Add Player +</Button>
+            <div>
+            <Button variant="contained" onClick={handleAdd} style={{ backgroundColor: '#F1F1F1', color: 'black' }}>Add Player +</Button>
+            <Button  variant="contained" onClick={handleSub} style={{ marginLeft: 20, color: 'white' }}>Substitute</Button>
+            </div>
             <Backdrop
-        sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
-        open={adding}
-      ><AddPlayerPanel teamRoster = {teamRoster} handleClose={handleClose}/></Backdrop>
+                sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
+                open={adding}
+            ><AddPlayerPanel teamRoster={teamRoster} handleClose={handleClose} /></Backdrop>
+            <Backdrop
+                sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
+                open={subbing}
+            ><SubPanel teamRoster={teamRoster} handleClose={handleClose} /></Backdrop>
         </div>
     );
 }
