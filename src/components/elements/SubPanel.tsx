@@ -6,8 +6,8 @@ import { GameStateContext } from "../../App";
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
 import { Roster } from "../../state/Roster";
-
-
+import { Player } from "../../state/Player";
+import { GameTime } from "../../state/GameTime";
 type propsType = {
     handleClose: any;
     teamRoster: Roster;
@@ -17,11 +17,32 @@ function SubPanel({handleClose, teamRoster}: propsType) {
 
     const context = useContext(GameStateContext);
     const [minutes, setMinutes] = useState("")
-    const [seconds, Seconds] = useState("")
+    const [seconds, setSeconds] = useState("")
 
     const [subOut, setSubOut] = useState(-1)
     const [subIn, setSubIn] = useState(-1)
 
+
+    const handleInSelect = (p: Player) => {
+        setSubIn(p.num)
+        if(subOut > -1) {
+            let gt = new GameTime(context.scoreboard.getQuarter(), +minutes, +seconds)
+            context.actionStack.addSubstitution(teamRoster.team, p.num, subOut, gt)
+            setSubIn(-1)
+            setSubOut(-1)
+        }
+    }
+
+    
+    const handleOutSelect = (p: Player) => {
+        setSubOut(p.num)
+        if(subIn > -1) {
+            let gt = new GameTime(context.scoreboard.getQuarter(), +minutes, +seconds)
+            context.actionStack.addSubstitution(teamRoster.team, subIn, p.num, gt)
+            setSubIn(-1)
+            setSubOut(-1)
+        }
+    }
 
 
 
@@ -29,13 +50,15 @@ function SubPanel({handleClose, teamRoster}: propsType) {
         <h1>Substitute</h1>
         <div className = "timeInputWrapper">
         <TextField onChange = {(e) => {setMinutes(e.target.value)}} id="standard-basic" label="Minute" variant="standard" autoComplete="off"/>
-        <TextField onChange = {(e) => {setMinutes(e.target.value)}} id="standard-basic" label="Second" variant="standard" autoComplete="off"/>
+        <TextField onChange = {(e) => {setSeconds(e.target.value)}} id="standard-basic" label="Second" variant="standard" autoComplete="off"/>
         </div>
+        <p>{subIn}</p>
+        <p>{subOut}</p>
         <div className = "subPlayerSelectorWrapper">
             <div>
                 <h3>Sub Out</h3>
             {teamRoster.getPlayerArr().map((p) => {
-                return <>{p.inGame && <div className = "playerCell">
+                return <>{p.inGame && <div className = "playerCell" onClick ={() => {handleOutSelect(p)}}>
                     {p.num} {p.firstName + " "} {p.lastName}
                     </div>}</>
            })}  
@@ -43,14 +66,13 @@ function SubPanel({handleClose, teamRoster}: propsType) {
            <div>
            <h3>Sub In</h3>
            {teamRoster.getPlayerArr().map((p) => {
-                return <>{!p.inGame && <div className = "playerCell">
+                return <>{!p.inGame && <div className = "playerCell" onClick={() => {handleInSelect(p)}}>
                     {p.num} {p.firstName} {p.lastName}
                     </div>}</>
            })} 
            </div>
         </div>
-        <Button variant="contained">Complete</Button>
-        <Button onClick = {handleClose} variant="outlined" color="error">Cancel</Button>
+        <Button onClick = {handleClose} variant="contained">Done</Button>
     </div>)
 } 
 export default observer(SubPanel);
