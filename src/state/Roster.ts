@@ -1,5 +1,13 @@
 import { makeAutoObservable } from "mobx";
-
+import { AssistPublisher } from "./actions/Assist";
+import { BlockPublisher } from "./actions/Block";
+import { FoulPublisher } from "./actions/Foul";
+import { FreeThrowPublisher } from "./actions/FreeThrow";
+import { QuarterEndPublisher } from "./actions/QuarterEnd";
+import { ReboundPublisher } from "./actions/Rebound";
+import { ShotPublisher } from "./actions/Shot";
+import { SubstitutionPublisher } from "./actions/Substitution";
+import { TurnoverPublisher } from "./actions/Turnover";
 import { Player, Team } from "./Player";
 
 class GameRoster {
@@ -46,6 +54,14 @@ class Roster {
             false
         );
         this.players.set(newPlayer.num, newPlayer);
+        AssistPublisher.getInstance().subscribe(newPlayer);
+        BlockPublisher.getInstance().subscribe(newPlayer);
+        FoulPublisher.getInstance().subscribe(newPlayer);
+        FreeThrowPublisher.getInstance().subscribe(newPlayer);
+        ReboundPublisher.getInstance().subscribe(newPlayer);
+        ShotPublisher.getInstance().subscribe(newPlayer);
+        TurnoverPublisher.getInstance().subscribe(newPlayer);
+        SubstitutionPublisher.getInstance().subscribe(newPlayer);
     }
 
     removePlayer(num: number) {
