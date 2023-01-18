@@ -1,6 +1,7 @@
 .prompttitle {
     display: flex;
     justify-content: left;
+    padding-left: 20px;
 }
 
 .inputprompts {
@@ -12,6 +13,18 @@
     padding: .25em;
 }
 
+.keyCell {
+    display: flex;
+    align-items: center;
+}
 .current {
     border-bottom: 1px solid grey
+}
+
+.actionTooltipPanel {
+    display: flex;
+    width: 100%;
+    height: 100%;
+    flex-wrap: wrap;
+    justify-content: center;
 }

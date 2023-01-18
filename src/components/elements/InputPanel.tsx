@@ -11,11 +11,64 @@ import {
   RegionPromptInput
 } from "../../state/Prompt";
 import "./InputPanel.css";
+import Key from "./Key"
 
 function InputPanel() {
     const context = useContext(GameStateContext);
-    const [promptTitle, setPromptTitle] = useState<string>("Blank Prompt");
+    const [promptTitle, setPromptTitle] = useState<string>("none");
     //const [promptInputs, setPromptInputs] = useState<Array<PromptInput>>();
+
+
+    const keyMapping = [
+        {
+            key: "Q",
+            title: "Missed Shot"
+        },
+        {
+            key: "W",
+            title: "Make Shot"
+        },
+        {
+            key: "Q",
+            title: "Missed Shot"
+        },
+        {
+            key: "E",
+            title: "Free Throw"
+        },
+        {
+            key: "T",
+            title: "Turnover"
+        },
+        {
+            key: "A",
+            title: "Assist"
+        },
+        {
+            key: "S",
+            title: "Steal"
+        },
+        {
+            key: "D",
+            title: "Offensive Foul"
+        },
+        {
+            key: "F",
+            title: "Defensive Foul"
+        },
+        {
+            key: "Z",
+            title: "Defensive Rebound"
+        },
+        {
+            key: "X",
+            title: "Offensive Rebound"
+        },
+        {
+            key: "B",
+            title: "Block"
+        },
+    ]
 
     useEffect(() => {
         document.addEventListener("keydown", handleKeyPress);
@@ -26,7 +79,7 @@ function InputPanel() {
     //useEffect(() => {}, [context.currentInputNode]);
 
     const setUI = (prompt: Prompt) => {
-        setPromptTitle(prompt ? prompt.promptTitle : "Blank Prompt");
+        setPromptTitle(prompt ? prompt.promptTitle : "none");
         //setPromptInputs(prompt ? prompt.inputs : null);
     };
 
@@ -130,6 +183,7 @@ function InputPanel() {
 
     return (
         <div className="inputpanel">
+            {promptTitle !== "none" && <>
             <div className="prompttitle">
                 <h2>{promptTitle}</h2>
             </div>
@@ -148,7 +202,16 @@ function InputPanel() {
                             {input.inputTitle}: {input.toString()}
                         </div>
                     ))}
-            </div>
+                    </div>
+                </>}
+                {promptTitle == "none" && <div className = "actionTooltipPanel">
+                        {keyMapping.map((km) => {
+                            return <div className = "keyCell">
+                                <Key keyValue= {km.key} /> {km.title}
+                            </div>
+                        })}
+                    </div>}
+            
         </div>
     );
 }
