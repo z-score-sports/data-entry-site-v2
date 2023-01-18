@@ -131,7 +131,7 @@
 }
 
 .regionTooltip {
-  width: 70%;
+  width: 60%;
 }
 
 .playtooltip {
@@ -183,6 +183,25 @@
   border-bottom: 3px solid #FF7134
 }
 
+.logview {
+  padding: 1em;
+}
+
+.logviewtitle {
+  font-size: large;
+  font-weight: 600;
+  text-align: left;
+}
+
+.logviewlist {
+  padding: none;
+  margin: 0px;
+}
+.logviewitem {
+  
+  border-top: 1px solid lightgray;
+  width: 100%;
+}
 
 .rosterMgmtPanel {
   display: flex;
