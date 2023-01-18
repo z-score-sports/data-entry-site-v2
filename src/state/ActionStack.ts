@@ -262,11 +262,11 @@ class ActionStack {
         gameTime: GameTime
     ) {
         // Assumption: 1 player in for 1 player, no single subs
-
+       
         let pGI = GameContext.gameRoster
             .getRoster(team)
             .getPlayer(playerNumGoingIn);
-
+        
         let pGO = GameContext.gameRoster
             .getRoster(team)
             .getPlayer(playerNumGoingOut);
@@ -282,7 +282,7 @@ class ActionStack {
         }
 
         let newSubstitution = new Substitution(pGI, pGO, gameTime);
-
+        
         newSubstitution.createNotify();
         this.gameTimes.push(gameTime);
         this.mainStack.push(newSubstitution);
