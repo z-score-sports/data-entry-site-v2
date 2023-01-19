@@ -36,6 +36,10 @@ class Turnover extends Action {
             offensivePlayer: this.offensivePlayer.playerId,
         };
     }
+
+    get actionString(): string {
+        return `TURNOVER on ${this.offensivePlayer.teamString} #${this.offensivePlayer.num}`;
+    }
 }
 
 class Steal extends Turnover {
@@ -57,6 +61,10 @@ class Steal extends Turnover {
             offensivePlayerId: this.offensivePlayer.playerId,
             stealingPlayerId: this.stealingPlayer.playerId,
         };
+    }
+
+    get actionString(): string {
+        return `TURNOVER on ${this.offensivePlayer.teamString} #${this.offensivePlayer.num} caused by ${this.stealingPlayer.teamString} #${this.stealingPlayer.num}`;
     }
 }
 

@@ -1,6 +1,6 @@
 import { computed, makeObservable, observable } from "mobx";
 
-import { Player, Team } from "../Player";
+import { Player } from "../Player";
 import { createDelete, Publisher } from "../Publisher";
 import { Action } from "./Action";
 
@@ -38,9 +38,7 @@ class Rebound extends Action {
     }
 
     get actionString(): string {
-        return `REBOUND by player #${this.reboundingPlayer.num} team ${
-            this.reboundingPlayer.team === Team.home ? "HOME" : "AWAY"
-        }`;
+        return `REBOUND by ${this.reboundingPlayer.teamString} #${this.reboundingPlayer.num}`;
     }
 }
 
