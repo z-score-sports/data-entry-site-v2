@@ -1,27 +1,51 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import { observer } from "mobx-react-lite";
+import { createContext, useContext } from "react";
+import "./App.css";
+import LeftPanel from "./components/panels/LeftPanel";
+import MainPanel from "./components/panels/MainPanel";
+import RightPanel from "./components/panels/RightPanel";
+import TopBar from "./components/panels/TopBar";
+import RosterMgmtPanel from "./components/panels/RosterMgmtPanel";
+import { GameContext } from "./state/GameState";
+import {
+    BrowserRouter as Router,
+    Routes,
+    Route,
+  } from "react-router-dom";
+
+
+const context = GameContext;
+
+const GameStateContext = createContext(context);
 
 function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-          Edit
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+    const gContext = useContext(GameStateContext);
+
+    return (
+        <GameStateContext.Provider value={context}>
+           <Router>
+            <div className="App">
+                <TopBar />
+                <Routes>
+                    <Route path = "/" element = {                
+                    <div className="MainSection">
+                    <div className="panel leftwrapper">
+                        <LeftPanel />
+                    </div>
+                    <div className="panel mainwrapper">
+                        <MainPanel />
+                    </div>
+                    <div className="panel rightwrapper">
+                        <RightPanel />
+                    </div>
+                </div>}/>
+                    <Route path = "/roster" element = {<RosterMgmtPanel/>}/>
+                </Routes>
+            </div>
+            </Router>
+        </GameStateContext.Provider>
+    );
 }
 
-export default App;
+export { GameStateContext };
+export default observer(App);
