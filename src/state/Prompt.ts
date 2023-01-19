@@ -131,7 +131,7 @@ class Prompt {
     }
 
     handleInput(key: string) {
-        if (key === "SHIFT") {
+        if (key === "ENTER") {
             return this.handleEnter();
         } else if (key === "ARROWLEFT") {
             //this.inputs[this.index].setNull();

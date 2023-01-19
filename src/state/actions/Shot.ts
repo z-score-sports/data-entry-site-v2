@@ -59,9 +59,9 @@ class Shot extends Action {
     }
 
     get actionString(): string {
-        return `SHOT ${this.made ? "made" : "missed"} by player #${
-            this.shootingPlayer.num
-        } in region ${this.region}`;
+        return `SHOT ${this.made ? "made" : "missed"} by ${
+            this.shootingPlayer.teamString
+        } #${this.shootingPlayer.num} in region ${this.region}`;
     }
 }
 

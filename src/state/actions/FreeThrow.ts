@@ -42,9 +42,9 @@ class FreeThrow extends Action {
     }
 
     get actionString(): string {
-        return `FREETHROW ${this.made ? "made" : "missed"} by player #${
-            this.shootingPlayer.num
-        }`;
+        return `FREETHROW ${this.made ? "made" : "missed"} by ${
+            this.shootingPlayer.teamString
+        } #${this.shootingPlayer.num}`;
     }
 }
 

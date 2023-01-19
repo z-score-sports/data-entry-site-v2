@@ -38,7 +38,7 @@ class Assist extends Action {
     }
 
     get actionString(): string {
-        return `ASSIST by player #${this.assistingPlayer.num}`;
+        return `ASSIST by ${this.assistingPlayer.teamString} #${this.assistingPlayer.num}`;
     }
 }
 

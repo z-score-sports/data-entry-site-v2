@@ -38,7 +38,7 @@ class Foul extends Action {
     }
 
     get actionString(): string {
-        return `FOUL by player #${this.foulingPlayer.num}`;
+        return `FOUL by ${this.foulingPlayer.teamString} #${this.foulingPlayer.num}`;
     }
 }
 

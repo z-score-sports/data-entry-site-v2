@@ -38,7 +38,7 @@ class Block extends Action {
     }
 
     get actionString(): string {
-        return `BLOCK by player #${this.blockingPlayer.num}`;
+        return `BLOCK by ${this.blockingPlayer.teamString} #${this.blockingPlayer.num}`;
     }
 }
 
