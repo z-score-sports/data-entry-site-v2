@@ -18,8 +18,30 @@
 
 .leftwrapper {
   width: 30%;
+.MainSection {
+  display: flex;
+  flex-direction: row;
 }
 
+.container {
+  box-shadow: 0px 0px .3em 0em grey;
+    border-radius: .25em;
+}
+
+.panel {
+  min-height: 90vh;
+}
+
+.leftwrapper {
+  width: 30%;
+}
+
+.mainwrapper {
+  width: 40%;
+}
+
+.rightwrapper {
+  width: 30%;
 .mainwrapper {
   width: 40%;
 }
@@ -40,9 +62,82 @@
   border-bottom: 1px solid cyan;
   width: 100%;
   height: 100%;
+.lPanel {
+  display: flex;
+  width: 100%;
+  height: 100%;
+  flex-direction: column;
+  align-items: center;
+  gap: 2em;
+}
+.rPanel {
+  border-bottom: 1px solid cyan;
+  width: 100%;
+  height: 100%;
   display: flex;
   flex-direction: column;
   align-items: center;
+}
+
+.tBar {
+  border-bottom: 1px solid black;
+  height: 10vh;
+  display: flex;
+  flex-direction: row;
+}
+
+.mPanel {
+  border-bottom: 1px solid cyan;
+  width: 100%;
+  height: 100%;
+  /* border-left: 1px solid lightgray;
+  border-right: 1px solid lightgray; */
+  display: flex;
+  flex-direction: column;
+  align-items: center ;
+  gap: 2em;
+}
+
+
+.pRow th{
+  font-weight: normal;
+}
+
+.inGameTri {
+  width: 0; 
+  height: 0; 
+  border-top: 5px solid transparent;
+  border-bottom: 5px solid transparent;
+  border-left: 5px solid green;
+  margin-right: 15px;
+  display: inline-block;
+}
+.outGameTri {
+  width: 0; 
+  height: 0; 
+  border-top: 5px solid transparent;
+  border-bottom: 5px solid transparent;
+  border-left: 5px solid transparent;
+  margin-right: 15px;
+  display: inline-block;
+}
+.rosterPanel {
+  margin-top: 1em;
+  width: 90%;
+  margin-bottom: 30px;
+}
+
+.headerRow th {
+  font-weight: bold;
+  padding-bottom: 10px;
+}
+
+.scoreboard {
+  width: 60%;
+  height: 20%;
+  margin-top: 2em;
+  display: flex;
+  flex-direction: row;
 }
 
 .tBar {
@@ -120,6 +215,245 @@
 .rostercontainer {
   width: 90%;
   margin-top: 2em;
+}
+
+.keytooltip {
+  width: 100%;
+  height: 25%;
+  display: flex;
+  align-items: center;
+  justify-content: space-evenly;
+}
+
+.regionTooltip {
+  width: 60%;
+}
+
+.playtooltip {
+  width: 40%;
+  height: 100%;
+  padding-top: 0.15em;
+}
+
+.actiontooltip {
+  width: 40%;
+  height: 100%;
+  text-align: left;
+  padding-left: 10px;
+}
+
+.actionlog {
+  width: 90%;
+  min-height: 10em;
+}
+
+.toolTipLbl {
+  margin: 2px;
+  display: flex;
+  justify-content: left;
+  align-items: center;
+  gap: .5em;
+}
+.navbar {
+  display: flex;
+  width: 80%;
+  justify-content: end;
+  padding-top: 25px;
+}
+
+.navbar a {
+  margin-left: 20px;
+  font-family: 'Quantico';
+  color: black;
+  text-decoration: none;
+  height: 50%;
+}
+
+/* .rptitle {
+  text-align: left;
+  padding-left: 2em;
+} */
+
+.active{
+  border-bottom: 3px solid #FF7134
+}
+
+.logview {
+  padding: 1em;
+}
+
+.logviewtitle {
+  font-size: large;
+  font-weight: 600;
+  text-align: left;
+}
+
+.logviewlist {
+  padding: none;
+  margin: 0px;
+  font-family: 'Quantico';
+}
+.currentpossession {
+  width: 90%;
+  min-height: 30%
+}
+
+.inputpanel {
+  width: 90%;
+  height: 25%;
+}
+
+.rostercontainer {
+  width: 90%;
+  margin-top: 2em;
+}
+
+.keytooltip {
+  width: 100%;
+  height: 25%;
+  display: flex;
+  align-items: center;
+  justify-content: space-evenly;
+}
+
+.regionTooltip {
+  width: 60%;
+}
+
+.playtooltip {
+  width: 40%;
+  height: 100%;
+  padding-top: 0.15em;
+}
+
+.actiontooltip {
+  width: 40%;
+  height: 100%;
+  text-align: left;
+  padding-left: 10px;
+}
+
+.actionlog {
+  width: 90%;
+  min-height: 10em;
+}
+
+.toolTipLbl {
+  margin: 2px;
+  display: flex;
+  justify-content: left;
+  align-items: center;
+  gap: .5em;
+}
+.navbar {
+  display: flex;
+  width: 80%;
+  justify-content: end;
+  padding-top: 25px;
+}
+
+.navbar a {
+  margin-left: 20px;
+  font-family: 'Quantico';
+  color: black;
+  text-decoration: none;
+  height: 50%;
+}
+
+/* .rptitle {
+  text-align: left;
+  padding-left: 2em;
+} */
+
+.active{
+  border-bottom: 3px solid #FF7134
+}
+
+.logview {
+  padding: 1em;
+}
+
+.logviewtitle {
+  font-size: large;
+  font-weight: 600;
+  text-align: left;
+}
+
+.logviewlist {
+  padding: none;
+  margin: 0px;
+}
+.logviewitem {
+  
+  border-top: 1px solid lightgray;
+  width: 100%;
+}
+
+.rosterMgmtPanel {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 90vh;
+  width: 100%
+}
+.teamMgmtPanel {
+  height: 45vh;
+  width: 80%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.teamMgmtPanel table{
+  width: 100%;
+  margin-bottom: 25px;
+}
+
+
+.AddPlayerPanel {
+  background-color: white;
+  width: 500px;
+  height: 350px;
+  color: black;
+}
+
+.SubPlayerPanel {
+  background-color: white;
+  width: 800px;
+  height: 500px;
+  color: black;
+}
+
+.AddPlayerRowWrapper{
+  margin-top: 50px;
+}
+
+.popupPanel {
+  border: 3px solid black;
+  border-radius: 5%;
+}
+
+.subPlayerSelectorWrapper {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+}
+
+.playerCell {
+  border: 1px solid black;
+  padding: 5px;
+  border-radius: 2%;
+  margin: 10px;
+  padding-right: 20px;
+  padding-left: 20px;
+  background: #f3eae6;
+}
+
+.selPlayer {
+  background-color: #c9f7c0;
+  border-width: 2px;
 }
 
 .keytooltip {
