@@ -43,6 +43,7 @@ function TeamMgmtPanel({ teamRoster, team }: propsType) {
             {/* <h2 className="rptitle">{team === Team.home ? "Home" : "Away"}</h2> */}
             <table>
                 <tr className="headerRow">
+                    <th></th>
                     <th>Number</th>
                     <th>Player</th>
                     <th>PTS</th>
@@ -62,6 +63,13 @@ function TeamMgmtPanel({ teamRoster, team }: propsType) {
                 {teamRoster.getPlayerArr().map((p) => {
                     return (
                         <tr className={"pRow"}>
+                            <th>
+                                {p.inGame ? (
+                                    <span className="inGameTri"></span>
+                                ) : (
+                                    <span className="outGameTri"></span>
+                                )}
+                            </th>
                             <th>{p.num}</th>
                             <th>{p.lastName}</th>
                             <th>{p.points}</th>
