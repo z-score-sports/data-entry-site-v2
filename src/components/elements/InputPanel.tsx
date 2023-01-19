@@ -5,10 +5,10 @@ import { useContext } from "react";
 import { GameStateContext } from "../../App";
 import "../../App.css";
 import {
-  MakeMissPromptInput,
-  NumberPromptInput,
-  Prompt,
-  RegionPromptInput
+    MakeMissPromptInput,
+    NumberPromptInput,
+    Prompt,
+    RegionPromptInput,
 } from "../../state/Prompt";
 import "./InputPanel.css";
 
@@ -46,7 +46,7 @@ function InputPanel() {
                 addToActionStack();
                 newPrompt = null;
             }
-        } else if (key === "/") {
+        } else if (key === "SHIFT") {
             context.actionStack.addPossessionEnd();
             newPrompt = null;
         } else if (key === "W") {

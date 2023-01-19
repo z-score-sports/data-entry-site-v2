@@ -74,6 +74,14 @@ class Player implements Subscriber {
         }
     }
 
+    get teamString() {
+        if (this.team === Team.home) {
+            return "Home";
+        } else {
+            return "Away";
+        }
+    }
+
     update(context: playerUpdateMessage) {
         if (context.publisher === "assist") {
             this.handleAssistUpdate(context as AssistOutMessage);
@@ -243,7 +251,6 @@ class Player implements Subscriber {
     }
 
     private handleSubstitutionUpdate(context: SubstitutionOutMessage) {
-       
         let gameTime: GameTime = context.action.gameTime;
         let pGI = context.action.playerGoingIn;
         let pGO = context.action.playerGoingOut;
