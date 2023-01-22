@@ -2,7 +2,11 @@
     width: 25%;
 }
 .midSect {
-    width: 50%
+    width: 50%;
+}
+
+.midSect * {
+    outline: 1px solid aqua;
 }
 
 .foulCombinedSect{
@@ -39,4 +43,24 @@
     margin-left: 2px;
     padding: 1px;
     display: inline-block;
+}
+
+.timeoutSect {
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+}
+
+.circle {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+}
+
+.filled {
+    background-color: #FF7134;
+}
+
+.unfilled {
+    background-color: #F8B091;
 }
