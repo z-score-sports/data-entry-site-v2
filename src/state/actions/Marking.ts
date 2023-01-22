@@ -29,9 +29,7 @@ class Marking extends Action {
     }
 
     get actionString(): string {
-        return `MARKING #${this.markingKey} ${
-            markingMappings[this.markingKey]
-        }`;
+        return `MARKING ${markingMappings[this.markingKey]}`;
     }
 }
 
