@@ -11,64 +11,63 @@ import {
     RegionPromptInput,
 } from "../../state/Prompt";
 import "./InputPanel.css";
-import Key from "./Key"
+import Key from "./Key";
 
 function InputPanel() {
     const context = useContext(GameStateContext);
     const [promptTitle, setPromptTitle] = useState<string>("none");
     //const [promptInputs, setPromptInputs] = useState<Array<PromptInput>>();
 
-
     const keyMapping = [
         {
             key: "Q",
-            title: "Missed Shot"
+            title: "Missed Shot",
         },
         {
             key: "W",
-            title: "Make Shot"
+            title: "Make Shot",
         },
         {
             key: "Q",
-            title: "Missed Shot"
+            title: "Missed Shot",
         },
         {
             key: "E",
-            title: "Free Throw"
+            title: "Free Throw",
         },
         {
             key: "T",
-            title: "Turnover"
+            title: "Turnover",
         },
         {
             key: "A",
-            title: "Assist"
+            title: "Assist",
         },
         {
             key: "S",
-            title: "Steal"
+            title: "Steal",
         },
         {
             key: "D",
-            title: "Offensive Foul"
+            title: "Offensive Foul",
         },
         {
             key: "F",
-            title: "Defensive Foul"
+            title: "Defensive Foul",
         },
         {
             key: "Z",
-            title: "Defensive Rebound"
+            title: "Defensive Rebound",
         },
         {
             key: "X",
-            title: "Offensive Rebound"
+            title: "Offensive Rebound",
         },
         {
             key: "B",
-            title: "Block"
+            title: "Block",
         },
-    ]
+    ];
 
     useEffect(() => {
         document.addEventListener("keydown", handleKeyPress);
@@ -101,6 +100,18 @@ function InputPanel() {
             }
         } else if (key === "SHIFT") {
             context.actionStack.addPossessionEnd();
+            newPrompt = null;
+        } else if (key === "P") {
+            context.actionStack.addMarking(0);
+            newPrompt = null;
+        } else if (key === "O") {
+            context.actionStack.addMarking(1);
+            newPrompt = null;
+        } else if (key === "I") {
+            context.actionStack.addMarking(2);
+            newPrompt = null;
+        } else if (key === "L") {
+            context.actionStack.addMarking(3);
             newPrompt = null;
         } else if (key === "W") {
             const inputs = [
@@ -183,35 +194,40 @@ function InputPanel() {
 
     return (
         <div className="inputpanel">
-            {promptTitle !== "none" && <>
-            <div className="prompttitle">
-                <h2>{promptTitle}</h2>
-            </div>
-            <div className="inputprompts">
-                {context.currentPrompt &&
-                    context.currentPrompt.inputs &&
-                    context.currentPrompt.inputs.map((input, i) => (
-                        <div
-                            className={`promptinput ${
-                                context.currentPrompt.index === i
-                                    ? "current"
-                                    : ""
-                            }`}
-                            key={i}
-                        >
-                            {input.inputTitle}: {input.toString()}
-                        </div>
-                    ))}
+            {promptTitle !== "none" && (
+                <>
+                    <div className="prompttitle">
+                        <h2>{promptTitle}</h2>
                     </div>
-                </>}
-                {promptTitle == "none" && <div className = "actionTooltipPanel">
-                        {keyMapping.map((km) => {
-                            return <div className = "keyCell">
-                                <Key keyValue= {km.key} /> {km.title}
+                    <div className="inputprompts">
+                        {context.currentPrompt &&
+                            context.currentPrompt.inputs &&
+                            context.currentPrompt.inputs.map((input, i) => (
+                                <div
+                                    className={`promptinput ${
+                                        context.currentPrompt.index === i
+                                            ? "current"
+                                            : ""
+                                    }`}
+                                    key={i}
+                                >
+                                    {input.inputTitle}: {input.toString()}
+                                </div>
+                            ))}
+                    </div>
+                </>
+            )}
+            {promptTitle == "none" && (
+                <div className="actionTooltipPanel">
+                    {keyMapping.map((km) => {
+                        return (
+                            <div className="keyCell">
+                                <Key keyValue={km.key} /> {km.title}
                             </div>
-                        })}
-                    </div>}
-            
+                        );
+                    })}
+                </div>
+            )}
         </div>
     );
 }

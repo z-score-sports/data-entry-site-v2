@@ -1,7 +1,7 @@
 import { observer } from "mobx-react-lite";
 import "../../App.css";
+import Key from "../elements/Key";
 import LogView from "../elements/LogView";
-import Key from "../elements/Key"
 
 type markingInput = {
     color: string;
@@ -29,16 +29,6 @@ const markingData: Array<markingInput> = [
         color: "green",
         key: "L",
         description: "Isolation",
-    },
-    {
-        color: "blue",
-        key: "K",
-        description: "Play 1",
-    },
-    {
-        color: "purple",
-        key: "J",
-        description: "Play 2",
     },
 ];
 
