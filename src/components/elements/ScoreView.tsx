@@ -1,12 +1,34 @@
 import { observer } from "mobx-react-lite";
-import { useContext, useState } from "react";
+import { useContext, useRef, useState } from "react";
 import { GameStateContext } from "../../App";
 import "./ScoreView.css";
 
 function ScoreView() {
     const context = useContext(GameStateContext);
-    const [homeTimeouts, setHomeTimeouts] = useState(2);
-    const [awayTimeouts, setAwayTimeouts] = useState(3);
+    const [homeTimeouts, setHomeTimeouts] = useState(4);
+    const [awayTimeouts, setAwayTimeouts] = useState(4);
+
+    const homeIncrease = useRef(null);
+    const awayIncrease = useRef(null);
+    const homeDecrease = useRef(null);
+    const awayDecrease = useRef(null);
+
+    const handleHomeIncrease = () => {
+        setHomeTimeouts(Math.min(homeTimeouts + 1, 4));
+        homeIncrease.current.blur();
+    };
+    const handleAwayIncrease = () => {
+        setAwayTimeouts(Math.min(awayTimeouts + 1, 4));
+        awayIncrease.current.blur();
+    };
+    const handleHomeDecrease = () => {
+        setHomeTimeouts(Math.max(0, homeTimeouts - 1));
+        homeDecrease.current.blur();
+    };
+    const handleAwayDecrease = () => {
+        setAwayTimeouts(Math.max(0, awayTimeouts - 1));
+        awayDecrease.current.blur();
+    };
 
     return (
         <>
@@ -35,7 +57,13 @@ function ScoreView() {
                 </div>
                 <div className="scoreTimeoutSect">
                     <div className="timeoutSect">
-                        <button>-</button>
+                        <button
+                            ref={homeDecrease}
+                            className="timeoutButton"
+                            onClick={handleHomeDecrease}
+                        >
+                            -
+                        </button>
                         {[...Array(4)].map((val, i) => (
                             <div
                                 className={`circle ${
@@ -45,10 +73,22 @@ function ScoreView() {
                                 }`}
                             ></div>
                         ))}
-                        <button>+</button>
+                        <button
+                            ref={homeIncrease}
+                            className="timeoutButton"
+                            onClick={handleHomeIncrease}
+                        >
+                            +
+                        </button>
                     </div>
                     <div className="timeoutSect">
-                        <button>-</button>
+                        <button
+                            ref={awayDecrease}
+                            className="timeoutButton"
+                            onClick={handleAwayDecrease}
+                        >
+                            -
+                        </button>
                         {[...Array(4)].map((val, i) => (
                             <div
                                 className={`circle ${
@@ -58,7 +98,13 @@ function ScoreView() {
                                 }`}
                             ></div>
                         ))}
-                        <button>+</button>
+                        <button
+                            ref={awayIncrease}
+                            className="timeoutButton"
+                            onClick={handleAwayIncrease}
+                        >
+                            +
+                        </button>
                     </div>
                 </div>
             </div>
