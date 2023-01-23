@@ -31,6 +31,9 @@ class Marking extends Action {
     get actionString(): string {
         return `MARKING ${markingMappings[this.markingKey]}`;
     }
+    get markString(): string {
+        return markingMappings[this.markingKey]
+    }
 }
 
 export { Marking };

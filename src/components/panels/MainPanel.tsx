@@ -4,6 +4,7 @@ import { GameStateContext } from "../../App";
 import "../../App.css";
 import InputPanel from "../elements/InputPanel";
 import ScoreView from "../elements/ScoreView";
+import CurrentPosView from "../elements/CurrentPosView"
 
 function MainPanel() {
     const context = useContext(GameStateContext);
@@ -14,17 +15,7 @@ function MainPanel() {
             <div className="container scoreboard">
                 <ScoreView />
             </div>
-
-            <div className="container currentpossession">
-                <h2>Current Possession</h2>
-                <ul>
-                    {context.actionStack
-                        .getCurPossessionActions()
-                        .map((action) => (
-                            <li>{action.actionString}</li>
-                        ))}
-                </ul>
-            </div>
+                <CurrentPosView/>
             <div className="container inputpanel">
                 <InputPanel />
             </div>
