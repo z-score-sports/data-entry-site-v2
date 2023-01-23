@@ -391,6 +391,17 @@ class ActionStack {
         return ret;
     }
 
+    getCurMarking() {
+        let actions = this.getCurPossessionActions()
+        let mark: Marking = null
+        actions.forEach((a) => {
+            if(a instanceof Marking) {
+                mark = a
+            }
+        })
+        return mark
+    }
+
     lastNActions(n: number) {
         let ret: ActionRecord[] = [];
 
