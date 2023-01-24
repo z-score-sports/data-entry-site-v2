@@ -81,7 +81,7 @@ function TeamMgmtPanel({ teamRoster, team }: propsType) {
                                 {p.fgm}/{p.fga}
                             </th>
                             <th>
-                                {p.fta}/{p.fta}
+                                {p.ftm}/{p.fta}
                             </th>
                             <th>{p.steals}</th>
                             <th>{p.turnovers}</th>
