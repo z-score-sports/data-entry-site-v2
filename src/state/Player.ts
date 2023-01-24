@@ -8,7 +8,6 @@ import { ShotOutMessage } from "./actions/Shot";
 import { SubstitutionOutMessage } from "./actions/Substitution";
 import { Steal, Turnover, TurnoverOutMessage } from "./actions/Turnover";
 import { GameTime } from "./GameTime";
-import { MinutesKeeper } from "./MinutesKeeper";
 import { Subscriber } from "./Subscriber";
 
 enum Team {
@@ -51,7 +50,9 @@ class Player implements Subscriber {
     fta: number = 0;
     steals: number = 0;
     turnovers: number = 0;
-    minutesKeeper: MinutesKeeper = new MinutesKeeper();
+
+    lastTimeIn: GameTime = null;
+    intervals: GameInterval[] = [];
 
     public constructor(
         playerId: string,
@@ -70,7 +71,7 @@ class Player implements Subscriber {
         this.inGame = inGame;
         if (this.inGame) {
             let startGameTime = new GameTime(1, 12, 0);
-            this.minutesKeeper.addSubIn(startGameTime);
+            this.lastTimeIn = startGameTime;
         }
     }
 
@@ -254,33 +255,72 @@ class Player implements Subscriber {
         let gameTime: GameTime = context.action.gameTime;
         let pGI = context.action.playerGoingIn;
         let pGO = context.action.playerGoingOut;
+        if (pGI.team !== pGO.team) {
+            return;
+        }
         if (context.type === "CREATE") {
-            if (pGI === this && this.inGame === false) {
+            if (this === pGI) {
                 this.inGame = true;
-                this.minutesKeeper.addSubIn(gameTime);
-            } else if (pGO === this && this.inGame === true) {
+                this.addTimeIn(gameTime);
+            } else if (this === pGO) {
                 this.inGame = false;
-                this.minutesKeeper.addSubOut(gameTime);
-            } else {
-                console.log(
-                    "warning: this was an invalid substitution. No changes."
-                );
+                this.addTimeOut(gameTime);
+            } else if (this.inGame) {
+                this.addTimeIn(gameTime);
             }
         } else {
-            // case when we're deleting a substitution
-            if (pGI === this && this.inGame === true) {
-                // removing a sub in
+            if (this === pGI) {
                 this.inGame = false;
-                this.minutesKeeper.removeSubIn();
-            } else if (pGO === this && this.inGame === false) {
+                this.removeTimeNowOut();
+            } else if (this === pGO) {
                 this.inGame = true;
-                this.minutesKeeper.removeSubOut();
-            } else {
-                console.log(
-                    "warning: this was an invalid undo of a substitution. "
-                );
+                this.removeTimeNowIn();
+            } else if (this.inGame) {
+                this.removeTimeNowIn();
             }
         }
+    }
+
+    private addTimeIn(gameTime: GameTime) {
+        if (this.lastTimeIn !== null) {
+            let newInterval: GameInterval = {
+                timeIn: this.lastTimeIn,
+                timeOut: gameTime,
+            };
+            this.intervals.push(newInterval);
+            this.lastTimeIn = gameTime;
+        } else {
+            this.lastTimeIn = gameTime;
+        }
+    }
+
+    private addTimeOut(gameTime: GameTime) {
+        if (this.lastTimeIn !== null) {
+            let newInterval: GameInterval = {
+                timeIn: this.lastTimeIn,
+                timeOut: gameTime,
+            };
+            this.intervals.push(newInterval);
+            this.lastTimeIn = null;
+        }
+    }
+
+    private removeTimeNowIn() {
+        let lastInterval: GameInterval = this.intervals.pop();
+        this.lastTimeIn = lastInterval.timeIn;
+    }
+
+    private removeTimeNowOut() {
+        this.lastTimeIn = null;
+    }
+
+    get playerMinutes() {
+        let sum: number = 0;
+        this.intervals.forEach((interval: GameInterval) => {
+            sum += interval.timeIn.minutesBetween(interval.timeOut);
+        });
+
+        return sum;
     }
 }
 

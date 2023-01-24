@@ -36,13 +36,7 @@ function RosterPanel({ teamRoster, team }: propsType) {
                             </th>
                             <th>{p.lastName}</th>
                             <th>{p.points}</th>
-                            <th>
-                                {(
-                                    p.minutesKeeper.getMinutes(
-                                        context.actionStack.getLastGameTime()
-                                    ) || 0
-                                ).toFixed(0)}
-                            </th>
+                            <th>{(p.playerMinutes || 0).toFixed(0)}</th>
                             <th>{p.fouls}</th>
                         </tr>
                     );

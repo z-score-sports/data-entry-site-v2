@@ -281,8 +281,8 @@ class ActionStack {
             return;
         }
 
-        let newSubstitution = new Substitution(pGI, pGO, gameTime);
-        
+
+        let newSubstitution = new Substitution(pGI, pGO, gameTime);        
         newSubstitution.createNotify();
         this.gameTimes.push(gameTime);
         this.mainStack.push(newSubstitution);

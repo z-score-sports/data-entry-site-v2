@@ -101,6 +101,9 @@ function InputPanel() {
         } else if (key === "SHIFT") {
             context.actionStack.addPossessionEnd();
             newPrompt = null;
+        } else if (key === "TAB") {
+            context.actionStack.addQuarterEnd();
+            newPrompt = null;
         } else if (key === "P") {
             context.actionStack.addMarking(0);
             newPrompt = null;
