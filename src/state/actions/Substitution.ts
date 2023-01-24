@@ -55,7 +55,11 @@ class Substitution extends Action {
             this.playerGoingIn.team === Team.home ? "HOME" : "AWAY"
         } SUBSTITUTION ${this.playerGoingIn.num} for ${
             this.playerGoingOut.num
-        }`;
+        } at ${this.gameTime.quarter}Q ${this.gameTime.minutes
+            .toString()
+            .padStart(2, "0")}:${this.gameTime.seconds
+            .toString()
+            .padStart(2, "0")}`;
     }
 }
 
