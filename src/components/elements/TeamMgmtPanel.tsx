@@ -86,13 +86,7 @@ function TeamMgmtPanel({ teamRoster, team }: propsType) {
                             <th>{p.steals}</th>
                             <th>{p.turnovers}</th>
                             <th>{p.blocks}</th>
-                            <th>
-                                {(
-                                    p.minutesKeeper.getMinutes(
-                                        context.actionStack.getLastGameTime()
-                                    ) || 0
-                                ).toFixed(0)}
-                            </th>
+                            <th>{(p.playerMinutes || 0).toFixed(0)}</th>
                             <th>{p.fouls}</th>
                             <th>
                                 <IconButton
