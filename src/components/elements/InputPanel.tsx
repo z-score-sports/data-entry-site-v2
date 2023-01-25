@@ -28,10 +28,6 @@ function InputPanel() {
             title: "Make Shot",
         },
         {
-            key: "Q",
-            title: "Missed Shot",
-        },
-        {
             key: "E",
             title: "Free Throw",
         },

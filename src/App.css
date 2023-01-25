@@ -154,6 +154,8 @@
 .actionlog {
   width: 90%;
   min-height: 10em;
+  max-height: 25vh;
+  overflow: scroll;
 }
 
 .toolTipLbl {
@@ -200,6 +202,7 @@
 .logviewlist {
   padding: none;
   margin: 0px;
+  overflow: scroll;
 }
 .logviewitem {
   
