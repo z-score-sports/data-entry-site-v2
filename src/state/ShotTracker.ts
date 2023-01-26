@@ -40,6 +40,14 @@ class ShotRegionTracker {
             this.allRegions[index].shotsMade -= 1;
         }
     }
+
+    getRegionString(region: number) {
+        return (
+            this.allRegions[region - 1].shotsMade +
+            "/" +
+            this.allRegions[region - 1].shotsAttempted
+        );
+    }
 }
 
 export { ShotRegionTracker };
