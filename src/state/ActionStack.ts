@@ -192,7 +192,7 @@ class ActionStack {
     }
 
     addPossessionEnd() {
-        let newPosEnd = new PossessionEnd();
+        let newPosEnd = new PossessionEnd(this.curPos);
         newPosEnd.createNotify();
         this.mainStack.push(newPosEnd);
         this.curPos = this.curPos === Team.home ? Team.away : Team.home; // just flips the possession

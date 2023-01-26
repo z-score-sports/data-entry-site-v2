@@ -1,8 +1,11 @@
 import { computed, makeObservable } from "mobx";
+import { Team } from "../Player";
 import { Action } from "./Action";
 
 class PossessionEnd extends Action {
-    public constructor() {
+    possessingTeam: Team;
+
+    public constructor(team: Team) {
         super();
         makeObservable(this, {
             actionJSON: computed,
