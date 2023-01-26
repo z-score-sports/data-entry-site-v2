@@ -44,8 +44,8 @@ function TeamMgmtPanel({ teamRoster, team }: propsType) {
             <table>
                 <tr className="headerRow">
                     <th></th>
-                    <th>Number</th>
-                    <th>Player</th>
+                    <th>#</th>
+                    <th>Name</th>
                     <th>PTS</th>
                     <th>REB</th>
                     <th>AST</th>
@@ -53,7 +53,6 @@ function TeamMgmtPanel({ teamRoster, team }: propsType) {
                     <th>3PT</th>
                     <th>FG</th>
                     <th>FT</th>
-                    <th>S</th>
                     <th>TO</th>
                     <th>B</th>
                     <th>Min</th>
@@ -76,14 +75,15 @@ function TeamMgmtPanel({ teamRoster, team }: propsType) {
                             <th>{p.rebounds}</th>
                             <th>{p.assists}</th>
                             <th>{p.plusminus}</th>
-                            <th>{p.threePointers}</th>
+                            <th>
+                                {p.threePointersMade}/{p.threePointersAttempted}
+                            </th>
                             <th>
                                 {p.fgm}/{p.fga}
                             </th>
                             <th>
                                 {p.ftm}/{p.fta}
                             </th>
-                            <th>{p.steals}</th>
                             <th>{p.turnovers}</th>
                             <th>{p.blocks}</th>
                             <th>{(p.playerMinutes || 0).toFixed(0)}</th>

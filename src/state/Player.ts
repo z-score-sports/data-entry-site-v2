@@ -8,6 +8,7 @@ import { ShotOutMessage } from "./actions/Shot";
 import { SubstitutionOutMessage } from "./actions/Substitution";
 import { Steal, Turnover, TurnoverOutMessage } from "./actions/Turnover";
 import { GameTime } from "./GameTime";
+import { ShotRegionTracker } from "./ShotTracker";
 import { Subscriber } from "./Subscriber";
 
 enum Team {
@@ -20,6 +21,23 @@ type GameInterval = {
     timeOut: GameTime;
 };
 
+type ShotData = {
+    shotsMade: number;
+    shotsAttempted: number;
+};
+
+type RegionShotData = {
+    shotIndex: any;
+    r1: ShotData;
+    r2: ShotData;
+    r3: ShotData;
+    r4: ShotData;
+    r5: ShotData;
+    r6: ShotData;
+    r7: ShotData;
+    r8: ShotData;
+    r9: ShotData;
+};
 type playerUpdateMessage =
     | ShotOutMessage
     | AssistOutMessage
@@ -43,11 +61,13 @@ class Player implements Subscriber {
     plusminus: number = 0;
     fouls: number = 0;
     blocks: number = 0;
-    threePointers: number = 0;
+    threePointersMade: number = 0;
+    threePointersAttempted: number = 0;
     fgm: number = 0;
     fga: number = 0;
     ftm: number = 0;
     fta: number = 0;
+    shotTracker = new ShotRegionTracker();
     steals: number = 0;
     turnovers: number = 0;
 
@@ -202,9 +222,16 @@ class Player implements Subscriber {
                 this.points += points;
                 this.fgm += points > 0 ? 1 : 0;
                 this.fga += 1;
-                if (context.action.region >= 5 && context.action.made) {
-                    this.threePointers += 1;
+                if (context.action.region >= 5) {
+                    this.threePointersAttempted += 1;
+                    if (context.action.made) {
+                        this.threePointersMade += 1;
+                    }
                 }
+                this.shotTracker.addShot(
+                    context.action.made,
+                    context.action.region
+                );
             }
             if (this.inGame) {
                 if (context.action.shootingPlayer.team === this.team) {
@@ -218,9 +245,16 @@ class Player implements Subscriber {
                 this.points -= points;
                 this.fgm -= points > 0 ? 1 : 0;
                 this.fga -= 1;
-                if (context.action.region >= 5 && context.action.made) {
-                    this.threePointers -= 1;
+                if (context.action.region >= 5) {
+                    this.threePointersAttempted -= 1;
+                    if (context.action.made) {
+                        this.threePointersMade -= 1;
+                    }
                 }
+                this.shotTracker.removeShot(
+                    context.action.made,
+                    context.action.region
+                );
             }
             if (this.inGame) {
                 if (context.action.shootingPlayer.team === this.team) {
@@ -325,3 +359,4 @@ class Player implements Subscriber {
 }
 
 export { Player, Team };
+
