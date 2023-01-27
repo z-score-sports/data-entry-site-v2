@@ -41,11 +41,19 @@ class ShotRegionTracker {
         }
     }
 
+    getRegionShotsMade(region: number): number {
+        return this.allRegions[region - 1].shotsMade;
+    }
+
+    getRegionShotsAttempted(region: number): number {
+        return this.allRegions[region - 1].shotsAttempted;
+    }
+
     getRegionString(region: number) {
         return (
-            this.allRegions[region - 1].shotsMade +
+            this.getRegionShotsMade(region) +
             "/" +
-            this.allRegions[region - 1].shotsAttempted
+            this.getRegionShotsAttempted(region)
         );
     }
 }

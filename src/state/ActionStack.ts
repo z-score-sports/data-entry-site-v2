@@ -442,6 +442,7 @@ class ActionStack {
 
         return statFactory.data;
     }
+
 }
 
 export { ActionStack };

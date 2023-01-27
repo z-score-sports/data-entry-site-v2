@@ -1,28 +1,43 @@
 
-Other validations:
+Lineup vs Lineup
+Off PPP = Offensive Points Per Possesion = points scored / total offensive possessions
+Def PPP = Defensive Points Per Possesion = points allowed / total defensive possesions
+FG % = Field Goal % = field goals made / field goals attempted
+3PT % = Three Point % = three pointers made / three pointers attempted
+REB = Rebounds
+AST = Assists
+TO = Turnovers
+DEF FG% = Defensive Field goal % = opponent field goal attempt made/ total opponent field
+goal attempts ... this is equal to the other teams FG %
+DEF 3PT % = defensive 3pt % = opponent made three pointers/ opponent three pointers
+attempted
+Most scored on marking = marking that generated the mosrt points
+Shot Table = field goals made / field goals attempted for each region
+All stats are contained within the time the lineup was in the game
 
-Max of 1 rebound, block, and assist -> if a rebound/block/assist is found when adding, unable to add that action
-
-Rebounds can't happen on made shots
-
-The shooting player cannot assist their own shot
 
 
-Planning: 
-1) Make a button to do everything on the main page
-2) Do testing for each action add, handle and validate everything
+General Team
+Offensive Effeciency = 100*(Points Scored / Possessions)
+Defensive Efficiency = 100*(Points Allowed / Possessions)
+Most ran play
+Lineup with top plus minus
+Player with most points
+Player with most assists
+Player with most reounds
+Player with best plus minus
+Whole game shot table
 
 
-Shots
-    - Rebounds
-    - Assists
-    - Blocks
-Foul
-    - Free throw
-Steal/Turnover
-Quarter end
-Substitution
-Possession End
+
+Play v Play
+Points per possesion
+Points scored on play
+Ast on play
+3pt %
+Fg %
+Ts %
+Turnovers
 
 
 

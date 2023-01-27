@@ -90,6 +90,77 @@ function TeamAnalytics({ team }: TeamAnalyticsProps) {
                             </tr>
                         );
                     })}
+                <tr className="headerRow">
+                    <th></th>
+                    <th>Team</th>
+                    <th>{context.gameRoster.getRoster(team).rosterPoints}</th>
+                    <th>{context.gameRoster.getRoster(team).rosterRebounds}</th>
+                    <th>{context.gameRoster.getRoster(team).rosterAssists}</th>
+                    <th>
+                        {context.gameRoster.getRoster(team).rosterTurnovers}
+                    </th>
+                    <th></th>
+                    <th>{context.gameRoster.getRoster(team).rosterFouls}</th>
+                    <th></th>
+                    <th>
+                        {context.gameRoster.getRoster(team)
+                            .threePointPercentage || "0"}
+                        %
+                    </th>
+                    <th>
+                        {context.gameRoster.getRoster(team).fgPercentage || "0"}
+                        %
+                    </th>
+                    <th>
+                        {context.gameRoster.getRoster(team).tsPercentage || "0"}
+                        %
+                    </th>
+                    <th>
+                        {context.gameRoster
+                            .getRoster(team)
+                            .getRegionShotString(1)}
+                    </th>
+                    <th>
+                        {context.gameRoster
+                            .getRoster(team)
+                            .getRegionShotString(2)}
+                    </th>
+                    <th>
+                        {context.gameRoster
+                            .getRoster(team)
+                            .getRegionShotString(3)}
+                    </th>
+                    <th>
+                        {context.gameRoster
+                            .getRoster(team)
+                            .getRegionShotString(4)}
+                    </th>
+                    <th>
+                        {context.gameRoster
+                            .getRoster(team)
+                            .getRegionShotString(5)}
+                    </th>
+                    <th>
+                        {context.gameRoster
+                            .getRoster(team)
+                            .getRegionShotString(6)}
+                    </th>
+                    <th>
+                        {context.gameRoster
+                            .getRoster(team)
+                            .getRegionShotString(7)}
+                    </th>
+                    <th>
+                        {context.gameRoster
+                            .getRoster(team)
+                            .getRegionShotString(8)}
+                    </th>
+                    <th>
+                        {context.gameRoster
+                            .getRoster(team)
+                            .getRegionShotString(9)}
+                    </th>
+                </tr>
             </table>
             <h2>Lineup Comparison</h2>
         </div>

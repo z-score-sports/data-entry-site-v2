@@ -3,7 +3,6 @@ import { AssistPublisher } from "./actions/Assist";
 import { BlockPublisher } from "./actions/Block";
 import { FoulPublisher } from "./actions/Foul";
 import { FreeThrowPublisher } from "./actions/FreeThrow";
-import { QuarterEndPublisher } from "./actions/QuarterEnd";
 import { ReboundPublisher } from "./actions/Rebound";
 import { ShotPublisher } from "./actions/Shot";
 import { SubstitutionPublisher } from "./actions/Substitution";
@@ -90,6 +89,91 @@ class Roster {
         });
         lineupArr.sort();
         return lineupArr.toString();
+    }
+
+    get rosterPoints() {
+        let sum = 0;
+        this.players.forEach((player, playerNumber) => {
+            sum += player.points;
+        });
+        return sum;
+    }
+
+    get rosterRebounds() {
+        let sum = 0;
+        this.players.forEach((player, playerNumber) => {
+            sum += player.rebounds;
+        });
+        return sum;
+    }
+
+    get rosterAssists() {
+        let sum = 0;
+        this.players.forEach((player, playerNumber) => {
+            sum += player.assists;
+        });
+        return sum;
+    }
+
+    get rosterTurnovers() {
+        let sum = 0;
+        this.players.forEach((player, playerNumber) => {
+            sum += player.turnovers;
+        });
+        return sum;
+    }
+
+    get rosterFouls() {
+        let sum = 0;
+        this.players.forEach((player, playerNumber) => {
+            sum += player.fouls;
+        });
+        return sum;
+    }
+
+    get threePointPercentage() {
+        let made = 0;
+        let attempted = 0;
+        this.players.forEach((player, playerNumber) => {
+            attempted += player.threePointersAttempted;
+            made += player.threePointersMade;
+        });
+        return Math.round((100 * made) / attempted);
+    }
+
+    get fgPercentage() {
+        let made = 0;
+        let attempted = 0;
+        this.players.forEach((player, playerNumber) => {
+            attempted += player.fga;
+            made += player.fgm;
+        });
+        return Math.round((100 * made) / attempted);
+    }
+
+    get tsPercentage() {
+        let points = 0;
+        let fgAttempted = 0;
+        let ftAttempted = 0;
+        this.players.forEach((player, playerNumber) => {
+            points += player.points;
+            fgAttempted += player.fga;
+            ftAttempted += player.fta;
+        });
+        return Math.round(
+            100 * (points / (2 * fgAttempted + 0.88 * ftAttempted))
+        );
+    }
+
+    getRegionShotString(region: number) {
+        let made = 0;
+        let attempted = 0;
+        this.players.forEach((player, playerNumber) => {
+            made += player.shotTracker.getRegionShotsMade(region);
+            attempted += player.shotTracker.getRegionShotsAttempted(region);
+        });
+
+        return made + "/" + attempted;
     }
 }
 
