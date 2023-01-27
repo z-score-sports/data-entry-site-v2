@@ -91,7 +91,7 @@ function TeamMgmtPanel({ teamRoster, team }: propsType) {
                             <th>
                                 <IconButton
                                     onClick={() => {
-                                        deletePlayer(p);
+                                        //deletePlayer(p);
                                     }}
                                     style={{ padding: 0 }}
                                     aria-label="delete"

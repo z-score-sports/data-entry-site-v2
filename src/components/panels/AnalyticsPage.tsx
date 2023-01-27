@@ -173,7 +173,6 @@ function AnalyticsPage() {
         <div>
             <TeamAnalytics team={Team.home}></TeamAnalytics>
             <TeamAnalytics team={Team.away}></TeamAnalytics>
-            {JSON.stringify(context.actionStack.getStats())}
         </div>
     );
 }
