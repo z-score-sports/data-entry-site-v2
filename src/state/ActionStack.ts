@@ -14,6 +14,7 @@ import { Steal, Turnover } from "./actions/Turnover";
 import { GameContext, markingMappings } from "./GameState";
 import { GameTime } from "./GameTime";
 import { Team } from "./Player";
+import { StatFactory } from "./StatFactory";
 
 // TODO: Need to test and validate each action
 
@@ -191,7 +192,7 @@ class ActionStack {
     }
 
     addPossessionEnd() {
-        let newPosEnd = new PossessionEnd();
+        let newPosEnd = new PossessionEnd(this.curPos);
         newPosEnd.createNotify();
         this.mainStack.push(newPosEnd);
         this.curPos = this.curPos === Team.home ? Team.away : Team.home; // just flips the possession
@@ -262,11 +263,11 @@ class ActionStack {
         gameTime: GameTime
     ) {
         // Assumption: 1 player in for 1 player, no single subs
-       
+
         let pGI = GameContext.gameRoster
             .getRoster(team)
             .getPlayer(playerNumGoingIn);
-        
+
         let pGO = GameContext.gameRoster
             .getRoster(team)
             .getPlayer(playerNumGoingOut);
@@ -281,8 +282,7 @@ class ActionStack {
             return;
         }
 
-
-        let newSubstitution = new Substitution(pGI, pGO, gameTime);        
+        let newSubstitution = new Substitution(pGI, pGO, gameTime);
         newSubstitution.createNotify();
         this.gameTimes.push(gameTime);
         this.mainStack.push(newSubstitution);
@@ -392,14 +392,14 @@ class ActionStack {
     }
 
     getCurMarking() {
-        let actions = this.getCurPossessionActions()
-        let mark: Marking = null
+        let actions = this.getCurPossessionActions();
+        let mark: Marking = null;
         actions.forEach((a) => {
-            if(a instanceof Marking) {
-                mark = a
+            if (a instanceof Marking) {
+                mark = a;
             }
-        })
-        return mark
+        });
+        return mark;
     }
 
     lastNActions(n: number) {
@@ -427,13 +427,22 @@ class ActionStack {
         return ret;
     }
 
-    toJSON(): Object {
+    toJSON(): Array<object> {
         let retJSON: object[] = this.mainStack.map((action, i) => ({
             id: i,
             ...action.actionJSON,
         }));
         return retJSON;
     }
+
+    getStats(): Object {
+        let actionJSON: Array<object> = this.toJSON();
+
+        const statFactory = new StatFactory([...this.mainStack]);
+
+        return statFactory.data;
+    }
+
 }
 
 export { ActionStack };

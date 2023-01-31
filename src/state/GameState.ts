@@ -32,6 +32,9 @@ const p6_a = new Player("000015", 15, "L", "Lopez", Team.away, false);
 const homePlayers = new Array<Player>(p1_h, p2_h, p3_h, p4_h, p5_h, p6_h);
 const awayPlayers = new Array<Player>(p1_a, p2_a, p3_a, p4_a, p5_a, p6_a);
 
+const homeStart = [p1_h, p2_h, p3_h, p4_h, p5_h];
+const awayStart = [p1_a, p2_a, p3_a, p4_a, p5_a];
+
 const initialGameTime = new GameTime(1, 12, 0);
 
 const markingMappings: Array<string> = [
@@ -48,7 +51,9 @@ interface game {
     scoreboard: Scoreboard;
     actionStack: ActionStack;
     currentPrompt: Prompt;
-    markingMappings: Array<string>;
+    markingMappings: string[];
+    homeStartLineup: Player[];
+    awayStartLineup: Player[];
 }
 
 const createGameContext = (): game => {
@@ -87,13 +92,14 @@ const createGameContext = (): game => {
     FreeThrowPublisher.getInstance().subscribe(scoreboard);
     QuarterEndPublisher.getInstance().subscribe(scoreboard);
 
-    
     return {
         gameRoster: gameRoster,
         scoreboard: scoreboard,
         actionStack: actionStack,
         currentPrompt: null,
         markingMappings: markingMappings,
+        homeStartLineup: homeStart,
+        awayStartLineup: awayStart,
     };
 };
 
