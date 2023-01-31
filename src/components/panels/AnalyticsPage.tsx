@@ -2,6 +2,7 @@ import { observer } from "mobx-react-lite";
 import { useContext } from "react";
 import { GameStateContext } from "../../App";
 import "../../App.css";
+import { getTeamLineupStats } from "../../state/functions";
 import { Team } from "../../state/Player";
 
 type TeamAnalyticsProps = {
@@ -163,6 +164,19 @@ function TeamAnalytics({ team }: TeamAnalyticsProps) {
                 </tr>
             </table>
             <h2>Lineup Comparison</h2>
+            <button
+                onClick={() =>
+                    console.log(
+                        getTeamLineupStats(
+                            context.actionStack.mainStack,
+                            Team.home,
+                            context.homeStartLineup
+                        )
+                    )
+                }
+            >
+                Click to log
+            </button>
         </div>
     );
 }

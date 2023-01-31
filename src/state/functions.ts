@@ -1,4 +1,9 @@
 import { Action } from "./actions/Action";
+import { Assist } from "./actions/Assist";
+import { FreeThrow } from "./actions/FreeThrow";
+import { PossessionEnd } from "./actions/PossessionEnd";
+import { Rebound } from "./actions/Rebound";
+import { Shot } from "./actions/Shot";
 import { Substitution } from "./actions/Substitution";
 import { Player, Team } from "./Player";
 
@@ -26,6 +31,7 @@ import { Player, Team } from "./Player";
 */
 
 type LineupData = {
+    lineupString: string;
     pointsScored: number;
     pointsAllowed: number;
     possessions: number;
@@ -41,17 +47,18 @@ type LineupData = {
     defensive3PM: number;
 };
 
-const createNewLineupData = (): LineupData => {
+const createNewLineupData = (lineupString: string): LineupData => {
     return {
-        pointsScored: 0,
+        lineupString: lineupString,
+        pointsScored: 0, // done
         pointsAllowed: 0,
-        possessions: 0,
+        possessions: 0, // done
         offensiveFGA: 0,
         offensiveFGM: 0,
         offensive3PA: 0,
         offensive3PM: 0,
-        rebounds: 0,
-        assists: 0,
+        rebounds: 0, // done
+        assists: 0, // done
         defensiveFGA: 0,
         defensiveFGM: 0,
         defensive3PA: 0,
@@ -60,7 +67,7 @@ const createNewLineupData = (): LineupData => {
 };
 
 const arrayRemove = (arr: Array<Player>, value: Player) => {
-    return arr.filter((value) => value !== value);
+    return arr.filter((player) => player.num !== value.num);
 };
 
 const getLineupString = (lineup: Array<Player>): string => {
@@ -78,7 +85,6 @@ const segmentActionsByLineup = (
     let lineupString: string = getLineupString(lineup);
 
     const actionDict: Map<string, Action[]> = new Map<string, Action[]>();
-    actionDict.set(lineupString, []);
 
     actionStack.forEach((action: Action, index) => {
         if (
@@ -87,7 +93,7 @@ const segmentActionsByLineup = (
         ) {
             let PGI = action.playerGoingIn;
             let PGO = action.playerGoingOut;
-            arrayRemove(lineup, PGO);
+            lineup = arrayRemove(lineup, PGO);
             lineup.push(PGI);
             lineupString = getLineupString(lineup);
         } else {
@@ -102,13 +108,87 @@ const segmentActionsByLineup = (
     return actionDict;
 };
 
-const getLineupStats = (
-    actionStack: Array<Action>,
-    startingHomeLineup: Array<Player>,
-    startingAwayLineup: Array<Player>
-) => {
-    actionStack.forEach((action: Action, i) => {});
-    return {};
+const getLineupData = (
+    team: Team,
+    lineupString: string,
+    actions: Action[]
+): LineupData => {
+    const data = createNewLineupData(lineupString);
+
+    actions.forEach((action: Action) => {
+        if (action instanceof PossessionEnd) {
+            data.possessions += 1;
+        } else if (
+            action instanceof Rebound &&
+            action.reboundingPlayer.team === team
+        ) {
+            data.rebounds += 1;
+        } else if (
+            action instanceof Assist &&
+            action.assistingPlayer.team == team
+        ) {
+            data.assists += 1;
+        } else if (action instanceof FreeThrow && action.made) {
+            if (action.shootingPlayer.team === team) {
+                data.pointsScored += 1;
+            } else {
+                data.pointsAllowed += 1;
+            }
+        } else if (action instanceof Shot) {
+            if (action.shootingPlayer.team === team) {
+                data.offensiveFGA += 1;
+                data.pointsScored += action.shotPoints;
+                if (action.made) {
+                    data.offensiveFGM += 1;
+                }
+                if (action.region >= 5) {
+                    data.offensive3PA += 1;
+                    if (action.made) {
+                        data.offensive3PM += 1;
+                    }
+                }
+            } else {
+                data.defensiveFGA += 1;
+                data.pointsAllowed += action.shotPoints;
+                if (action.made) {
+                    data.defensiveFGM += 1;
+                }
+                if (action.region >= 5) {
+                    data.defensive3PA += 1;
+                    if (action.made) {
+                        data.defensive3PM += 1;
+                    }
+                }
+            }
+        }
+    });
+    return data;
 };
 
-export { getLineupStats };
+const getTeamLineupStats = (
+    actionStack: Array<Action>,
+    team: Team,
+    startingLineup: Array<Player>
+) => {
+    // get actionStack segmentations
+    // for each lineup segmentation, get all the data
+    const segmentations: Map<string, Action[]> = segmentActionsByLineup(
+        actionStack,
+        team,
+        startingLineup
+    );
+
+    const allData: LineupData[] = [];
+    segmentations.forEach((actionArr, lineupString) => {
+        let entryData: LineupData = getLineupData(
+            team,
+            lineupString,
+            actionArr
+        );
+        allData.push(entryData);
+    });
+
+    return allData;
+};
+
+export { getTeamLineupStats, segmentActionsByLineup };
