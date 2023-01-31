@@ -164,19 +164,74 @@ function TeamAnalytics({ team }: TeamAnalyticsProps) {
                 </tr>
             </table>
             <h2>Lineup Comparison</h2>
-            <button
-                onClick={() =>
-                    console.log(
-                        getTeamLineupStats(
-                            context.actionStack.mainStack,
-                            Team.home,
-                            context.homeStartLineup
-                        )
-                    )
-                }
-            >
-                Click to log
-            </button>
+            <table>
+                <tr className="headerRow">
+                    <th>Lineup</th>
+                    <th>Off PPP</th>
+                    <th>Def PPP</th>
+                    <th>Assists</th>
+                    <th>Rebounds</th>
+                    <th>Turnovers</th>
+                    <th>FG%</th>
+                    <th>3PT%</th>
+                    <th>Def FG%</th>
+                    <th>Def 3PT%</th>
+                </tr>
+                {getTeamLineupStats(
+                    context.actionStack.mainStack,
+                    team,
+                    team === Team.home
+                        ? context.homeStartLineup
+                        : context.awayStartLineup
+                ).map((data) => (
+                    <tr className="pRow">
+                        <th>{data.lineupString}</th>
+                        <th>
+                            {data.offensivePossessions &&
+                                data.pointsScored / data.offensivePossessions}
+                        </th>
+                        <th>
+                            {data.defensivePossessions &&
+                                data.pointsAllowed / data.defensivePossessions}
+                        </th>
+                        <th>{data.assists}</th>
+                        <th>{data.rebounds}</th>
+                        <th>{data.turnovers}</th>
+                        <th>
+                            {data.offensiveFGA &&
+                                Math.round(
+                                    (100 * data.offensiveFGM) /
+                                        data.offensiveFGA
+                                )}
+                            %
+                        </th>
+                        <th>
+                            {data.offensive3PA &&
+                                Math.round(
+                                    (100 * data.offensive3PM) /
+                                        data.offensive3PA
+                                )}
+                            %
+                        </th>
+                        <th>
+                            {data.defensiveFGA &&
+                                Math.round(
+                                    (100 * data.defensiveFGM) /
+                                        data.defensiveFGA
+                                )}
+                            %
+                        </th>
+                        <th>
+                            {data.defensive3PA &&
+                                Math.round(
+                                    (100 * data.defensive3PM) /
+                                        data.defensive3PA
+                                )}
+                            %
+                        </th>
+                    </tr>
+                ))}
+            </table>
         </div>
     );
 }

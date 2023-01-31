@@ -5,6 +5,7 @@ import { PossessionEnd } from "./actions/PossessionEnd";
 import { Rebound } from "./actions/Rebound";
 import { Shot } from "./actions/Shot";
 import { Substitution } from "./actions/Substitution";
+import { Turnover } from "./actions/Turnover";
 import { Player, Team } from "./Player";
 
 //format of result:
@@ -34,13 +35,15 @@ type LineupData = {
     lineupString: string;
     pointsScored: number;
     pointsAllowed: number;
-    possessions: number;
+    offensivePossessions: number;
+    defensivePossessions: number;
     offensiveFGA: number;
     offensiveFGM: number;
     offensive3PA: number;
     offensive3PM: number;
     rebounds: number;
     assists: number;
+    turnovers: number;
     defensiveFGA: number;
     defensiveFGM: number;
     defensive3PA: number;
@@ -52,13 +55,15 @@ const createNewLineupData = (lineupString: string): LineupData => {
         lineupString: lineupString,
         pointsScored: 0, // done
         pointsAllowed: 0,
-        possessions: 0, // done
+        offensivePossessions: 0, // done
+        defensivePossessions: 0,
         offensiveFGA: 0,
         offensiveFGM: 0,
         offensive3PA: 0,
         offensive3PM: 0,
         rebounds: 0, // done
         assists: 0, // done
+        turnovers: 0,
         defensiveFGA: 0,
         defensiveFGM: 0,
         defensive3PA: 0,
@@ -117,7 +122,11 @@ const getLineupData = (
 
     actions.forEach((action: Action) => {
         if (action instanceof PossessionEnd) {
-            data.possessions += 1;
+            if (action.possessingTeam === team) {
+                data.offensivePossessions += 1;
+            } else {
+                data.defensivePossessions += 1;
+            }
         } else if (
             action instanceof Rebound &&
             action.reboundingPlayer.team === team
@@ -125,9 +134,14 @@ const getLineupData = (
             data.rebounds += 1;
         } else if (
             action instanceof Assist &&
-            action.assistingPlayer.team == team
+            action.assistingPlayer.team === team
         ) {
             data.assists += 1;
+        } else if (
+            action instanceof Turnover &&
+            action.offensivePlayer.team === team
+        ) {
+            data.turnovers += 1;
         } else if (action instanceof FreeThrow && action.made) {
             if (action.shootingPlayer.team === team) {
                 data.pointsScored += 1;
@@ -191,4 +205,4 @@ const getTeamLineupStats = (
     return allData;
 };
 
-export { getTeamLineupStats, segmentActionsByLineup };
+export { getTeamLineupStats };

@@ -10,6 +10,7 @@ class PossessionEnd extends Action {
         makeObservable(this, {
             actionJSON: computed,
         });
+        this.possessingTeam = team;
     }
 
     createNotify(): void {}
