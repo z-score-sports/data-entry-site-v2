@@ -2,7 +2,7 @@ import { observer } from "mobx-react-lite";
 import { useContext } from "react";
 import { GameStateContext } from "../../App";
 import "../../App.css";
-import { getTeamLineupStats } from "../../state/functions";
+import { getMarkingStats, getTeamLineupStats } from "../../state/functions";
 import { Team } from "../../state/Player";
 
 type TeamAnalyticsProps = {
@@ -24,7 +24,7 @@ function TeamAnalytics({ team }: TeamAnalyticsProps) {
                     <th>PTS</th>
                     <th>REB</th>
                     <th>AST</th>
-                    <th>TO</th>
+                    <th>T</th>
                     <th>Min</th>
                     <th>F</th>
                     <th>+/-</th>
@@ -168,9 +168,9 @@ function TeamAnalytics({ team }: TeamAnalyticsProps) {
                     <th>Lineup</th>
                     <th>Off PPP</th>
                     <th>Def PPP</th>
-                    <th>Assists</th>
-                    <th>Rebounds</th>
-                    <th>Turnovers</th>
+                    <th>AST</th>
+                    <th>REB</th>
+                    <th>T</th>
                     <th>FG%</th>
                     <th>3PT%</th>
                     <th>Def FG%</th>
@@ -228,6 +228,65 @@ function TeamAnalytics({ team }: TeamAnalyticsProps) {
                                 )}
                             %
                         </th>
+                    </tr>
+                ))}
+            </table>
+            <h2>Possession Markings</h2>
+            <table>
+                <tr className="headerRow">
+                    <th>Marking</th>
+                    <th>PTS</th>
+                    <th>T</th>
+                    <th>FG%</th>
+                    <th>3PT%</th>
+                    <th>TS%</th>
+                    <th>R1</th>
+                    <th>R2</th>
+                    <th>R3</th>
+                    <th>R4</th>
+                    <th>R5</th>
+                    <th>R6</th>
+                    <th>R7</th>
+                    <th>R8</th>
+                    <th>R9</th>
+                </tr>
+                {getMarkingStats(
+                    context.actionStack.mainStack,
+                    team,
+                    context.markingMappings
+                ).map((data) => (
+                    <tr className="pRow">
+                        <th>{data.markingString}</th>
+                        <th>{data.points}</th>
+                        <th>{data.turnovers}</th>
+                        <th>
+                            {data.fga &&
+                                Math.round((100 * data.fgm) / data.fga)}
+                            %
+                        </th>
+                        <th>
+                            {data.tpa &&
+                                Math.round((100 * data.tpm) / data.tpa)}
+                            %
+                        </th>
+                        <th>
+                            {(data.fga || data.fta) &&
+                                Math.round(
+                                    100 *
+                                        (data.points /
+                                            (2 * data.fga + 0.88 * data.fta))
+                                )}
+                            %
+                        </th>
+                        <th>{data.shots.getRegionString(1)}</th>
+                        <th>{data.shots.getRegionString(2)}</th>
+                        <th>{data.shots.getRegionString(3)}</th>
+                        <th>{data.shots.getRegionString(4)}</th>
+                        <th>{data.shots.getRegionString(5)}</th>
+                        <th>{data.shots.getRegionString(6)}</th>
+                        <th>{data.shots.getRegionString(7)}</th>
+                        <th>{data.shots.getRegionString(8)}</th>
+                        <th>{data.shots.getRegionString(9)}</th>
                     </tr>
                 ))}
             </table>
