@@ -14,7 +14,7 @@ function TeamAnalytics({ team }: TeamAnalyticsProps) {
 
     return (
         <div>
-            <h1>{team ? "Away" : "Home"} Analytics</h1>
+            <h1>Home Analytics</h1>
 
             <h2>Player v. Player</h2>
             <table>
